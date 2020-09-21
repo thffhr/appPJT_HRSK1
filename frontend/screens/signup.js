@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
-// const serverUrl = 'http:127.0.0.1:8000/'
+// const serverUrl = 'http:10.0.2.2:8080/'
 
 class Signup extends Component {
   constructor(props) {
