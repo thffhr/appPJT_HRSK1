@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 // import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { StackNavigator } from 'react-navigation';
 
@@ -17,7 +17,7 @@ class Login extends Component {
     this.setState({ username: text });
   };
   handlePassword = text => {
-    this.setState({ password: text })
+    this.setState({ password: text });
   };
   onLogin = () => {
     fetch('http://10.0.2.2:8080/rest-auth/login/', {
@@ -31,8 +31,8 @@ class Login extends Component {
       .then(response => {
         console.log('로그인 성공')
         console.log(response)
-        // this.$cookies.set('auth-token', res.data.key)
-        // this.$cookies.set('username', this.state.username)
+        AsyncStorage.setItem('auth-token',response.key)
+        AsyncStorage.setItem('username',this.state.username)
         this.props.navigation.push('Home')
       })
       .catch(err => console.error(err))

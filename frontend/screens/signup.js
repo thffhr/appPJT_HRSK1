@@ -27,10 +27,9 @@ class Signup extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        // this.$cookies.set('auth-token', res.data.key)
-        // this.$cookies.set('username', this.state.signupData.username)
-        console.log('성공')
         console.log(response)
+        AsyncStorage.setItem('auth-token',response.key)
+        AsyncStorage.setItem('username',this.state.signupData.username)
         this.props.navigation.push('Home')
       })
       .catch(err => {
