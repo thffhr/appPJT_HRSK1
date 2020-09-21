@@ -1,38 +1,50 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, View, Dimensions } from 'react-native';
+import {StyleSheet, Text, View, Dimensions, AsyncStorage } from 'react-native';
 
 const { width,height } = Dimensions.get("screen");
 
 class Home extends Component {
-    render() {
-        return (
-            <View style={styles.Container}>
-                <View style={styles.Nav}>
-                    <Text style={styles.title}>하루세끼</Text>
-                    <Text style={styles.user}>User</Text>
-                </View>
-                <View style= {styles.body1}>
-                    <Text style={styles.photo}>사진 등록</Text>
-                </View>
-                <View style= {styles.body2}>
-                    <View style={styles.body3}>
-                        <Text style={styles.record}>내 기록</Text>
-                    </View>
-                    <View style={styles.body4}>
-                        <Text style={styles.community}>커뮤니티</Text>
-                    </View>
-                </View>
-                <View style= {styles.body5}>
-                    <View style={styles.body6}>
-                        <Text style={styles.ranking}>랭킹</Text>
-                    </View>
-                    <View style={styles.body7}>
-                        <Text style={styles.game}>식단월드컵</Text>
-                    </View>
-                </View>
-            </View>
-        )
+  constructor(props){
+    super(props);
+    this.state = {
+      username: '',
     }
+  };
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    this.setState({ 
+      username: await AsyncStorage.getItem('username')
+    })
+  }
+  render() {
+    return (
+      <View style={styles.Container}>
+        <View style={styles.Nav}>
+          <Text style={styles.title}>하루세끼</Text>
+          <Text style={styles.user}>{ this.state.username }</Text>
+        </View>
+        <View style= {styles.body1}>
+          <Text style={styles.photo}>사진 등록</Text>
+        </View>
+        <View style= {styles.body2}>
+          <View style={styles.body3}>
+            <Text style={styles.record}>내 기록</Text>
+          </View>
+          <View style={styles.body4}>
+              <Text style={styles.community}>커뮤니티</Text>
+          </View>
+        </View>
+        <View style= {styles.body5}>
+          <View style={styles.body6}>
+            <Text style={styles.ranking}>랭킹</Text>
+          </View>
+          <View style={styles.body7}>
+            <Text style={styles.game}>식단월드컵</Text>
+          </View>
+        </View>
+      </View>
+    )
+  }
 }
 
 export default Home;

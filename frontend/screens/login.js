@@ -29,10 +29,22 @@ class Login extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        console.log('로그인 성공')
         console.log(response)
-        AsyncStorage.setItem('auth-token',response.key)
-        AsyncStorage.setItem('username',this.state.username)
+        async (response) => {
+          try {
+            await AsyncStorage.setItem(
+              'auth-token',
+              response.key
+            );
+            await AsyncStorage.setItem(
+              'username',
+              this.state.username
+            );
+          } catch (error) {
+            // Error saving data
+            console.log(error)
+          }
+        };
         this.props.navigation.push('Home')
       })
       .catch(err => console.error(err))
