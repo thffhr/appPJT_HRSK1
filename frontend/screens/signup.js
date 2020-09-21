@@ -18,21 +18,11 @@ class Signup extends Component {
     }
   };
   onSignup = () => {
-    console.log(this.state.signupData)
     fetch('http://10.0.2.2:8080/rest-auth/signup/', {
       method: 'POST',
-      // body: JSON.stringify({
-      //   username: this.state.signupData.username,
-      //   email: this.state.signupData.email,
-      //   password1: this.state.signupData.password1,
-      //   password2: this.state.signupData.password2,
-      // }),
-      body: JSON.stringify({
-        signupData: this.state.signupData,
-      }),
+      body: JSON.stringify(this.state.signupData),
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
       .then(response => response.json())
@@ -41,10 +31,10 @@ class Signup extends Component {
         // this.$cookies.set('username', this.state.signupData.username)
         console.log('성공')
         console.log(response)
+        this.props.navigation.push('Home')
       })
       .catch(err => {
         console.log(err)
-        console.log(2)
       })
   };
   render() {

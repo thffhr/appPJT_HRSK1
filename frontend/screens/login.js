@@ -20,21 +20,11 @@ class Login extends Component {
     this.setState({ password: text })
   };
   onLogin = () => {
-    // axios.post('http://localhost:8080/rest-auth/login/', this.state, null)
-    //   .then(() => {
-    //     alert("로그인 성공!!")
-    //     this.props.navigation.push('Home')
-    //   })
-    //   .catch(err => console.log(err))
-    console.log(typeof this.state)
-    console.log(this.state)
     fetch('http://10.0.2.2:8080/rest-auth/login/', {
       method: 'POST',
-      body: JSON.stringify(this.state
-      ),
+      body: JSON.stringify(this.state),
       headers: {
         'Content-Type': 'application/json',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
       .then(response => response.json())
