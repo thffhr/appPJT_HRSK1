@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {StyleSheet, Text, View, Dimensions, AsyncStorage } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const { width,height } = Dimensions.get("screen");
 
@@ -21,6 +22,30 @@ class Home extends Component {
       <View style={styles.Container}>
         <View style={styles.Nav}>
           <Text style={styles.title}>하루세끼</Text>
+          <TouchableOpacity
+            style={styles.user}
+            onPress={async () => {
+              const token = await AsyncStorage.getItem('auth-token')
+              console.log(token)
+              if (token !== null) {
+                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
+                  method: 'POST',
+                  header: {
+                    'Authorization': `Token ${token}`
+                  }
+                })
+                  .then(() => {
+                    console.log('로그아웃 성공')
+                    AsyncStorage.clear()
+                    console.log(AsyncStorage.getItem('auth-token'))
+                    this.props.navigation.push("Login")
+                  })
+                  .catch(err => console.error(err))
+              }
+            }}
+          >
+            <Text style={styles.user}>로그아웃</Text>
+          </TouchableOpacity>
           <Text style={styles.user}>{ this.state.username }</Text>
         </View>
         <View style= {styles.body1}>

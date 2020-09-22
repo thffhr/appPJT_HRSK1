@@ -35,13 +35,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
-const userScreens = {
-  Home: Home,
-};
-const authScreens = {
-  Login: Login,
-  Signup: Signup,
-};
+
 class App extends Component {
   constructor(props){
     super(props);
@@ -59,12 +53,22 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer style={styles.container}>
-        <Stack.Navigator>
-          {Object.entries({
-            ...(this.state.isLoggedIn ? userScreens : authScreens),
-          }).map(([name, component]) => (
-            <Stack.Screen name={name} component={component} />
-          ))}
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen 
+          name="Login" 
+          component={Login}
+          options={{title:"로그인"}}
+          />
+          <Stack.Screen 
+          name="Signup" 
+          component={Signup}
+          options={{title:"회원가입"}}
+          />
+          <Stack.Screen 
+          name="Home" 
+          component={Home} 
+          options={{title:"하루세끼"}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     )

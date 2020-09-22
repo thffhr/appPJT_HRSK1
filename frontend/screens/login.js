@@ -36,16 +36,8 @@ class Login extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
-        async (response) => {
-          try {
-            await AsyncStorage.setItem('auth-token', response.key);
-            await AsyncStorage.setItem('username', this.state.username);
-          } catch (error) {
-            // Error saving data
-            console.log(error);
-          }
-        };
+        AsyncStorage.setItem('auth-token', response.key);
+        AsyncStorage.setItem('username', this.state.username);
         this.props.navigation.push('Home');
       })
       .catch((err) => console.error(err));
