@@ -18,6 +18,7 @@ import {
   View,
   Text,
   TextInput,
+  AsyncStorage,
   // StatusBar,
 } from 'react-native';
 import {
@@ -34,27 +35,36 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
-
+const userScreens = {
+  Home: Home,
+};
+const authScreens = {
+  Login: Login,
+  Signup: Signup,
+};
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+    }
+  };
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    const username = await AsyncStorage.getItem('username')
+    if (username !== null) {
+      this.setState({ isLoggedIn: true })
+    }
+  }
   render() {
     return (
       <NavigationContainer style={styles.container}>
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen 
-            name="Login"
-            component={Login}
-            options={{ title: '로그인' }}         
-          />
-          <Stack.Screen 
-            name="Home"
-            component={Home}
-            options={{ title: 'Home' }}
-          />
-          <Stack.Screen 
-            name="Signup"
-            component={Signup}
-            options={{ title: '회원가입'}}
-          />
+        <Stack.Navigator>
+          {Object.entries({
+            ...(this.state.isLoggedIn ? userScreens : authScreens),
+          }).map(([name, component]) => (
+            <Stack.Screen name={name} component={component} />
+          ))}
         </Stack.Navigator>
       </NavigationContainer>
     )
