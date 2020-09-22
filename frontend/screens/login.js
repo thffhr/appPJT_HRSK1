@@ -36,9 +36,13 @@ class Login extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        AsyncStorage.setItem('auth-token', response.key);
-        AsyncStorage.setItem('username', this.state.username);
-        this.props.navigation.push('Home');
+        if (response.ok) {
+          AsyncStorage.setItem('auth-token', response.key);
+          AsyncStorage.setItem('username', this.state.username);
+          this.props.navigation.push('Home');
+        } else {
+          alert('계정 정보가 일치하지 않습니다.')
+        }
       })
       .catch((err) => console.error(err));
   };
