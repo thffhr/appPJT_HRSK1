@@ -37,7 +37,6 @@ class Home extends Component {
                   .then(() => {
                     console.log('로그아웃 성공')
                     AsyncStorage.clear()
-                    console.log(AsyncStorage.getItem('auth-token'))
                     this.props.navigation.push("Login")
                   })
                   .catch(err => console.error(err))
