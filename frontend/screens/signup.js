@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
 
 // const serverUrl = 'http:10.0.2.2:8080/'
 
@@ -36,7 +37,12 @@ class Signup extends Component {
         if (response.key) {
           AsyncStorage.setItem('auth-token', response.key);
           AsyncStorage.setItem('username', this.state.signupData.username);
-          this.props.navigation.push('Home');
+          this.props.navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{name: 'Home'}],
+            }),
+          );
         } else if (response.username) {
           alert(response.username);
         } else if (response.email) {
