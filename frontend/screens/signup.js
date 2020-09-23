@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-
 // const serverUrl = 'http:10.0.2.2:8080/'
 
 class Signup extends Component {
@@ -63,7 +62,7 @@ class Signup extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
-          생성할 아이디와 비밀번호를 입력해주세요.
+          생성할 아이디와{'\n'}비밀번호를 입력해주세요.
         </Text>
         <View>
           <TextInput
@@ -117,7 +116,7 @@ class Signup extends Component {
             }}
           />
           <TouchableOpacity onPress={this.onSignup} style={styles.signupBtn}>
-            <Text>회원가입</Text>
+            <Text style={{fontSize: 15, fontWeight: 'bold'}}>회원가입</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -132,24 +131,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: 'bold',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 40,
+    textAlign: 'center',
   },
   signupBtn: {
-    backgroundColor: 'transparent',
+    backgroundColor: '#f5d742',
     color: 'blue',
     alignItems: 'center',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
+    marginTop: 40,
+    borderWidth: 1,
+    width: 100,
+    alignSelf: 'center',
+    padding: 20,
+    borderRadius: 5,
   },
   inputArea: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 7,
+    marginBottom: 7,
+    width: 300,
+    borderRadius: 5,
   },
 });
 
