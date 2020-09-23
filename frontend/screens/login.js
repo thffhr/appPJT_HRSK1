@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
+import { NavigationActions, StackActions } from 'react-navigation';
 // import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { StackNavigator } from 'react-navigation';
 
@@ -36,10 +37,20 @@ class Login extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        if (response.ok) {
+        console.log(response)
+        if (response.key) {
           AsyncStorage.setItem('auth-token', response.key);
           AsyncStorage.setItem('username', this.state.username);
-          this.props.navigation.push('Home');
+          const resetAction = StackActions.reset({
+              index: 0,
+              actions: [
+                  NavigationActions.navigate({
+                      routeName: 'Home',
+                  }),
+              ],
+          })
+          this.props.navigation.dispatch(resetAction);
+          // this.props.navigation.push('Home');
         } else {
           alert('계정 정보가 일치하지 않습니다.')
         }
@@ -56,7 +67,7 @@ class Login extends Component {
         <View>
           <TextInput
             style={styles.inputArea}
-            placeholder="이메일을 입력하세요."
+            placeholder="아이디를 입력하세요."
             onChangeText={this.handleEmail}
           />
           <TextInput
