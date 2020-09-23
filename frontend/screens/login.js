@@ -49,6 +49,9 @@ class Login extends Component {
   onSign = () => {
     this.props.navigation.push('Signup');
   };
+  onProfile = () => {
+    this.props.navigation.push('Profile');
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -84,6 +87,11 @@ class Login extends Component {
             <TouchableOpacity style={styles.signupBtn} onPress={this.onSign}>
               <Text style={{color: 'blue', textDecorationLine: 'underline'}}>
                 회원가입
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.signupBtn} onPress={this.onProfile}>
+              <Text style={{color: 'blue', textDecorationLine: 'underline'}}>
+                프로필
               </Text>
             </TouchableOpacity>
           </View>
