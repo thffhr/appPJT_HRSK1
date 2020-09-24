@@ -27,10 +27,10 @@ class Result():
 
 
 @api_view(['GET'])
-def profile(request, user_id):
+def profile(request, username):
     # user = get_object_or_404(User, uid=user_id)
     # articles = Article.objects.filter(user=user.id)
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(User, username=username)
     serializer = UserSerializer(user)
 
     return Response(serializer.data)
@@ -64,11 +64,19 @@ def update_info(request):
         serializer.save()
         return Response(serializer.data)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def userdelete(request, username):
+    user = get_object_or_404(User, username=username)
+    if request.method == 'POST':
+        user.delete()
+        # request.user.delete()
+        return Response('탈퇴하였습니다.')
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def follow(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+def follow(request, username):
+    user = get_object_or_404(User, username=username)
     if user != request.user:
         if user.followers.filter(id=request.user.id).exists():
             user.followers.remove(request.user)
@@ -89,8 +97,8 @@ def follow(request, user_id):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def isfollow(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+def isfollow(request, username):
+    user = get_object_or_404(User, username=username)
     if user.followers.filter(id=request.user.id).exists():
         result = {"follow": "True"}
         result = json.dumps(result)
