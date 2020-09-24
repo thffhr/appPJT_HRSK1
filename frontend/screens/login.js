@@ -1,8 +1,17 @@
-import React, { Component } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, TouchableOpacity } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import React, {Component} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+} from 'react-native';
+import {AsyncStorage} from 'react-native';
+import {NavigationActions, StackActions} from 'react-navigation';
 // import { Colors } from 'react-native/Libraries/NewAppScreen';
 // import { StackNavigator } from 'react-navigation';
+import {CommonActions} from '@react-navigation/native';
 
 class Login extends Component {
   constructor(props) {
@@ -11,13 +20,13 @@ class Login extends Component {
     this.state = {
       username: '',
       password: '',
-    }
+    };
+  }
+  handleEmail = (text) => {
+    this.setState({username: text});
   };
-  handleEmail = text => {
-    this.setState({ username: text });
-  };
-  handlePassword = text => {
-    this.setState({ password: text });
+  handlePassword = (text) => {
+    this.setState({password: text});
   };
   onLogin = () => {
     fetch('http://10.0.2.2:8080/rest-auth/login/', {
@@ -27,40 +36,46 @@ class Login extends Component {
         'Content-Type': 'application/json',
       },
     })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response)
-        async (response) => {
-          try {
-            await AsyncStorage.setItem(
-              'auth-token',
-              response.key
-            );
-            await AsyncStorage.setItem(
-              'username',
-              this.state.username
-            );
-          } catch (error) {
-            // Error saving data
-            console.log(error)
-          }
-        };
-        this.props.navigation.push('Home')
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.key) {
+          // AsyncStorage.setItem('auth-token', response.key);
+          // AsyncStorage.setItem('username', this.state.username);
+          // const resetAction = StackActions.reset({
+          //     index: 0,
+          //     actions: [
+          //         NavigationActions.navigate({
+          //             routeName: 'Home',
+          //         }),
+          //     ],
+          // })
+          // this.props.navigation.dispatch(resetAction);
+
+          this.props.navigation.dispatch(
+            CommonActions.reset({
+              index: 1,
+              routes: [{name: 'Home'}],
+            }),
+          );
+
+          // this.props.navigation.navigate('Home');
+        } else {
+          alert('계정 정보가 일치하지 않습니다.');
+        }
       })
-      .catch(err => console.error(err))
-    
+      .catch((err) => console.error(err));
   };
   onSign = () => {
-    this.props.navigation.push('Signup')
+    this.props.navigation.push('Signup');
   };
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>로그인</Text>
+        <Text style={styles.title}>하루세끼</Text>
         <View>
           <TextInput
             style={styles.inputArea}
-            placeholder="이메일을 입력하세요."
+            placeholder="아이디를 입력하세요."
             onChangeText={this.handleEmail}
           />
           <TextInput
@@ -69,37 +84,31 @@ class Login extends Component {
             secureTextEntry={true}
             onChangeText={this.handlePassword}
           />
-          <TouchableOpacity
-            onPress={this.onLogin}
-            style={styles.loginBtn}
-          >
-          <Text>로그인</Text>
+          <TouchableOpacity onPress={this.onLogin} style={styles.loginBtn}>
+            <Text style={styles.loginBtnText}>로그인</Text>
           </TouchableOpacity>
           <View style={styles.findBox}>
-            <TouchableOpacity
-              style={styles.findBtn}
-              color="transparent"
-            >
-            <Text>아이디 찾기 | </Text>
+            <TouchableOpacity style={styles.findBtn} color="transparent">
+              <Text>아이디 찾기</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.findBtn}
-            >
-            <Text>비밀번호 찾기</Text>
+            <Text style={{fontSize: 15}}>|</Text>
+            <TouchableOpacity style={styles.findBtn}>
+              <Text>비밀번호 찾기</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.signupBox}>
-            <Text>가입이 되어 있지 않으신가요?</Text>
-            <TouchableOpacity
-              style={styles.signupBtn}
-              onPress={this.onSign}
-            >
-            <Text>회원가입</Text>
+            <Text style={{textAlign: 'center', marginBottom: 3}}>
+              가입이 되어 있지 않으신가요?
+            </Text>
+            <TouchableOpacity style={styles.signupBtn} onPress={this.onSign}>
+              <Text style={{color: 'blue', textDecorationLine: 'underline'}}>
+                회원가입
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -110,28 +119,39 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 40,
+    fontSize: 60,
     fontWeight: 'bold',
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 50,
   },
   inputArea: {
-    height: 40, 
-    borderColor: 'gray', 
-    borderWidth: 1, 
-    marginTop: 5, 
+    width: 300,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginTop: 5,
     marginBottom: 5,
   },
   loginBtn: {
     alignItems: 'center',
     backgroundColor: '#F1C40F',
+    padding: 15,
+    borderRadius: 5,
+    marginTop: 5,
+    marginBottom: 10,
+  },
+  loginBtnText: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   findBox: {
     flexDirection: 'row',
+    justifyContent: 'center',
   },
   findBtn: {
     backgroundColor: 'transparent',
     color: 'red',
+    marginHorizontal: 10,
   },
   signupBox: {
     marginTop: 70,
@@ -140,8 +160,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     color: 'blue',
     alignItems: 'center',
-    borderBottomColor: 'black',
-    borderBottomWidth: 1,
   },
 });
 

@@ -10,6 +10,7 @@ urlpatterns = [
          views.update_info, name='update_info'),
     path('profile/<str:username>/follow/', views.follow, name='follow'),
     path('profile/<str:username>/isfollow/', views.isfollow, name='isfollow'),
+    path('need/', views.need, name='need'),
     # path('config/', views.config, name='config'),
     path('delete/<str:username>', views.userdelete, name='userdelete'),
     # path('recommend/<str:username>/', views.recommend, name='recommend'),

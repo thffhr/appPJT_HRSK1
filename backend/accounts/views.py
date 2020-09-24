@@ -39,6 +39,23 @@ def profile(request, username):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
+def need(request):
+    user = get_object_or_404(User, id=request.user.id)
+    save_data = request.data
+    if save_data['sex'] == 'male':
+        basal_metabolism = 1500
+    elif save_data['sex'] == 'female':
+        basal_metabolism = 1000
+
+    save_data['basal_metabolism'] = int(basal_metabolism)
+    serializer = UserSerializer(user, data=save_data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def update_info(request):
     user = get_object_or_404(User, id=request.user.id)
     save_data = request.data

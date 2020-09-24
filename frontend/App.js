@@ -6,11 +6,15 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import Loding from './components/loading';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
+import Camera from './screens/camera';
+import Profile from './screens/profile';
+import Startsex from './screens/start_sex';
+import Startinfo from './screens/start_info';
 import {
   SafeAreaView,
   StyleSheet,
@@ -18,6 +22,7 @@ import {
   View,
   Text,
   TextInput,
+  AsyncStorage,
   // StatusBar,
 } from 'react-native';
 import {
@@ -27,39 +32,72 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-import { StackNavigator } from 'react-navigation';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import {StackNavigator} from 'react-navigation';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 
 const Stack = createStackNavigator();
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false,
+    };
+  }
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    const username = await AsyncStorage.getItem('username');
+    if (username !== null) {
+      this.setState({isLoggedIn: true});
+    }
+  }
   render() {
     return (
       <NavigationContainer style={styles.container}>
         <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen 
+          <Stack.Screen
             name="Login"
             component={Login}
-            options={{ title: '로그인' }}         
+            options={{title: '로그인'}}
           />
-          <Stack.Screen 
-            name="Home"
-            component={Home}
-            options={{ title: 'Home' }}
-          />
-          <Stack.Screen 
+          <Stack.Screen
             name="Signup"
             component={Signup}
-            options={{ title: '회원가입'}}
+            options={{title: '회원가입'}}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{title: '하루세끼'}}
+          />
+          <Stack.Screen
+            name="Camera"
+            component={Camera}
+            options={{title: '카메라'}}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{title: '프로필'}}
+          />
+          <Stack.Screen
+            name="Startsex"
+            component={Startsex}
+            options={{title: '성별입력'}}
+          />
+          <Stack.Screen
+            name="Startinfo"
+            component={Startinfo}
+            options={{title: '정보입력'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
-    )
+    );
   }
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -72,18 +110,18 @@ const styles = StyleSheet.create({
 
 //redux
 const initialState = {
-  counter: 0
-}
+  counter: 0,
+};
 
-const reducer = (state=initialState, action) => {
-  switch(action.type){
+const reducer = (state = initialState, action) => {
+  switch (action.type) {
     case 'INCREASE_COUNTER': {
-      return{counter:state.counter+1}
+      return {counter: state.counter + 1};
     }
     case 'DECREASE_COUNTER':
-      return{counter:state.counter-1}
+      return {counter: state.counter - 1};
   }
-  return state
-}
+  return state;
+};
 
 export default App;
