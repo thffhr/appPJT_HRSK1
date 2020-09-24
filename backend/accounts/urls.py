@@ -5,12 +5,12 @@ app_name = 'accounts'
 
 urlpatterns = [
     # path('superuser/', views.superuser, name='superuser'),
-    path('profile/<int:user_id>/', views.profile, name='profile'),
+    path('profile/<str:username>/', views.profile, name='profile'),
     path('profile/update/',
          views.update_info, name='update_info'),
-    path('profile/<int:user_id>/follow/', views.follow, name='follow'),
-    path('profile/<int:user_id>/isfollow/', views.isfollow, name='isfollow'),
+    path('profile/<str:username>/follow/', views.follow, name='follow'),
+    path('profile/<str:username>/isfollow/', views.isfollow, name='isfollow'),
     # path('config/', views.config, name='config'),
-    # path('delete/<int:user_id>/', views.userdelete, name='userdelete'),
+    path('delete/<str:username>', views.userdelete, name='userdelete'),
     # path('recommend/<str:username>/', views.recommend, name='recommend'),
 ]
