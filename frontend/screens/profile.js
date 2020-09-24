@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {AsyncStorage, Image} from 'react-native';
+import {CommonActions} from '@react-navigation/native';
 
 // const serverUrl = 'http:10.0.2.2:8080/'
 
@@ -18,22 +19,28 @@ class Profile extends Component {
     super(props);
 
     this.state = {
-      userData: {
-        username: '',
-      },
+      username: '',
       profileData: {
         username: '',
-        // age: '',
-        // gender: '',
-        // height: '',
-        // weight: '',
+        age: '',
+        sex: '',
+        height: '',
+        weight: '',
+        bm: '',
       },
     };
   }
-  getProfile = () => {
-    fetch(`http://10.0.2.2:8080/accounts/profile/{username}`, {
-      method: 'POST',
-      body: JSON.stringify(this.state.userData),
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    this.setState({
+      username: await AsyncStorage.getItem('username'),
+    });
+    this.getInfo();
+    console.log(this.state.userId);
+  }
+  getInfo = () => {
+    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -41,11 +48,13 @@ class Profile extends Component {
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
-        AsyncStorage.setItem('username', this.state.profileData.username);
-        AsyncStorage.setItem('age', this.state.profileData.age);
-        AsyncStorage.setItem('gender', this.state.profileData.gender);
-        AsyncStorage.setItem('height', this.state.profileData.height);
-        AsyncStorage.setItem('weight', this.state.profileData.weight);
+        this.setState({
+          age: response.age,
+          sex: response.sex,
+          height: response.height,
+          weight: response.weight,
+          bm: response.basal_metabolism,
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -60,10 +69,53 @@ class Profile extends Component {
   onUpdate = () => {
     // this.props.navigation.push('Update')
   };
-  onDelete = () => {
-    // this.props.navigation.push('Delete')
+  onDelete = async () => {
+    const token = await AsyncStorage.getItem('auth-token');
+    fetch(`http://10.0.2.2:8080/accounts/delete/${this.state.username}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        AsyncStorage.clear();
+        this.props.navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Login'}],
+          }),
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   render() {
+    const ageCheck = this.state.age;
+    const genderCheck = this.state.sex;
+    const heightCheck = this.state.height;
+    let age;
+    let gender;
+    let height;
+    if (ageCheck) {
+      age = `${ageCheck}세`;
+    } else {
+      age = '정보 없음';
+    }
+    if (genderCheck == 'male') {
+      gender = '남성';
+    } else if (genderCheck == 'female') {
+      gender = '여성';
+    } else {
+      gender = '정보 없음';
+    }
+    if (heightCheck) {
+      height = `${heightCheck}cm`;
+    } else {
+      height = '정보 없음';
+    }
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.onUpdate} style={styles.updateBtn}>
@@ -96,11 +148,11 @@ class Profile extends Component {
             <Text style={styles.infoText}>기초대사량</Text>
           </View>
           <View style={styles.infoCon}>
-            <Text style={styles.infoText}>이건내아이디</Text>
-            <Text style={styles.infoText}>20세</Text>
-            <Text style={styles.infoText}>여</Text>
-            <Text style={styles.infoText}>160cm</Text>
-            <Text style={styles.infoText}>1400kcal</Text>
+            <Text style={styles.infoText}>{this.state.username}</Text>
+            <Text style={styles.infoText}>{age}</Text>
+            <Text style={styles.infoText}>{gender}</Text>
+            <Text style={styles.infoText}>{height}</Text>
+            <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
         <TouchableOpacity onPress={this.onDelete} style={styles.deleteBtn}>
