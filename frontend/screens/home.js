@@ -5,6 +5,7 @@ import {CommonActions} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('screen');
 
+const {width, height} = Dimensions.get('screen');
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -18,6 +19,9 @@ class Home extends Component {
       username: await AsyncStorage.getItem('username'),
     });
   }
+  onProfile = () => {
+    this.props.navigation.push('Profile');
+  };
   render() {
     return (
       <View style={styles.Container}>
@@ -50,7 +54,16 @@ class Home extends Component {
             }}>
             <Text style={styles.user}>로그아웃</Text>
           </TouchableOpacity>
-          <Text style={styles.user}>{this.state.username}</Text>
+          <Text style={styles.user} onPress={this.onProfile}>
+            {/* {this.state.username} */}
+            <Image
+              style={styles.profileImg}
+              source={{
+                uri:
+                  'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+              }}
+            />
+          </Text>
         </View>
         <View style={styles.body1}>
           <Text style={styles.photo}>사진 등록</Text>
@@ -101,6 +114,10 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     color: 'white',
+  },
+  profileImg: {
+    width: 25,
+    height: 25,
   },
   body1: {
     flexDirection: 'row',

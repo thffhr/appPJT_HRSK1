@@ -11,6 +11,7 @@ import Loding from './components/loading';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
+import Profile from './screens/profile';
 import {
   SafeAreaView,
   StyleSheet,
@@ -68,6 +69,11 @@ class App extends Component {
             name="Home"
             component={Home}
             options={{title: '하루세끼'}}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={{title: '프로필'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
