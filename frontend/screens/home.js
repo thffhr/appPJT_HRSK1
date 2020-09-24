@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  AsyncStorage,
-} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, AsyncStorage} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import {CommonActions} from '@react-navigation/native';
+
+const {width, height} = Dimensions.get('screen');
 
 const {width, height} = Dimensions.get('screen');
 class Home extends Component {
@@ -15,14 +11,12 @@ class Home extends Component {
     super(props);
     this.state = {
       username: '',
-      userId: '',
     };
   }
   async componentDidMount() {
     // you might want to do the I18N setup here
     this.setState({
       username: await AsyncStorage.getItem('username'),
-      userId: await AsyncStorage.getItem('userId'),
     });
   }
   onProfile = () => {
@@ -41,14 +35,19 @@ class Home extends Component {
               if (token !== null) {
                 fetch('http://10.0.2.2:8080/rest-auth/logout/', {
                   method: 'POST',
-                  headers: {
+                  header: {
                     Authorization: `Token ${token}`,
                   },
                 })
                   .then(() => {
                     console.log('로그아웃 성공');
                     AsyncStorage.clear();
-                    this.props.navigation.push('Login');
+                    this.props.navigation.dispatch(
+                      CommonActions.reset({
+                        index: 1,
+                        routes: [{name: 'Login'}],
+                      }),
+                    );
                   })
                   .catch((err) => console.error(err));
               }
