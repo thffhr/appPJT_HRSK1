@@ -39,7 +39,7 @@ class Signup extends Component {
           this.props.navigation.dispatch(
             CommonActions.reset({
               index: 1,
-              routes: [{name: 'Home'}],
+              routes: [{name: 'Startsex'}],
             }),
           );
         } else if (response.username) {

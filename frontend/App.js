@@ -11,6 +11,8 @@ import Loding from './components/loading';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
+import Startsex from './screens/start_sex';
+import Startinfo from './screens/start_info';
 import {
   SafeAreaView,
   StyleSheet,
@@ -68,6 +70,16 @@ class App extends Component {
             name="Home"
             component={Home}
             options={{title: '하루세끼'}}
+          />
+          <Stack.Screen
+            name="Startsex"
+            component={Startsex}
+            options={{title: '성별입력'}}
+          />
+          <Stack.Screen
+            name="Startinfo"
+            component={Startinfo}
+            options={{title: '정보입력'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
