@@ -13,6 +13,8 @@ import Home from './screens/home';
 import Signup from './screens/signup';
 import Camera from './screens/camera';
 import Profile from './screens/profile';
+import Startsex from './screens/start_sex';
+import Startinfo from './screens/start_info';
 import {
   SafeAreaView,
   StyleSheet,
@@ -80,6 +82,14 @@ class App extends Component {
             name="Profile"
             component={Profile}
             options={{title: '프로필'}}
+            name="Startsex"
+            component={Startsex}
+            options={{title: '성별입력'}}
+          />
+          <Stack.Screen
+            name="Startinfo"
+            component={Startinfo}
+            options={{title: '정보입력'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
