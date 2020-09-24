@@ -11,6 +11,7 @@ import Loding from './components/loading';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
+import Camera from './screens/camera';
 import Profile from './screens/profile';
 import {
   SafeAreaView,
@@ -69,6 +70,11 @@ class App extends Component {
             name="Home"
             component={Home}
             options={{title: '하루세끼'}}
+          />
+          <Stack.Screen
+            name="Camera"
+            component={Camera}
+            options={{title: '카메라'}}
           />
           <Stack.Screen
             name="Profile"

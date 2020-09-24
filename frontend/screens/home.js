@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View, Dimensions, AsyncStorage} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  AsyncStorage,
+} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CommonActions} from '@react-navigation/native';
-
-const {width, height} = Dimensions.get('screen');
 
 const {width, height} = Dimensions.get('screen');
 class Home extends Component {
@@ -21,6 +26,9 @@ class Home extends Component {
   }
   onProfile = () => {
     this.props.navigation.push('Profile');
+  };
+  onCamera = () => {
+    this.props.navigation.push('Camera');
   };
   render() {
     return (
@@ -66,7 +74,9 @@ class Home extends Component {
           </Text>
         </View>
         <View style={styles.body1}>
-          <Text style={styles.photo}>사진 등록</Text>
+          <TouchableOpacity onPress={this.onCamera}>
+            <Text style={styles.photo}>사진 등록</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.body2}>
           <View style={styles.body3}>
