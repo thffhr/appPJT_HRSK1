@@ -82,6 +82,8 @@ class App extends Component {
             name="Profile"
             component={Profile}
             options={{title: '프로필'}}
+          />
+          <Stack.Screen
             name="Startsex"
             component={Startsex}
             options={{title: '성별입력'}}

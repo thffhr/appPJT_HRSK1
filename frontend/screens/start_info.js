@@ -70,24 +70,14 @@ class Startinfo extends Component {
             style={styles.inputArea}
             placeholder="키"
             onChangeText={(text) => {
-              this.setState({
-                signupData: {
-                  ...this.state.signupData,
-                  username: text,
-                },
-              });
+              this.setState({height: text});
             }}
           />
           <TextInput
             style={styles.inputArea}
             placeholder="몸무게"
             onChangeText={(text) => {
-              this.setState({
-                signupData: {
-                  ...this.state.signupData,
-                  email: text,
-                },
-              });
+              this.setState({weight: text});
             }}
           />
           <TextInput
@@ -95,12 +85,7 @@ class Startinfo extends Component {
             placeholder="나이"
             secureTextEntry={true}
             onChangeText={(text) => {
-              this.setState({
-                signupData: {
-                  ...this.state.signupData,
-                  password1: text,
-                },
-              });
+              this.setState({age: text});
             }}
           />
         </View>
