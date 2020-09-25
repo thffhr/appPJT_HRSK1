@@ -18,12 +18,13 @@ class Startinfo extends Component {
       height: null,
       weight: null,
       age: null,
+      active: 'normal',
     };
   }
   infoNext = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     if (this.state.height && this.state.weight && this.state.age) {
-      fetch('http://10.0.2.2:8080/accounts/profile/update/', {
+      fetch('http://10.0.2.2:8080/accounts/need/info/', {
         method: 'PATCH',
         body: JSON.stringify(this.state),
         headers: {
@@ -83,7 +84,6 @@ class Startinfo extends Component {
           <TextInput
             style={styles.inputArea}
             placeholder="나이"
-            secureTextEntry={true}
             onChangeText={(text) => {
               this.setState({age: text});
             }}

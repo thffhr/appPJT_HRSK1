@@ -42,7 +42,7 @@ class Startsex extends Component {
   setMale = () => {
     this.setState({
       need: {sex: 'male'},
-      malecolor: 'blue',
+      malecolor: '#a2d5f2',
       femalecolor: 'white',
     });
   };
@@ -50,7 +50,7 @@ class Startsex extends Component {
     this.setState({
       need: {sex: 'female'},
       malecolor: 'white',
-      femalecolor: 'red',
+      femalecolor: '#ff9595',
     });
   };
   render() {

@@ -56,6 +56,35 @@ def need(request):
 
 @api_view(['PATCH'])
 @permission_classes([IsAuthenticated])
+def need_info(request):
+    print(request.data)
+    user = get_object_or_404(User, id=request.user.id)
+    save_data = request.data
+    if user.sex == 'male':
+        basal_metabolism = 66.47 + \
+            (13.75 * int(save_data['weight'])) + (5 *
+                                                  int(save_data['height'])) - (6.76 * int(save_data['age']))
+    elif user.sex == 'female':
+        basal_metabolism = 655.1 + \
+            (9.56 * int(save_data['weight'])) + (1.85 *
+                                                 int(save_data['height'])) - (4.68 * int(save_data['age']))
+
+    if save_data['active'] == 'high':
+        basal_metabolism *= 1.1
+    elif save_data['active'] == 'normal':
+        pass
+    elif save_data['active'] == 'low':
+        basal_metabolism *= 0.9
+
+    save_data['basal_metabolism'] = int(basal_metabolism)
+    serializer = UserSerializer(user, data=save_data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
 def update_info(request):
     user = get_object_or_404(User, id=request.user.id)
     save_data = request.data
@@ -81,6 +110,7 @@ def update_info(request):
         serializer.save()
         return Response(serializer.data)
 
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def userdelete(request, username):
@@ -89,6 +119,7 @@ def userdelete(request, username):
         user.delete()
         # request.user.delete()
         return Response('탈퇴하였습니다.')
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
