@@ -1,21 +1,3 @@
-// import React, { Component } from 'react';
-// import { View } from 'react-native';
-// import { RNCamera } from 'react-native-camera';
-
-// class Camera extends Component {
-//   render() {
-//     return (
-//       <RNCamera
-//         style={{width: 200, height: 200}}
-//         type={RNCamera.Constants.Type.back}
-//         captureAudio={false}
-//       />
-//     )
-//   }
-// }
-
-// export default Camera;
-// 'use strict';
 import React, {PureComponent} from 'react';
 import {
   AppRegistry,
@@ -28,6 +10,7 @@ import {
 } from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import CameraRoll from '@react-native-community/cameraroll';
+import axios from 'axios';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -76,26 +59,30 @@ class ExampleApp extends PureComponent {
       const options = {quality: 0.5, base64: true};
       var data = await this.camera.takePictureAsync(options);
       data.type = 'image/jpeg';
-      // data = `${data}, "type": 'image/jpg'`
-      console.log(data);
-      // const temp = 'wer'
+      // data.name = 'image'
+      console.log('data', data);
       // if (data) {
-      //   const result = await CameraRoll.saveToCameraRoll(data.uri)(data.uri);
+      //   const result = await CameraRoll.saveToCameraRoll(data.uri);
       //   console.log('result', result);
       // }
 
       var formData = new FormData();
       formData.append('file', data);
-      console.log(formData);
+      // formData.append('file', {
+      //   uri: data.uri,
+      //   type: 'image/jpg',
+      //   name: 'img.jpg',
+      // })
+      console.log('FormData', formData)
       fetch('http://10.0.2.2:8080/gallery/saveImg/', {
         method: 'POST',
         body: formData,
         headers: {
-          Accept: 'application/json',
           'Content-Type': 'multipart/form-data',
-          //   // Authorization: `Token ${this.state.authToken}`,
+          // Authorization: `Token ${this.state.authToken}`,
         },
       })
+        // .then(response => response.json())
         .then((response) => {
           console.log('보내기 성공');
           console.log(response);
@@ -134,5 +121,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// AppRegistry.registerComponent('App', () => ExampleApp);
 export default ExampleApp;
