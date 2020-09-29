@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import {AsyncStorage, Image} from 'react-native';

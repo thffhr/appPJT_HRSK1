@@ -29,7 +29,7 @@ class Startsex extends Component {
         },
       })
         .then((response) => response.json())
-        .then((response) => {
+        .then(() => {
           this.props.navigation.push('Startinfo');
         })
         .catch((err) => {

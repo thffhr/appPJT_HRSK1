@@ -6,37 +6,21 @@
  * @flow strict-local
  */
 
-import React, {Component} from 'react';
-import Loding from './components/loading';
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  AsyncStorage,
+} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
-import Camera from './screens/camera';
 import Profile from './screens/profile';
 import Startsex from './screens/start_sex';
 import Startinfo from './screens/start_info';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  TextInput,
-  AsyncStorage,
-  // StatusBar,
-} from 'react-native';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import {StackNavigator} from 'react-navigation';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
+import Rank from './screens/rank';
+import Community from './screens/community';
 
 const Stack = createStackNavigator();
 
@@ -73,11 +57,11 @@ class App extends Component {
             component={Home}
             options={{title: '하루세끼'}}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             name="Camera"
             component={Camera}
             options={{title: '카메라'}}
-          />
+          /> */}
           <Stack.Screen
             name="Profile"
             component={Profile}
@@ -93,6 +77,16 @@ class App extends Component {
             component={Startinfo}
             options={{title: '정보입력'}}
           />
+          <Stack.Screen
+            name="Rank"
+            component={Rank}
+            options={{title: '랭킹페이지'}}
+          />
+          <Stack.Screen
+            name="Community"
+            component={Community}
+            options={{title: '커뮤니티'}}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     );
@@ -107,21 +101,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
-
-//redux
-const initialState = {
-  counter: 0,
-};
-
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case 'INCREASE_COUNTER': {
-      return {counter: state.counter + 1};
-    }
-    case 'DECREASE_COUNTER':
-      return {counter: state.counter - 1};
-  }
-  return state;
-};
 
 export default App;

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CommonActions} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('screen');
 class Home extends Component {
@@ -29,6 +30,12 @@ class Home extends Component {
   };
   onCamera = () => {
     this.props.navigation.push('Camera');
+  };
+  onCommunity = () => {
+    this.props.navigation.push('Community');
+  };
+  onRank = () => {
+    this.props.navigation.push('Rank');
   };
   render() {
     return (
@@ -63,7 +70,6 @@ class Home extends Component {
             <Text style={styles.user}>로그아웃</Text>
           </TouchableOpacity>
           <Text style={styles.user} onPress={this.onProfile}>
-            {/* {this.state.username} */}
             <Image
               style={styles.profileImg}
               source={{
@@ -74,24 +80,49 @@ class Home extends Component {
           </Text>
         </View>
         <View style={styles.body1}>
-          <TouchableOpacity onPress={this.onCamera}>
-            <Text style={styles.photo}>사진 등록</Text>
+          <TouchableOpacity>
+            <Icon name="camera-outline" style={styles.photo}></Icon>
+            {/* <Text style={styles.photo}>사진 등록</Text> */}
           </TouchableOpacity>
         </View>
         <View style={styles.body2}>
           <View style={styles.body3}>
+            <Icon name="calendar-outline" style={styles.record} />
             <Text style={styles.record}>내 기록</Text>
           </View>
           <View style={styles.body4}>
-            <Text style={styles.community}>커뮤니티</Text>
+            <TouchableOpacity
+              style={styles.communityBtn}
+              onPress={this.onCommunity}>
+              <View style={styles.btnContent}>
+                <Icon name="earth-outline" style={styles.community} />
+                <Text style={styles.community}>커뮤니티</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.body5}>
           <View style={styles.body6}>
-            <Text style={styles.ranking}>랭킹</Text>
+            <TouchableOpacity style={styles.rankBtn} onPress={this.onRank}>
+              <View style={styles.btnContent}>
+                <Icon name="medal-outline" style={styles.ranking} />
+                <Text style={styles.ranking}>랭킹</Text>
+              </View>
+            </TouchableOpacity>
           </View>
+          {/* <View style={styles.body7}>
+            <Icon name="trophy-outline" style={styles.game} />
+            <TouchableOpacity>
+              <Text style={styles.game}>식단월드컵</Text>
+            </TouchableOpacity>
+          </View> */}
           <View style={styles.body7}>
-            <Text style={styles.game}>식단월드컵</Text>
+            <TouchableOpacity>
+              <View style={styles.btnContent}>
+                <Icon name="trophy-outline" style={styles.game} />
+                <Text style={styles.game}>식단월드컵</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -138,7 +169,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   photo: {
-    fontSize: 30,
+    fontSize: 100,
     fontWeight: 'bold',
   },
   body2: {
@@ -148,7 +179,7 @@ const styles = StyleSheet.create({
   },
   body3: {
     width: '50%',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -160,11 +191,19 @@ const styles = StyleSheet.create({
   },
   body4: {
     width: '50%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // flexDirection: 'row',
     borderWidth: 1,
     borderColor: 'black',
+    backgroundColor: 'blue',
+    padding: 0,
+  },
+  communityBtn: {
+    flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'yellow',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   community: {
     fontSize: 30,
@@ -177,11 +216,20 @@ const styles = StyleSheet.create({
   },
   body6: {
     width: '50%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    // flexDirection: 'row',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
+    backgroundColor: 'green',
+  },
+  rankBtn: {
+    // flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'yellow',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   ranking: {
     fontSize: 30,
@@ -189,7 +237,7 @@ const styles = StyleSheet.create({
   },
   body7: {
     width: '50%',
-    flexDirection: 'row',
+    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
@@ -198,5 +246,8 @@ const styles = StyleSheet.create({
   game: {
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  btnContent: {
+    alignItems: 'center',
   },
 });

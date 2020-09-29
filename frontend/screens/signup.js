@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-// const serverUrl = 'http:10.0.2.2:8080/'
 
 class Signup extends Component {
   constructor(props) {
