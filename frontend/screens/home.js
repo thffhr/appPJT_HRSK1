@@ -20,12 +20,14 @@ class Home extends Component {
     this.state = {
       username: '',
       avatarSource: '',
+      authToken: '',
     };
   }
   async componentDidMount() {
     // you might want to do the I18N setup here
     this.setState({
       username: await AsyncStorage.getItem('username'),
+      authToken: await AsyncStorage.getItem('auth-token'),
     });
   }
   onProfile = () => {
@@ -38,6 +40,9 @@ class Home extends Component {
       storageOptions: {
         skipBackup: true,
         path: 'images',
+        allowsEditing: true,
+        // maxWidth: width,
+        // maxHeight: width,
       },
     };
 
@@ -52,13 +57,27 @@ class Home extends Component {
       //   console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
-    
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
-    
         this.setState({
           avatarSource: source,
         });
+        var data = new FormData();
+        data.append('file', response);
+        fetch('http://10.0.2.2:8080/gallery/saveImg/', {
+        method: 'POST',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${this.state.authToken}`,
+        },
+      })
+        .then((response) => {
+          console.log('보내기 성공');
+          console.log(response);
+        })
+        .catch((error) => console.log(error));
       }
     });
   };
@@ -143,12 +162,6 @@ class Home extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.body7}>
-            <Icon name="trophy-outline" style={styles.game} />
-            <TouchableOpacity>
-              <Text style={styles.game}>식단월드컵</Text>
-            </TouchableOpacity>
-          </View> */}
           <View style={styles.body7}>
             <TouchableOpacity>
               <View style={styles.btnContent}>
