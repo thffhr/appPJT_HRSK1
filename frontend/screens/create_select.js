@@ -19,18 +19,18 @@ class CreateSelect extends Component {
     super(props);
 
     this.state = {
-      selected: '1',
+      selected: 1,
       pictures: [
-        {pid: 1, image: '1'},
-        {pid: 2, image: '2'},
-        {pid: 3, image: '3'},
-        {pid: 4, image: '4'},
-        {pid: 5, image: '5'},
-        {pid: 6, image: '6'},
-        {pid: 7, image: '7'},
-        {pid: 8, image: '8'},
-        {pid: 9, image: '9'},
-        {pid: 10, image: '10'},
+        {id: 1, image: '1'},
+        {id: 2, image: '2'},
+        {id: 3, image: '3'},
+        {id: 4, image: '4'},
+        {id: 5, image: '5'},
+        {id: 6, image: '6'},
+        {id: 7, image: '7'},
+        {id: 8, image: '8'},
+        {id: 9, image: '9'},
+        {id: 10, image: '10'},
       ],
 
       offset: 0,
@@ -121,13 +121,15 @@ class CreateSelect extends Component {
           <ScrollView>
             <View style={styles.pictures}>
               {this.state.pictures.map((picture) => {
+                const borderColor =
+                  picture.id === this.state.selected ? 'red' : 'white';
                 return (
                   <TouchableOpacity
-                    style={styles.picture}
-                    key={picture.pid}
+                    style={[styles.picture, {borderColor: borderColor}]}
+                    key={picture.id}
                     onPress={() => {
                       this.setState({
-                        selected: picture.image,
+                        selected: picture.id,
                       });
                     }}>
                     <Text style={{color: 'white', fontSize: 30}}>

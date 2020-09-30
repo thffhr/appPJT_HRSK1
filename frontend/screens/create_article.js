@@ -95,7 +95,8 @@ class CreateArticle extends Component {
                   tags: text,
                 });
               }}
-              // style={{borderWidth: 1}}
+              style={[styles.fs1, {flexShrink: 1, maxWidth: '70%'}]}
+              multiline={true}
             />
           </View>
           <Text
@@ -128,21 +129,26 @@ class CreateArticle extends Component {
           />
         </View>
         <View style={styles.block}>
-          <Text>레시피 추가</Text>
+          <View>
+            <Text style={styles.fs1}>레시피 추가</Text>
+            <Text style={{fontSize: 12, color: 'gray', marginTop: 10}}>
+              게시물 하단에 레시피 추가 버튼이 생성됩니다.
+            </Text>
+          </View>
           <Switch
             onValueChange={this.RtoggleSwitch}
             value={this.state.RswitchValue}
           />
         </View>
         <View style={styles.block}>
-          <Text>댓글 허용</Text>
+          <Text style={styles.fs1}>댓글 허용</Text>
           <Switch
             onValueChange={this.CtoggleSwitch}
             value={this.state.CswitchValue}
           />
         </View>
         <View style={styles.block}>
-          <Text>검색 허용</Text>
+          <Text style={styles.fs1}>검색 허용</Text>
           <Switch
             onValueChange={this.StoggleSwitch}
             value={this.state.SswitchValue}
@@ -183,7 +189,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 2,
     borderBottomColor: 'gray',
-    padding: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  fs1: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
