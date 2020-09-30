@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class Community extends Component {
   constructor(props) {
@@ -36,129 +37,130 @@ class Community extends Component {
       active: 'btn1',
     };
   }
-  onBtn1 = () => {
-    this.setState({
-      btn1_color: 'orange',
-      btn2_color: 'white',
-      active: 'btn1',
-    });
-  };
-  onBtn2 = () => {
-    this.setState({
-      btn1_color: 'white',
-      btn2_color: 'orange',
-      active: 'btn2',
-    });
+  onCreateSelect = () => {
+    this.props.navigation.push('CreateSelect');
   };
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
-        <View style={{width: '100%'}}>
-          {this.state.active == 'btn1' && (
-            <View style={{width: '100%'}}>
-              <View style={styles.articles}>
-                <Text
-                  style={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    marginLeft: '5%',
-                    marginBottom: 10,
-                  }}></Text>
-                {this.state.articles.map((article) => {
-                  return (
-                    <View style={styles.article} key={article.id}>
-                      <View style={styles.writer}>
+        <ScrollView>
+          <View style={{width: '100%'}}>
+            {this.state.active == 'btn1' && (
+              <View style={{width: '100%'}}>
+                <View style={styles.articles}>
+                  <Text
+                    style={{
+                      fontSize: 30,
+                      fontWeight: 'bold',
+                      marginLeft: '5%',
+                      marginBottom: 10,
+                    }}></Text>
+                  {this.state.articles.map((article) => {
+                    return (
+                      <View style={styles.article} key={article.id}>
+                        <View style={styles.writer}>
+                          <View
+                            style={{
+                              borderRadius: 50,
+                              width: 50,
+                              height: 50,
+                              backgroundColor: 'green',
+                            }}></View>
+                          <Text
+                            style={{
+                              marginLeft: 10,
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>
+                            {article.user}
+                          </Text>
+                        </View>
+                        <View style={styles.tags}>
+                          {article.tags.map((tag) => {
+                            return (
+                              <Text
+                                key={tag}
+                                style={{marginRight: 5, fontSize: 20}}>
+                                #{tag}
+                              </Text>
+                            );
+                          })}
+                        </View>
                         <View
                           style={{
-                            borderRadius: 50,
-                            width: 50,
-                            height: 50,
-                            backgroundColor: 'green',
-                          }}></View>
-                        <Text
-                          style={{
-                            marginLeft: 10,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                          }}>
-                          {article.user}
-                        </Text>
-                      </View>
-                      <View style={styles.tags}>
-                        {article.tags.map((tag) => {
-                          return (
-                            <Text
-                              key={tag}
-                              style={{marginRight: 5, fontSize: 20}}>
-                              #{tag}
-                            </Text>
-                          );
-                        })}
-                      </View>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: 400,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          backgroundColor: 'orange',
-                          marginBottom: 10,
-                        }}>
-                        <Text>이미지자리</Text>
-                      </View>
-                      <View style={styles.articleBelow}>
-                        <View style={styles.articleBtns}>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                        </View>
-                        <Text
-                          style={{
+                            width: '100%',
+                            height: 400,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            backgroundColor: 'orange',
                             marginBottom: 10,
-                            fontSize: 20,
                           }}>
-                          (하트) abcdefg님 외 1명이 좋아합니다.
-                        </Text>
-                        <Text>{article.content}</Text>
+                          <Text>이미지자리</Text>
+                        </View>
+                        <View style={styles.articleBelow}>
+                          <View style={styles.articleBtns}>
+                            <View
+                              style={{
+                                borderRadius: 40,
+                                width: 40,
+                                height: 40,
+                                backgroundColor: 'green',
+                                marginRight: 10,
+                              }}></View>
+                            <View
+                              style={{
+                                borderRadius: 40,
+                                width: 40,
+                                height: 40,
+                                backgroundColor: 'green',
+                                marginRight: 10,
+                              }}></View>
+                            <View
+                              style={{
+                                borderRadius: 40,
+                                width: 40,
+                                height: 40,
+                                backgroundColor: 'green',
+                                marginRight: 10,
+                              }}></View>
+                          </View>
+
+                          <Text
+                            style={{
+                              marginBottom: 10,
+                              fontSize: 20,
+                            }}>
+                            <Icon
+                              name="heart"
+                              style={{fontSize: 20, color: 'red'}}
+                            />{' '}
+                            abcdefg님 외 1명이 좋아합니다.
+                          </Text>
+                          <Text>{article.content}</Text>
+                        </View>
                       </View>
-                    </View>
-                  );
-                })}
+                    );
+                  })}
+                </View>
               </View>
-            </View>
-          )}
-          {this.state.active == 'btn2' && (
-            <View>
-              <Text>팔로워</Text>
-            </View>
-          )}
-        </View>
-      </ScrollView>
+            )}
+            {this.state.active == 'btn2' && (
+              <View>
+                <Text>팔로워</Text>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.createArticle}
+          onPress={this.onCreateSelect}>
+          <Icon name="add-outline" style={{color: 'black', fontSize: 30}} />
+        </TouchableOpacity>
+      </View>
     );
   }
 }
@@ -218,6 +220,19 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     marginBottom: 10,
+  },
+  createArticle: {
+    position: 'absolute',
+    right: 30,
+    bottom: 30,
+    width: 70,
+    height: 70,
+    borderRadius: 70,
+    borderWidth: 3,
+    borderColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'yellow',
   },
 });
 
