@@ -41,7 +41,7 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer style={styles.container}>
-        <Stack.Navigator initialRouteName="Startsex" >
+        <Stack.Navigator initialRouteName="Login" >
           <Stack.Screen
             name="Login"
             component={Login}

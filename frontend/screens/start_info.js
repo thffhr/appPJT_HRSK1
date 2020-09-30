@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   width,
   AsyncStorage,
+  Image
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
@@ -51,43 +52,56 @@ class Startinfo extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fca652'}}>
             다음
           </Text>
         </TouchableOpacity>
-        <Text style={{marginTop: 150}}>아이콘</Text>
+        <Image
+            source={
+              require('../assets/images/info.png')
+            }
+            style={styles.image}/>
         <Text
           style={{
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: 'bold',
             color: 'gray',
-            marginBottom: 100,
             textAlign: 'center',
+            marginVertical: 20,
           }}>
           기초대사량 계산을 위해{'\n'}다음 정보를 입력해주세요.
         </Text>
         <View>
-          <TextInput
-            style={styles.inputArea}
-            placeholder="키"
-            onChangeText={(text) => {
-              this.setState({height: text});
-            }}
-          />
-          <TextInput
-            style={styles.inputArea}
-            placeholder="몸무게"
-            onChangeText={(text) => {
-              this.setState({weight: text});
-            }}
-          />
-          <TextInput
-            style={styles.inputArea}
-            placeholder="나이"
-            onChangeText={(text) => {
-              this.setState({age: text});
-            }}
-          />
+          <View style={styles.textGroup}>
+            <TextInput
+              style={styles.inputArea}
+              placeholder="키"
+              onChangeText={(text) => {
+                this.setState({height: text});
+              }}
+            />
+            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>cm</Text>
+          </View>
+          <View style={styles.textGroup}>
+            <TextInput
+              style={styles.inputArea}
+              placeholder="몸무게"
+              onChangeText={(text) => {
+                this.setState({weight: text});
+              }}
+            />
+            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>kg</Text>
+          </View>
+          <View style={styles.textGroup}>
+            <TextInput
+              style={styles.inputArea}
+              placeholder="나이"
+              onChangeText={(text) => {
+                this.setState({age: text});
+              }}
+            />
+            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>세</Text>
+          </View>
         </View>
         <View style={styles.location}>
           <View style={styles.ncircle}></View>
@@ -101,24 +115,33 @@ class Startinfo extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    width: width,
     flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
   },
   next: {
     position: 'absolute',
     right: 15,
     top: 15,
   },
+  image: {
+    width: 150,
+    height: 150,
+  },
+  textGroup:{
+    flexDirection: "row"
+  },
   inputArea: {
     height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    marginTop: 7,
-    marginBottom: 7,
-    width: 300,
-    borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    width: 200,
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
   },
   location: {
     position: 'absolute',
@@ -132,7 +155,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 100,
-    backgroundColor: 'orange',
+    backgroundColor: '#fca652',
   },
   ncircle: {
     width: 20,

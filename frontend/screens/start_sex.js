@@ -72,7 +72,7 @@ class Startsex extends Component {
             fontSize: 25,
             fontWeight: 'bold',
             color: 'gray',
-            marginVertical: 30,
+            marginVertical: 20,
           }}>
           성별을 입력해주세요.
         </Text>
