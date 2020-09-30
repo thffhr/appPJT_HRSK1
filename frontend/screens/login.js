@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {
+  Image,
   View,
   Text,
   TextInput,
@@ -8,6 +9,7 @@ import {
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+import { Fonts } from '../src/Fonts'
 
 
 class Login extends Component {
@@ -56,7 +58,15 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.titleGroup}>
+        <Image
+            style={styles.tinyLogo}
+            source={
+              require('../assets/images/로고.png')
+            }
+            style={styles.image}/>
         <Text style={styles.title}>하루세끼</Text>
+            </View>
         <View>
           <TextInput
             style={styles.inputArea}
@@ -69,9 +79,12 @@ class Login extends Component {
             secureTextEntry={true}
             onChangeText={this.handlePassword}
           />
-          <TouchableOpacity onPress={this.onLogin} style={styles.loginBtn}>
-            <Text style={styles.loginBtnText}>로그인</Text>
-          </TouchableOpacity>
+          </View>
+          <View style={styles.loginBtn}>
+            <TouchableOpacity onPress={this.onLogin} >
+              <Text style={styles.loginBtnText}>로그인</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.findBox}>
             <TouchableOpacity style={styles.findBtn} color="transparent">
               <Text>아이디 찾기</Text>
@@ -92,7 +105,6 @@ class Login extends Component {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
     );
   }
 }
@@ -102,30 +114,45 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
+  },
+  titleGroup: {
+    flexDirection: 'row'
   },
   title: {
-    fontSize: 60,
-    fontWeight: 'bold',
+    fontSize: 50,
+    fontFamily: "BMJUA",
     marginTop: 10,
     marginBottom: 50,
+  },
+  image: {
+    marginTop: 15,
+    marginRight: 10,
+    width: 60,
+    height: 60,
   },
   inputArea: {
     width: 300,
     height: 40,
-    borderColor: 'gray',
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
     borderWidth: 1,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 10,
+    marginBottom: 10,
   },
   loginBtn: {
     alignItems: 'center',
-    backgroundColor: '#F1C40F',
+    backgroundColor: '#fca652',
     padding: 15,
     borderRadius: 5,
-    marginTop: 5,
+    marginTop: 10,
     marginBottom: 10,
+    width: 300,
   },
   loginBtnText: {
+    color: 'white',
     fontSize: 15,
     fontWeight: 'bold',
   },
@@ -139,7 +166,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   signupBox: {
-    marginTop: 70,
+    marginTop: 60,
   },
   signupBtn: {
     backgroundColor: 'transparent',
