@@ -52,13 +52,6 @@ class Community extends Component {
             {this.state.active == 'btn1' && (
               <View style={{width: '100%'}}>
                 <View style={styles.articles}>
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: 'bold',
-                      marginLeft: '5%',
-                      marginBottom: 10,
-                    }}></Text>
                   {this.state.articles.map((article) => {
                     return (
                       <View style={styles.article} key={article.id}>
@@ -183,14 +176,6 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
   },
-  btnList: {
-    width: '100%',
-    height: 60,
-    flexDirection: 'row',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2,
-    marginBottom: 20,
-  },
   articles: {
     width: '100%',
     flexDirection: 'column',
@@ -198,7 +183,7 @@ const styles = StyleSheet.create({
   article: {
     flexDirection: 'column',
     width: '100%',
-    marginBottom: 50,
+    marginVertical: 20,
   },
   writer: {
     marginLeft: '5%',
