@@ -20,6 +20,7 @@ import Rank from './screens/rank';
 import Community from './screens/community';
 import CreateSelect from './screens/create_select';
 import CreateArticle from './screens/create_article';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ class App extends Component {
     };
   }
   async componentDidMount() {
+    SplashScreen.hide();
     // you might want to do the I18N setup here
     const username = await AsyncStorage.getItem('username');
     if (username !== null) {
