@@ -20,6 +20,7 @@ import Rank from './screens/rank';
 import Community from './screens/community';
 import CreateSelect from './screens/create_select';
 import CreateArticle from './screens/create_article';
+import Test from './screens/test';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +42,11 @@ class App extends Component {
     return (
       <NavigationContainer style={styles.container}>
         <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Test"
+            component={Test}
+            options={{title: '테스트'}}
+          />
           <Stack.Screen
             name="Login"
             component={Login}

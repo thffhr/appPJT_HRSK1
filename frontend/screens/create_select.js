@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ScrollView,
+  Dimensions,
+  PanResponder,
+  Animated,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -29,6 +32,14 @@ class CreateSelect extends Component {
         {pid: 9, image: '9'},
         {pid: 10, image: '10'},
       ],
+
+      offset: 0,
+      topHeight: 200, // min height for top pane header
+      bottomHeight: 200, // min height for bottom pane header,
+      deviceHeight: Dimensions.get('window').height,
+      isDividerClicked: false,
+
+      pan: new Animated.ValueXY(),
     };
   }
   onNext = () => {
@@ -36,6 +47,40 @@ class CreateSelect extends Component {
       selected: this.state.selected,
     });
   };
+
+  componentWillMount() {
+    this._panResponder = PanResponder.create({
+      onMoveShouldSetResponderCapture: () => true,
+      onMoveShouldSetPanResponderCapture: () => true,
+
+      // Initially, set the Y position offset when touch start
+      onPanResponderGrant: (e, gestureState) => {
+        this.setState({
+          offset: e.nativeEvent.pageY,
+          isDividerClicked: true,
+        });
+      },
+
+      // When we drag the divider, set the bottomHeight (component state) again.
+      onPanResponderMove: (e, gestureState) => {
+        this.setState({
+          bottomHeight:
+            gestureState.moveY > this.state.deviceHeight - 40
+              ? 40
+              : this.state.deviceHeight - gestureState.moveY,
+          offset: e.nativeEvent.pageY,
+        });
+      },
+
+      onPanResponderRelease: (e, gestureState) => {
+        // Do something here for the touch end event
+        this.setState({
+          offset: e.nativeEvent.pageY,
+          isDividerClicked: false,
+        });
+      },
+    });
+  }
 
   render() {
     return (
@@ -48,34 +93,52 @@ class CreateSelect extends Component {
         <View style={styles.navbar}>
           <Text style={styles.title}>사진선택</Text>
         </View>
-        <View style={styles.selected}>
+        <Animated.View
+          style={[
+            styles.selected,
+            {minHeight: 40, flex: 1},
+            {height: this.state.topHeight},
+          ]}>
           <Text style={{color: 'white', fontSize: 50}}>
             {this.state.selected}
           </Text>
-        </View>
-        <View style={styles.description}>
+        </Animated.View>
+        <View
+          style={[
+            styles.description,
+            this.state.isDividerClicked
+              ? {backgroundColor: '#666'}
+              : {backgroundColor: '#e2e2e2'},
+          ]}
+          {...this._panResponder.panHandlers}>
           <Text style={{color: '#08ceff'}}>사진에서 선택</Text>
         </View>
-        <ScrollView>
-          <View style={styles.pictures}>
-            {this.state.pictures.map((picture) => {
-              return (
-                <TouchableOpacity
-                  style={styles.picture}
-                  key={picture.pid}
-                  onPress={() => {
-                    this.setState({
-                      selected: picture.image,
-                    });
-                  }}>
-                  <Text style={{color: 'white', fontSize: 30}}>
-                    {picture.image}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </ScrollView>
+        <Animated.View
+          style={[
+            {backgroundColor: 'white', minHeight: 40},
+            {height: this.state.bottomHeight},
+          ]}>
+          <ScrollView>
+            <View style={styles.pictures}>
+              {this.state.pictures.map((picture) => {
+                return (
+                  <TouchableOpacity
+                    style={styles.picture}
+                    key={picture.pid}
+                    onPress={() => {
+                      this.setState({
+                        selected: picture.image,
+                      });
+                    }}>
+                    <Text style={{color: 'white', fontSize: 30}}>
+                      {picture.image}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </ScrollView>
+        </Animated.View>
       </View>
     );
   }
@@ -107,7 +170,6 @@ const styles = StyleSheet.create({
   },
   selected: {
     width: '100%',
-    height: 400,
     backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',

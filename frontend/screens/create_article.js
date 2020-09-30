@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   AsyncStorage,
-  ScrollView,
+  Switch,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,10 +19,47 @@ class CreateArticle extends Component {
       selected: this.props.route.params.selected,
       tags: '태그1 태그2',
       content: '',
+      RswitchValue: false,
+      CswitchValue: false,
+      SswitchValue: false,
     };
   }
   infoNext = async () => {
     const token = await AsyncStorage.getItem('auth-token');
+  };
+
+  RtoggleSwitch = () => {
+    if (this.state.RswitchValue) {
+      this.setState({
+        RswitchValue: false,
+      });
+    } else {
+      this.setState({
+        RswitchValue: true,
+      });
+    }
+  };
+  CtoggleSwitch = () => {
+    if (this.state.CswitchValue) {
+      this.setState({
+        CswitchValue: false,
+      });
+    } else {
+      this.setState({
+        CswitchValue: true,
+      });
+    }
+  };
+  StoggleSwitch = () => {
+    if (this.state.SswitchValue) {
+      this.setState({
+        SswitchValue: false,
+      });
+    } else {
+      this.setState({
+        SswitchValue: true,
+      });
+    }
   };
 
   render() {
@@ -36,7 +73,7 @@ class CreateArticle extends Component {
         <View style={styles.navbar}>
           <Text style={styles.title}>새 게시물</Text>
         </View>
-        <View style={styles.block1}>
+        <View style={styles.block}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Text
               style={{
@@ -65,7 +102,6 @@ class CreateArticle extends Component {
             style={{
               width: 40,
               height: 40,
-              borderRadius: 40,
               backgroundColor: 'green',
               textAlign: 'center',
               textAlignVertical: 'center',
@@ -87,6 +123,29 @@ class CreateArticle extends Component {
                 content: text,
               });
             }}
+            style={{flexShrink: 1}}
+            multiline={true}
+          />
+        </View>
+        <View style={styles.block}>
+          <Text>레시피 추가</Text>
+          <Switch
+            onValueChange={this.RtoggleSwitch}
+            value={this.state.RswitchValue}
+          />
+        </View>
+        <View style={styles.block}>
+          <Text>댓글 허용</Text>
+          <Switch
+            onValueChange={this.CtoggleSwitch}
+            value={this.state.CswitchValue}
+          />
+        </View>
+        <View style={styles.block}>
+          <Text>검색 허용</Text>
+          <Switch
+            onValueChange={this.StoggleSwitch}
+            value={this.state.SswitchValue}
           />
         </View>
       </View>
@@ -117,7 +176,7 @@ const styles = StyleSheet.create({
     right: 15,
     top: 15,
   },
-  block1: {
+  block: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
