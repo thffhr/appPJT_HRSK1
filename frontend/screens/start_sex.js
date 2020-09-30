@@ -14,8 +14,8 @@ class Startsex extends Component {
     super(props);
     this.state = {
       need: {sex: ''},
-      malecolor: 'white',
-      femalecolor: 'white',
+      malecolor: 'transparent',
+      femalecolor: 'transparent',
     };
   }
   infoNext = async () => {
@@ -58,7 +58,7 @@ class Startsex extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fca652'}}>
             다음
           </Text>
         </TouchableOpacity>
@@ -78,16 +78,22 @@ class Startsex extends Component {
         </Text>
         <View style={styles.selectboxes}>
           <TouchableOpacity
-            style={styles.selectbox1}
+            style={[styles.selectbox1, {backgroundColor: this.state.malecolor}]}
             onPress={this.setMale}>
-            <Text style={{fontSize: 30, fontWeight: 'bold'}}>남</Text>
+            <Image source={
+              require('../assets/images/male.png')
+            }
+            style={styles.selectsex}/>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'gray'}}>남</Text>
           </TouchableOpacity>
-          <View
-            style={{width: 2, height: 200, backgroundColor: 'black'}}></View>
           <TouchableOpacity
-            style={styles.selectbox2}
+            style={[styles.selectbox2, {backgroundColor: this.state.femalecolor}]}
             onPress={this.setFemale}>
-            <Text style={{fontSize: 30, fontWeight: 'bold'}}>여</Text>
+            <Image source={
+              require('../assets/images/female.png')
+            }
+            style={styles.selectsex}/>
+            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'gray'}}>여</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.location}>
@@ -116,18 +122,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectbox1: {
-    width: 200,
+    width: 150,
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent' 
   },
   selectbox2: {
-    width: 200,
+    width: 150,
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent' 
+  },
+  selectsex: {
+    width: 100,
+    height: 100
   },
   next: {
     position: 'absolute',
@@ -146,7 +156,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 100,
-    backgroundColor: 'orange',
+    backgroundColor: '#fca652',
   },
   ncircle: {
     width: 20,
