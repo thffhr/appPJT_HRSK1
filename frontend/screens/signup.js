@@ -5,6 +5,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Image
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
@@ -60,9 +61,11 @@ class Signup extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          생성할 아이디와{'\n'}비밀번호를 입력해주세요.
-        </Text>
+        <Image
+            source={
+              require('../assets/images/로고.png')
+            }
+            style={styles.image}/>
         <View>
           <TextInput
             style={styles.inputArea}
@@ -115,7 +118,7 @@ class Signup extends Component {
             }}
           />
           <TouchableOpacity onPress={this.onSignup} style={styles.signupBtn}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>회원가입</Text>
+            <Text style={styles.signBtnText}>회원가입</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -128,6 +131,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
+  },
+  description: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginVertical: 10,
   },
   title: {
     fontSize: 25,
@@ -137,24 +146,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signupBtn: {
-    backgroundColor: '#f5d742',
-    color: 'blue',
     alignItems: 'center',
-    marginTop: 40,
-    borderWidth: 1,
-    width: 100,
-    alignSelf: 'center',
-    padding: 20,
+    backgroundColor: '#fca652',
+    padding: 15,
     borderRadius: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    width: 300,
+  },
+  signBtnText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   inputArea: {
     height: 40,
-    borderColor: 'gray',
     borderWidth: 1,
-    marginTop: 7,
-    marginBottom: 7,
+    marginTop: 10,
+    marginBottom: 10,
     width: 300,
-    borderRadius: 5,
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginBottom: 30
   },
 });
 
