@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   width,
   AsyncStorage,
+  Image,
 } from 'react-native';
 
 class Startsex extends Component {
@@ -42,15 +43,15 @@ class Startsex extends Component {
   setMale = () => {
     this.setState({
       need: {sex: 'male'},
-      malecolor: '#a2d5f2',
-      femalecolor: 'white',
+      malecolor: '#51adcf',
+      femalecolor: 'transparent',
     });
   };
   setFemale = () => {
     this.setState({
       need: {sex: 'female'},
-      malecolor: 'white',
-      femalecolor: '#ff9595',
+      malecolor: 'transparent',
+      femalecolor: '#f9c0c0',
     });
   };
   render() {
@@ -61,29 +62,30 @@ class Startsex extends Component {
             다음
           </Text>
         </TouchableOpacity>
-        <Text style={{marginTop: 150}}>아이콘</Text>
+        <Image
+            source={
+              require('../assets/images/sex.png')
+            }
+            style={styles.image}/>
         <Text
           style={{
             fontSize: 25,
             fontWeight: 'bold',
             color: 'gray',
-            marginBottom: 100,
+            marginVertical: 30,
           }}>
           성별을 입력해주세요.
         </Text>
         <View style={styles.selectboxes}>
           <TouchableOpacity
-            style={[styles.selectbox1, {backgroundColor: this.state.malecolor}]}
+            style={styles.selectbox1}
             onPress={this.setMale}>
             <Text style={{fontSize: 30, fontWeight: 'bold'}}>남</Text>
           </TouchableOpacity>
           <View
             style={{width: 2, height: 200, backgroundColor: 'black'}}></View>
           <TouchableOpacity
-            style={[
-              styles.selectbox2,
-              {backgroundColor: this.state.femalecolor},
-            ]}
+            style={styles.selectbox2}
             onPress={this.setFemale}>
             <Text style={{fontSize: 30, fontWeight: 'bold'}}>여</Text>
           </TouchableOpacity>
@@ -100,10 +102,14 @@ class Startsex extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    width: width,
     flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
+  },
+  image: {
+    width: 188,
+    height: 150,
   },
   selectboxes: {
     flexDirection: 'row',
@@ -114,12 +120,14 @@ const styles = StyleSheet.create({
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent' 
   },
   selectbox2: {
     width: 200,
     height: 200,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent' 
   },
   next: {
     position: 'absolute',

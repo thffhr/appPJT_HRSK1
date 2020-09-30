@@ -60,7 +60,6 @@ class Login extends Component {
       <View style={styles.container}>
         <View style={styles.titleGroup}>
         <Image
-            style={styles.tinyLogo}
             source={
               require('../assets/images/로고.png')
             }
