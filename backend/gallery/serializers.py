@@ -1,0 +1,25 @@
+from rest_framework import serializers
+from .models import Menu, KindOf
+from accounts.serializers import UserSerializer
+# from drf_extra_fields.fields import Base64ImageField
+
+class kindOfSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = KindOf
+        fields = '__all__'
+
+class MenueSerializer(serializers.ModelSerializer):
+    # user = UserSerializer(required=False)
+    # image = serializers.ImageField(required=False)
+    # image = Base64ImageField()
+    # kindOf = kindOfSerializer(required=False)
+    # created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False)
+
+    class Meta:
+        model = Menu
+        fields = '__all__'
+
+    # def create(self, validated_data):
+    #     image=validated_data.pop('image')
+    #     data=validated_data.pop('data')
+    #     return Menue.objects.create(data=data,image=image)
