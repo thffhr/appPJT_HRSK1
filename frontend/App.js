@@ -10,6 +10,7 @@ import React, {Component} from 'react';
 import {StyleSheet, AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import SplashScreen from 'react-native-splash-screen';
 import Login from './screens/login';
 import Home from './screens/home';
 import Signup from './screens/signup';
@@ -20,7 +21,7 @@ import Rank from './screens/rank';
 import Community from './screens/community';
 import CreateSelect from './screens/create_select';
 import CreateArticle from './screens/create_article';
-import SplashScreen from 'react-native-splash-screen';
+import Calendars from './screens/calendars';
 
 const Stack = createStackNavigator();
 
@@ -63,6 +64,11 @@ class App extends Component {
             component={Camera}
             options={{title: '카메라'}}
           /> */}
+          <Stack.Screen
+            name="Calendars"
+            component={Calendars}
+            options={{title: '내 기록'}}
+          />
           <Stack.Screen
             name="Profile"
             component={Profile}

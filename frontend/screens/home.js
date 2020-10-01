@@ -87,6 +87,9 @@ class Home extends Component {
   onRank = () => {
     this.props.navigation.push('Rank');
   };
+  onCalendar = () => {
+    this.props.navigation.push('Calendars');
+  };
   
   render() {
     return (
@@ -139,8 +142,14 @@ class Home extends Component {
         </View>
         <View style={styles.body2}>
           <View style={styles.body3}>
-            <Icon name="calendar-outline" style={styles.record} />
-            <Text style={styles.record}>내 기록</Text>
+            <TouchableOpacity
+              style={styles.communityBtn}
+              onPress={this.onCalendar}>
+              <View style={styles.btnContent}>
+                <Icon name="calendar-outline" style={styles.record} />
+                <Text style={styles.record}>내 기록</Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={styles.body4}>
             <TouchableOpacity
@@ -225,9 +234,6 @@ const styles = StyleSheet.create({
   },
   body3: {
     width: '50%',
-    // flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
   },
@@ -237,7 +243,6 @@ const styles = StyleSheet.create({
   },
   body4: {
     width: '50%',
-    // flexDirection: 'row',
     borderWidth: 1,
     borderColor: 'black',
     backgroundColor: 'blue',
