@@ -87,8 +87,8 @@ class Home extends Component {
   onRank = () => {
     this.props.navigation.push('Rank');
   };
-  onCalendar = () => {
-    this.props.navigation.push('Calendars');
+  onRecord = () => {
+    this.props.navigation.push('Record');
   };
   
   render() {
@@ -147,7 +147,7 @@ class Home extends Component {
           <View style={styles.body3}>
             <TouchableOpacity
               style={styles.btnBox}
-              onPress={this.onCalendar}>
+              onPress={this.onRecord}>
               <View style={styles.btnContent}>
                 <Icon name="calendar-outline" style={styles.record} />
                 <Text style={styles.record}>내 기록</Text>

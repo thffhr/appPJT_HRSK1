@@ -13,7 +13,7 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-class Calendars extends Component {
+class Record extends Component {
   constructor(props) {
     super(props);
 
@@ -174,4 +174,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Calendars;
+export default Record;

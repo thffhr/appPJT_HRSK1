@@ -11,17 +11,17 @@ import {StyleSheet, AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
-import Login from './screens/login';
+import Login from './screens/Account/login';
+import Signup from './screens/Account/signup';
+import Profile from './screens/Account/profile';
+import Startsex from './screens/Account/start_sex';
+import Startinfo from './screens/Account/start_info';
+import Record from './screens/Record/record';
+import Rank from './screens/Rank/rank';
+import Community from './screens/Community/community';
+import CreateSelect from './screens/Community/create_select';
+import CreateArticle from './screens/Community/create_article';
 import Home from './screens/home';
-import Signup from './screens/signup';
-import Profile from './screens/profile';
-import Startsex from './screens/start_sex';
-import Startinfo from './screens/start_info';
-import Rank from './screens/rank';
-import Community from './screens/community';
-import CreateSelect from './screens/create_select';
-import CreateArticle from './screens/create_article';
-import Calendars from './screens/calendars';
 
 const Stack = createStackNavigator();
 
@@ -65,8 +65,8 @@ class App extends Component {
             options={{title: '카메라'}}
           /> */}
           <Stack.Screen
-            name="Calendars"
-            component={Calendars}
+            name="Record"
+            component={Record}
             options={{title: '내 기록'}}
           />
           <Stack.Screen
