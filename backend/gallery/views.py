@@ -10,21 +10,21 @@ from django.core.files.base import ContentFile
 # from PIL import Image
 
 import base64
+# from django.http import FileResponse
 # Create your views here.
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def saveMenue(request):
-    # image = ContentFile(request.data['file'])
-    # new_menu = Menu()
-    # new_menu.user = request.user
-    # new_menu.image = request.data['file']
-    # new_menu.save()
-    print(request.POST)
-    print(ContentFile(request.POST['file']))
-    # decoded_data = base64.decodestring(request.data['file'][0])
-    # print(decoded_data)
-    return Response("파일이 저장되었습니다.")
+def saveMenu(request):
+    new_menu = Menu()
+    new_menu.user = request.user
+    # type, fileName, data << 각각 프론트에서 보낼 수 있는 데이터
+    decoded_data = base64.b64decode(request.data['data'])
+    new_menu.image = ContentFile(decoded_data, name=f"image/{request.data['fileName']}")
+    new_menu.save()
+    return Response("파일을 저장했습니다.")
+    # response = FileResponse(open(f"media/image/{request.data['fileName']}", 'rb'))
+    # return response
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

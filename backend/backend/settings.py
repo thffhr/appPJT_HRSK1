@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     # My app
     'accounts',
     'articles',
+    'gallery',
 ]
 
 MIDDLEWARE = [
