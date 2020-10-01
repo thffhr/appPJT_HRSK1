@@ -5,8 +5,10 @@ import {Calendar, CalendarList, Agenda, LocaleConfig, Arrow} from 'react-native-
 LocaleConfig.locales['fr'] = {
   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-  dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+  // dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+  // dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
+  dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+  dayNamesShort: ['일','월','화','수','목','금','토'],
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'fr';
@@ -26,7 +28,9 @@ class Calendars extends Component {
   render() {
     return (
       <View>
-        <Calendar
+        <CalendarList
+          horizontal={true}
+          pagingEnabled={true}
           // Initially visible month. Default = Date()
           current={'2020-10-01'}
           // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
@@ -53,7 +57,7 @@ class Calendars extends Component {
           // If firstDay=1 week starts from Monday. Note that dayNames and dayNamesShort should still start from Sunday.
           firstDay={1}
           // Hide day names. Default = false
-          hideDayNames={true}
+          hideDayNames={false}
           // Show week numbers to the left. Default = false
           showWeekNumbers={false}
           // Handler which gets executed when press arrow icon left. It receive a callback can go back month

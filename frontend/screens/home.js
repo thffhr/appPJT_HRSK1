@@ -135,15 +135,18 @@ class Home extends Component {
         </View>
         <View style={styles.body1}>
           <TouchableOpacity 
+            style={styles.btnBox}
             onPress={this.onCamera}>
-            <Icon name="camera-outline" style={styles.photo}></Icon>
-            {/* <Text style={styles.photo}>사진 등록</Text> */}
+            <View style={styles.btnContent}>
+              <Icon name="camera" style={styles.photo}></Icon>
+              <Text style={styles.photoTitle}>사진 등록</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.body2}>
           <View style={styles.body3}>
             <TouchableOpacity
-              style={styles.communityBtn}
+              style={styles.btnBox}
               onPress={this.onCalendar}>
               <View style={styles.btnContent}>
                 <Icon name="calendar-outline" style={styles.record} />
@@ -153,7 +156,7 @@ class Home extends Component {
           </View>
           <View style={styles.body4}>
             <TouchableOpacity
-              style={styles.communityBtn}
+              style={styles.btnBox}
               onPress={this.onCommunity}>
               <View style={styles.btnContent}>
                 <Icon name="earth-outline" style={styles.community} />
@@ -164,7 +167,7 @@ class Home extends Component {
         </View>
         <View style={styles.body5}>
           <View style={styles.body6}>
-            <TouchableOpacity style={styles.rankBtn} onPress={this.onRank}>
+            <TouchableOpacity style={styles.btnBox} onPress={this.onRank}>
               <View style={styles.btnContent}>
                 <Icon name="medal-outline" style={styles.ranking} />
                 <Text style={styles.ranking}>랭킹</Text>
@@ -172,7 +175,7 @@ class Home extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.body7}>
-            <TouchableOpacity>
+            <TouchableOpacity style={styles.btnBox}>
               <View style={styles.btnContent}>
                 <Icon name="trophy-outline" style={styles.game} />
                 <Text style={styles.game}>식단월드컵</Text>
@@ -216,15 +219,15 @@ const styles = StyleSheet.create({
     height: 25,
   },
   body1: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     flex: 4,
     borderWidth: 1,
     borderColor: 'black',
   },
   photo: {
     fontSize: 100,
+  },
+  photoTitle: {
+    fontSize: 30,
     fontWeight: 'bold',
   },
   body2: {
@@ -248,7 +251,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'blue',
     padding: 0,
   },
-  communityBtn: {
+  btnBox: {
     flexDirection: 'row',
     width: '100%',
     height: '100%',
@@ -267,20 +270,8 @@ const styles = StyleSheet.create({
   },
   body6: {
     width: '50%',
-    // flexDirection: 'row',
-    // justifyContent: 'center',
-    // alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
-    backgroundColor: 'green',
-  },
-  rankBtn: {
-    // flexDirection: 'row',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'yellow',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   ranking: {
     fontSize: 30,
@@ -288,9 +279,6 @@ const styles = StyleSheet.create({
   },
   body7: {
     width: '50%',
-    // flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: 'black',
   },
