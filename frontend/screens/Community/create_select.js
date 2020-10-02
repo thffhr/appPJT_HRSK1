@@ -10,6 +10,7 @@ import {
   Dimensions,
   PanResponder,
   Animated,
+  Image,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,19 +20,8 @@ class CreateSelect extends Component {
     super(props);
 
     this.state = {
-      selected: 1,
-      pictures: [
-        {id: 1, image: '1'},
-        {id: 2, image: '2'},
-        {id: 3, image: '3'},
-        {id: 4, image: '4'},
-        {id: 5, image: '5'},
-        {id: 6, image: '6'},
-        {id: 7, image: '7'},
-        {id: 8, image: '8'},
-        {id: 9, image: '9'},
-        {id: 10, image: '10'},
-      ],
+      selected: {id: null, image: null},
+      pictures: [],
 
       offset: 0,
       topHeight: 200, // min height for top pane header
@@ -82,6 +72,31 @@ class CreateSelect extends Component {
     });
   }
 
+  componentDidMount() {
+    this.getAllPictures();
+  }
+
+  getAllPictures = async () => {
+    const token = await AsyncStorage.getItem('auth-token');
+    fetch(`http://10.0.2.2:8080/gallery/myImgs/`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          pictures: response,
+          selected: {id: response[0].id, image: response[0].image},
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -99,9 +114,14 @@ class CreateSelect extends Component {
             {minHeight: 40, flex: 1},
             {height: this.state.topHeight},
           ]}>
-          <Text style={{color: 'white', fontSize: 50}}>
-            {this.state.selected}
-          </Text>
+          <Image
+            style={{width: '100%', height: '100%'}}
+            source={{
+              uri:
+                'http://10.0.2.2:8080/accounts/pimg' +
+                this.state.selected.image,
+            }}
+          />
         </Animated.View>
         <View
           style={[
@@ -122,19 +142,23 @@ class CreateSelect extends Component {
             <View style={styles.pictures}>
               {this.state.pictures.map((picture) => {
                 const borderColor =
-                  picture.id === this.state.selected ? 'red' : 'white';
+                  picture.id === this.state.selected.id ? 'red' : 'white';
                 return (
                   <TouchableOpacity
-                    style={[styles.picture, {borderColor: borderColor}]}
+                    style={[styles.imgBtn, {borderColor: borderColor}]}
                     key={picture.id}
                     onPress={() => {
                       this.setState({
-                        selected: picture.id,
+                        selected: {id: picture.id, image: picture.image},
                       });
                     }}>
-                    <Text style={{color: 'white', fontSize: 30}}>
-                      {picture.image}
-                    </Text>
+                    <Image
+                      style={styles.picture}
+                      source={{
+                        uri:
+                          'http://10.0.2.2:8080/accounts/pimg' + picture.image,
+                      }}
+                    />
                   </TouchableOpacity>
                 );
               })}
@@ -172,9 +196,6 @@ const styles = StyleSheet.create({
   },
   selected: {
     width: '100%',
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   description: {
     width: '100%',
@@ -188,14 +209,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  picture: {
+  imgBtn: {
     width: '25%',
     height: 100,
-    borderWidth: 2,
     borderColor: 'white',
-    backgroundColor: 'orange',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderWidth: 2,
+  },
+  picture: {
+    width: '100%',
+    height: '100%',
   },
 });
 

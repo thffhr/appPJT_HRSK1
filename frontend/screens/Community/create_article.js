@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Switch,
+  Image,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -24,6 +25,35 @@ class CreateArticle extends Component {
       SswitchValue: false,
     };
   }
+
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    this.setState({
+      username: await AsyncStorage.getItem('username'),
+    });
+    this.getInfo();
+    console.log(this.state.userId);
+  }
+
+  getInfo = () => {
+    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          profileImage: response.profileImage,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   infoNext = async () => {
     const token = await AsyncStorage.getItem('auth-token');
   };
@@ -63,6 +93,7 @@ class CreateArticle extends Component {
   };
 
   render() {
+    console.log('받아온 데이터', this.state.selected);
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
@@ -75,18 +106,25 @@ class CreateArticle extends Component {
         </View>
         <View style={styles.block}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Text
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 40,
-                backgroundColor: 'green',
-                textAlign: 'center',
-                textAlignVertical: 'center',
-                marginRight: 10,
-              }}>
-              프사
-            </Text>
+            {this.state.profileImage && (
+              <Image
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    'http://10.0.2.2:8080/accounts/pimg' +
+                    this.state.profileImage,
+                }}
+              />
+            )}
+            {!this.state.profileImage && (
+              <Image
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                }}
+              />
+            )}
             <TextInput
               placeholder="해시태그를 입력하세요"
               value={this.state.tags}
@@ -99,16 +137,14 @@ class CreateArticle extends Component {
               multiline={true}
             />
           </View>
-          <Text
-            style={{
-              width: 40,
-              height: 40,
-              backgroundColor: 'green',
-              textAlign: 'center',
-              textAlignVertical: 'center',
-            }}>
-            {this.state.selected}
-          </Text>
+          <Image
+            style={{width: 100, height: 100}}
+            source={{
+              uri:
+                'http://10.0.2.2:8080/accounts/pimg' +
+                this.state.selected.image,
+            }}
+          />
         </View>
         <View
           style={{
@@ -176,6 +212,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: 'bold',
+  },
+  profileImg: {
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    marginRight: 10,
   },
   next: {
     position: 'absolute',
