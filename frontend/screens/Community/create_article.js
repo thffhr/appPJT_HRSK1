@@ -110,9 +110,7 @@ class CreateArticle extends Component {
               <Image
                 style={styles.profileImg}
                 source={{
-                  uri:
-                    'http://10.0.2.2:8080/accounts/pimg' +
-                    this.state.profileImage,
+                  uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
                 }}
               />
             )}
@@ -140,9 +138,7 @@ class CreateArticle extends Component {
           <Image
             style={{width: 100, height: 100}}
             source={{
-              uri:
-                'http://10.0.2.2:8080/accounts/pimg' +
-                this.state.selected.image,
+              uri: 'http://10.0.2.2:8080/gallery' + this.state.selected.image,
             }}
           />
         </View>

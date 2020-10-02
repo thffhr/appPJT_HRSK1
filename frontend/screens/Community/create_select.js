@@ -117,9 +117,7 @@ class CreateSelect extends Component {
           <Image
             style={{width: '100%', height: '100%'}}
             source={{
-              uri:
-                'http://10.0.2.2:8080/accounts/pimg' +
-                this.state.selected.image,
+              uri: 'http://10.0.2.2:8080/gallery' + this.state.selected.image,
             }}
           />
         </Animated.View>

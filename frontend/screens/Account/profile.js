@@ -123,9 +123,7 @@ class Profile extends Component {
             <Image
               style={styles.profileImg}
               source={{
-                uri:
-                  'http://10.0.2.2:8080/accounts/pimg' +
-                  this.state.profileImage,
+                uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
               }}
             />
           )}

@@ -146,8 +146,7 @@ export default class UpdateImg extends React.Component {
         {!photo && this.state.profileImage && (
           <Image
             source={{
-              uri:
-                'http://10.0.2.2:8080/accounts/pimg' + this.state.profileImage,
+              uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
             }}
             style={{width: 200, height: 200}}
           />
