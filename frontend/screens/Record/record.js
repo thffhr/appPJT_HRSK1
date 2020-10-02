@@ -34,15 +34,6 @@ for (var i = 0; i < nextDays.length; i++) {
     };
   });
 }
-// nextDays.forEach(() => {
-//   newDaysObject = {
-//     ...newDaysObject,
-//     [day]: {
-//       marked: true,
-//       dotColor: '#FCA652',
-//     }
-//   };
-// });
 
 class Record extends Component {
   constructor(props) {
