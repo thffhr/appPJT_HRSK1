@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 50,
-    fontFamily: "BMJUAz",
+    fontFamily: "BMJUA",
     marginBottom: 50,
     marginTop: 5,
   },
