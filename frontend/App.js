@@ -44,7 +44,11 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer style={styles.container}>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerShown: false,
+          }}>
           <Stack.Screen
             name="Login"
             component={Login}
