@@ -65,7 +65,7 @@ class Home extends Component {
         data.append('data', response.data);
         data.append('type', response.type);
         data.append('fileName', response.fileName);
-        fetch('http://10.0.2.2:8080/gallery/saveMenue/', {
+        fetch('http://10.0.2.2:8080/gallery/saveMenu/', {
           method: 'POST',
           body: data,
           headers: {

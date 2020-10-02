@@ -5,13 +5,44 @@ import {Calendar, CalendarList, Agenda, LocaleConfig, Arrow} from 'react-native-
 LocaleConfig.locales['fr'] = {
   monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
   monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-  // dayNames: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
-  // dayNamesShort: ['Dim.','Lun.','Mar.','Mer.','Jeu.','Ven.','Sam.'],
   dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
   dayNamesShort: ['일','월','화','수','목','금','토'],
   today: 'Aujourd\'hui'
 };
 LocaleConfig.defaultLocale = 'fr';
+
+const breakfast = {key: 'breakfast', color: '#ffa696'};
+const lunch = {key: 'lunch', color: '#d7ff96'};
+const dinner = {key: 'dinner', color: '#96faff'};
+const snack = {key: 'snack', color: '#e196ff'};
+
+const nextDays = [
+  ['2020-10-01', 100, 200, 300, 400],
+  ['2020-10-15', 600, 500, 400, 330],
+  ['2020-10-30', 10, 20, 30, 40],
+  ['2020-10-31', 20, 60, 70, 50],
+];
+let newDaysObject = {};
+for (var i = 0; i < nextDays.length; i++) {
+  nextDays[i].forEach((day) => {
+    newDaysObject = {
+      ...newDaysObject,
+      [day]: {
+        marked: true,
+        dotColor: '#FCA652',
+      }
+    };
+  });
+}
+// nextDays.forEach(() => {
+//   newDaysObject = {
+//     ...newDaysObject,
+//     [day]: {
+//       marked: true,
+//       dotColor: '#FCA652',
+//     }
+//   };
+// });
 
 class Record extends Component {
   constructor(props) {
@@ -23,33 +54,39 @@ class Record extends Component {
     //   year: 2017,  // year
     //   // timestamp,   // UTC timestamp representing 00:00 AM of this date
     //   dateString: '2016-05-13' // date formatted as 'YYYY-MM-DD' string
-    btn1_color: 'white',
-    btn2_color: 'white',
-    btn3_color: 'orange',
-    active: 'btn3',
-    }
+      btn1_color: '#FFFBE6',
+      btn2_color: '#FFFBE6',
+      btn3_color: '#FCA652',
+      active: 'btn3',
+      // record = [
+      //   ['2020-10-06', 200, 300, 500, 200], // date, breakfast, lunch, dinner, snack 
+      //   ['2020-10-10', 200, 300, 500, 200],
+      //   ['2020-10-20', 200, 0, 500, 200],
+      // ],
+    };
   };
+  
   onBtn1 = () => {
     this.setState({
       btn1_color: 'orange',
-      btn2_color: 'white',
-      btn3_color: 'white',
+      btn2_color: '#FFFBE6',
+      btn3_color: '#FFFBE6',
       active: 'btn1',
     });
   };
   onBtn2 = () => {
     this.setState({
-      btn1_color: 'white',
-      btn2_color: 'orange',
-      btn3_color: 'white',
+      btn1_color: '#FFFBE6',
+      btn2_color: '#FCA652',
+      btn3_color: '#FFFBE6',
       active: 'btn2',
     });
   };
   onBtn3 = () => {
     this.setState({
-      btn1_color: 'white',
-      btn2_color: 'white',
-      btn3_color: 'orange',
+      btn1_color: '#FFFBE6',
+      btn2_color: '#FFFBE6',
+      btn3_color: '#FCA652',
       active: 'btn3',
     });
   };
@@ -83,7 +120,7 @@ class Record extends Component {
                 horizontal={true}
                 pagingEnabled={true}
                 // Initially visible month. Default = Date()
-                current={'2020-10-01'}
+                // current={'2020-10-01'}
                 // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                 minDate={'2020-01-01'}
                 // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
@@ -125,6 +162,16 @@ class Record extends Component {
                 // renderHeader={(date) => {/*Return JSX*/}}
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
+                markedDates={{
+                  '2020-10-05': {marked: true}
+                }}
+                theme={{
+                  todayTextColor: '#FCA652',
+                  // dotColor: '#FCA652',
+                  // backgroundColor: '#FFFBE6',
+                }}
+                markedDates={newDaysObject}
+
               />
             </View>
           )}
@@ -139,6 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     flex: 1,
+    backgroundColor: '#FFFBE6',
   },
   navbar: {
     width: '100%',
@@ -172,6 +220,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 30,
   },
+
 })
 
 export default Record;
