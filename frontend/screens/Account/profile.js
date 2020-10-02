@@ -26,6 +26,7 @@ class Profile extends Component {
       bm: '',
     };
   }
+
   async componentDidMount() {
     // you might want to do the I18N setup here
     this.setState({
