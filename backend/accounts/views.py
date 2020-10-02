@@ -135,13 +135,6 @@ def update_profileImage(request):
         return Response(serializer.data)
 
 
-def get_profile(request, uri):
-    images = []
-    data = open('media/image/' + uri, "rb").read()
-    images.append(data)
-    return HttpResponse(images, content_type="image/png")
-
-
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def del_profile(request):

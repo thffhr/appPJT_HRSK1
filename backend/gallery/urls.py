@@ -7,4 +7,5 @@ urlpatterns = [
     path('saveMenu/', views.saveMenu, name='saveMenue'),
     path('<int:image_id>/delImg/', views.delImg, name='delImg'),
     path('myImgs/', views.myImgs, name='myImgs'),
+    path('media/image/<str:uri>/', views.getImage, name='getImage'),
 ]

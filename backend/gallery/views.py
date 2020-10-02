@@ -5,7 +5,7 @@ from accounts.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-
+from django.http import HttpResponse
 from django.core.files.base import ContentFile
 # from PIL import Image
 
@@ -49,3 +49,10 @@ def myImgs(request):
     for image in images:
         my_imgs.append(MenuSerializer(image).data)
     return Response(my_imgs)
+
+
+def getImage(request, uri):
+    images = []
+    data = open('media/image/' + uri, "rb").read()
+    images.append(data)
+    return HttpResponse(images, content_type="image/png")
