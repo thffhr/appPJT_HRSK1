@@ -35,8 +35,19 @@ class Community extends Component {
       btn1_color: 'orange',
       btn2_color: 'white',
       active: 'btn1',
+      username: '',
+      authToken: '',
     };
   }
+
+  // async componentDidMount() {
+  //   // you might want to do the I18N setup here
+  //   this.setState({
+  //     username: await AsyncStorage.getItem('username'),
+  //     authToken: await AsyncStorage.getItem('auth-token'),
+  //   });
+  // }
+
   onCreateSelect = () => {
     this.props.navigation.push('CreateSelect');
   };
