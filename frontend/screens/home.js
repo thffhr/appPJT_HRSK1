@@ -10,26 +10,76 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ImagePicker from 'react-native-image-picker';
 
 const {width, height} = Dimensions.get('screen');
+
 class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       username: '',
+      avatarSource: '',
+      authToken: '',
     };
   }
   async componentDidMount() {
     // you might want to do the I18N setup here
     this.setState({
       username: await AsyncStorage.getItem('username'),
+      authToken: await AsyncStorage.getItem('auth-token'),
     });
   }
   onProfile = () => {
     this.props.navigation.push('Profile');
   };
   onCamera = () => {
-    this.props.navigation.push('Camera');
+    const options = {
+      title: 'Select Avatar',
+      // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+        allowsEditing: true,
+        // maxWidth: width,
+        // maxHeight: width,
+      },
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+    
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      // } else if (response.customButton) {
+      //   console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const source = { uri: response.uri };
+        // You can also display the image using data:
+        // const source = { uri: 'data:image/jpeg;base64,' + response.data };
+        this.setState({
+          avatarSource: source,
+        });
+        var data = new FormData();
+        data.append('file', response);
+        fetch('http://10.0.2.2:8080/gallery/saveImg/', {
+        method: 'POST',
+        body: data,
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${this.state.authToken}`,
+        },
+      })
+        .then((response) => {
+          console.log('보내기 성공');
+          console.log(response);
+        })
+        .catch((error) => console.log(error));
+      }
+    });
   };
   onCommunity = () => {
     this.props.navigation.push('Community');
@@ -37,6 +87,7 @@ class Home extends Component {
   onRank = () => {
     this.props.navigation.push('Rank');
   };
+  
   render() {
     return (
       <View style={styles.Container}>
@@ -80,7 +131,8 @@ class Home extends Component {
           </Text>
         </View>
         <View style={styles.body1}>
-          <TouchableOpacity>
+          <TouchableOpacity 
+            onPress={this.onCamera}>
             <Icon name="camera-outline" style={styles.photo}></Icon>
             {/* <Text style={styles.photo}>사진 등록</Text> */}
           </TouchableOpacity>
@@ -110,12 +162,6 @@ class Home extends Component {
               </View>
             </TouchableOpacity>
           </View>
-          {/* <View style={styles.body7}>
-            <Icon name="trophy-outline" style={styles.game} />
-            <TouchableOpacity>
-              <Text style={styles.game}>식단월드컵</Text>
-            </TouchableOpacity>
-          </View> */}
           <View style={styles.body7}>
             <TouchableOpacity>
               <View style={styles.btnContent}>

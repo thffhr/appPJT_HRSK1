@@ -6,11 +6,8 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  AsyncStorage,
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Login from './screens/login';
@@ -21,6 +18,9 @@ import Startsex from './screens/start_sex';
 import Startinfo from './screens/start_info';
 import Rank from './screens/rank';
 import Community from './screens/community';
+import CreateSelect from './screens/create_select';
+import CreateArticle from './screens/create_article';
+import SplashScreen from 'react-native-splash-screen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +32,7 @@ class App extends Component {
     };
   }
   async componentDidMount() {
+    SplashScreen.hide();
     // you might want to do the I18N setup here
     const username = await AsyncStorage.getItem('username');
     if (username !== null) {
@@ -86,6 +87,16 @@ class App extends Component {
             name="Community"
             component={Community}
             options={{title: '커뮤니티'}}
+          />
+          <Stack.Screen
+            name="CreateSelect"
+            component={CreateSelect}
+            options={{title: '사진선택'}}
+          />
+          <Stack.Screen
+            name="CreateArticle"
+            component={CreateArticle}
+            options={{title: '게시물작성'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
