@@ -1,7 +1,13 @@
 from django.contrib import admin
 from . import models
+from .models import Menu
 
 # Register your models here.
 
+
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'image')
+
+
+admin.site.register(Menu, MenuAdmin)
 admin.site.register(models.KindOf)
-admin.site.register(models.Menu)
