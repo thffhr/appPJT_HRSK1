@@ -19,14 +19,11 @@ class Profile extends Component {
 
     this.state = {
       username: '',
-      profileData: {
-        username: '',
-        age: '',
-        sex: '',
-        height: '',
-        weight: '',
-        bm: '',
-      },
+      age: '',
+      sex: '',
+      height: '',
+      weight: '',
+      bm: '',
     };
   }
   async componentDidMount() {
@@ -35,7 +32,6 @@ class Profile extends Component {
       username: await AsyncStorage.getItem('username'),
     });
     this.getInfo();
-    console.log(this.state.userId);
   }
   getInfo = () => {
     fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
@@ -53,6 +49,7 @@ class Profile extends Component {
           height: response.height,
           weight: response.weight,
           bm: response.basal_metabolism,
+          profileImage: response.profileImage,
         });
       })
       .catch((err) => {
@@ -63,7 +60,7 @@ class Profile extends Component {
     this.props.navigation.push('Home');
   };
   onUpdateImg = () => {
-    // this.props.navigation.push('UpdateImg')
+    this.props.navigation.push('UpdateImg');
   };
   onUpdate = () => {
     // this.props.navigation.push('Update')
@@ -121,14 +118,28 @@ class Profile extends Component {
           <Text style={styles.updateText}>수정</Text>
         </TouchableOpacity>
         <View>
-          <Image
-            style={styles.profileImg}
-            source={{
-              uri:
-                'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
-            }}
-          />
-          <View onPress={this.onUpdateImg} style={styles.updateImgBtn}>
+          {this.state.profileImage && (
+            <Image
+              style={styles.profileImg}
+              source={{
+                uri:
+                  'http://10.0.2.2:8080/accounts/pimg' +
+                  this.state.profileImage,
+              }}
+            />
+          )}
+          {!this.state.profileImage && (
+            <Image
+              style={styles.profileImg}
+              source={{
+                uri:
+                  'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+              }}
+            />
+          )}
+          <TouchableOpacity
+            onPress={this.onUpdateImg}
+            style={styles.updateImgBtn}>
             <Image
               style={styles.updateImg}
               source={{
@@ -136,7 +147,7 @@ class Profile extends Component {
                   'https://cdn4.iconfinder.com/data/icons/pictype-free-vector-icons/16/write-256.png',
               }}
             />
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.userInfo}>
           <View style={styles.infoTitle}>
@@ -172,6 +183,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     marginBottom: 30,
+    borderRadius: 150,
   },
   updateImgBtn: {
     width: 25,

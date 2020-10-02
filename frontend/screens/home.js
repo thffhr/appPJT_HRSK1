@@ -21,6 +21,7 @@ class Home extends Component {
       username: '',
       avatarSource: '',
       authToken: '',
+      profileImage: null,
     };
   }
   async componentDidMount() {
@@ -29,7 +30,27 @@ class Home extends Component {
       username: await AsyncStorage.getItem('username'),
       authToken: await AsyncStorage.getItem('auth-token'),
     });
+    this.getInfo();
   }
+
+  getInfo = () => {
+    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          profileImage: response.profileImage,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   onProfile = () => {
     this.props.navigation.push('Profile');
   };
@@ -48,13 +69,13 @@ class Home extends Component {
 
     ImagePicker.showImagePicker(options, (response) => {
       console.log('Response = ', response);
-    
+
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else {
-        const source = { uri: response.uri };
+        const source = {uri: response.uri};
         // You can also display the image using data:
         // const source = { uri: 'data:image/jpeg;base64,' + response.data };
         this.setState({
@@ -74,11 +95,11 @@ class Home extends Component {
             Authorization: `Token ${this.state.authToken}`,
           },
         })
-        .then(response => response.json())
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => console.log(error));
+          .then((response) => response.json())
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => console.log(error));
       }
     });
   };
@@ -124,19 +145,29 @@ class Home extends Component {
             <Text style={styles.user}>로그아웃</Text>
           </TouchableOpacity>
           <Text style={styles.user} onPress={this.onProfile}>
-            <Image
-              style={styles.profileImg}
-              source={{
-                uri:
-                  'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
-              }}
-            />
+            {this.state.profileImage && (
+              <Image
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    'http://10.0.2.2:8080/accounts/pimg' +
+                    this.state.profileImage,
+                }}
+              />
+            )}
+            {!this.state.profileImage && (
+              <Image
+                style={styles.profileImg}
+                source={{
+                  uri:
+                    'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                }}
+              />
+            )}
           </Text>
         </View>
         <View style={styles.body1}>
-          <TouchableOpacity 
-            style={styles.btnBox}
-            onPress={this.onCamera}>
+          <TouchableOpacity style={styles.btnBox} onPress={this.onCamera}>
             <View style={styles.btnContent}>
               <Icon name="camera" style={styles.photo}></Icon>
               <Text style={styles.photoTitle}>사진 등록</Text>
@@ -145,9 +176,7 @@ class Home extends Component {
         </View>
         <View style={styles.body2}>
           <View style={styles.body3}>
-            <TouchableOpacity
-              style={styles.btnBox}
-              onPress={this.onRecord}>
+            <TouchableOpacity style={styles.btnBox} onPress={this.onRecord}>
               <View style={styles.btnContent}>
                 <Icon name="calendar-outline" style={styles.record} />
                 <Text style={styles.record}>내 기록</Text>
@@ -155,9 +184,7 @@ class Home extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.body4}>
-            <TouchableOpacity
-              style={styles.btnBox}
-              onPress={this.onCommunity}>
+            <TouchableOpacity style={styles.btnBox} onPress={this.onCommunity}>
               <View style={styles.btnContent}>
                 <Icon name="earth-outline" style={styles.community} />
                 <Text style={styles.community}>커뮤니티</Text>

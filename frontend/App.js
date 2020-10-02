@@ -14,6 +14,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Login from './screens/Account/login';
 import Signup from './screens/Account/signup';
 import Profile from './screens/Account/profile';
+import UpdateImg from './screens/Account/updateImg';
 import Startsex from './screens/Account/start_sex';
 import Startinfo from './screens/Account/start_info';
 import Record from './screens/Record/record';
@@ -73,6 +74,11 @@ class App extends Component {
             name="Profile"
             component={Profile}
             options={{title: '프로필'}}
+          />
+          <Stack.Screen
+            name="UpdateImg"
+            component={UpdateImg}
+            options={{title: '프로필이미지변경'}}
           />
           <Stack.Screen
             name="Startsex"
