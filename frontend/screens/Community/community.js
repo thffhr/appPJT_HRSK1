@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ScrollView,
+  Image,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,29 +17,36 @@ class Community extends Component {
     super(props);
 
     this.state = {
-      articles: [
-        {
-          title: '제목1',
-          user: '작성자1',
-          content: '내용1',
-          id: 1,
-          tags: ['태그1', '태그2', '태그3'],
-        },
-        {
-          title: '제목2',
-          user: '작성자2',
-          content: '내용2',
-          id: 2,
-          tags: ['태그1', '태그2', '태그3'],
-        },
-      ],
-      btn1_color: 'orange',
-      btn2_color: 'white',
-      active: 'btn1',
+      articles: [],
     };
   }
   onCreateSelect = () => {
     this.props.navigation.push('CreateSelect');
+  };
+
+  componentDidMount() {
+    this.getAllArticles();
+  }
+
+  getAllArticles = async () => {
+    const token = await AsyncStorage.getItem('auth-token');
+    fetch(`http://10.0.2.2:8080/articles/readAll/`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          articles: response,
+        });
+        console.log(this.state.articles);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -47,32 +55,37 @@ class Community extends Component {
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
+        {!this.state.articles[0] && (
+          <Text style={{fontSize: 20, fontWeight: 'bold'}}>
+            아직 게시물이 없습니다. ㅠㅠ
+          </Text>
+        )}
         <ScrollView>
           <View style={{width: '100%'}}>
-            {this.state.active == 'btn1' && (
-              <View style={{width: '100%'}}>
-                <View style={styles.articles}>
-                  {this.state.articles.map((article) => {
-                    return (
-                      <View style={styles.article} key={article.id}>
-                        <View style={styles.writer}>
-                          <View
-                            style={{
-                              borderRadius: 50,
-                              width: 50,
-                              height: 50,
-                              backgroundColor: 'green',
-                            }}></View>
-                          <Text
-                            style={{
-                              marginLeft: 10,
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}>
-                            {article.user}
-                          </Text>
-                        </View>
-                        <View style={styles.tags}>
+            <View style={{width: '100%'}}>
+              <View style={styles.articles}>
+                {this.state.articles.map((article) => {
+                  return (
+                    <View style={styles.article} key={article.id}>
+                      <View style={styles.writer}>
+                        <Image
+                          style={styles.writerImg}
+                          source={{
+                            uri:
+                              'http://10.0.2.2:8080/gallery' +
+                              article.user.profileImage,
+                          }}
+                        />
+                        <Text
+                          style={{
+                            marginLeft: 10,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                          }}>
+                          {article.user.username}
+                        </Text>
+                      </View>
+                      {/* <View style={styles.tags}>
                           {article.tags.map((tag) => {
                             return (
                               <Text
@@ -82,70 +95,96 @@ class Community extends Component {
                               </Text>
                             );
                           })}
-                        </View>
-                        <View
-                          style={{
-                            width: '100%',
-                            height: 400,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: 'orange',
-                            marginBottom: 10,
-                          }}>
-                          <Text>이미지자리</Text>
-                        </View>
-                        <View style={styles.articleBelow}>
-                          <View style={styles.articleBtns}>
-                            <View
-                              style={{
-                                borderRadius: 40,
-                                width: 40,
-                                height: 40,
-                                backgroundColor: 'green',
-                                marginRight: 10,
-                              }}></View>
-                            <View
-                              style={{
-                                borderRadius: 40,
-                                width: 40,
-                                height: 40,
-                                backgroundColor: 'green',
-                                marginRight: 10,
-                              }}></View>
-                            <View
-                              style={{
-                                borderRadius: 40,
-                                width: 40,
-                                height: 40,
-                                backgroundColor: 'green',
-                                marginRight: 10,
-                              }}></View>
-                          </View>
-
-                          <Text
-                            style={{
-                              marginBottom: 10,
-                              fontSize: 20,
+                        </View> */}
+                      <Image
+                        style={styles.articleImg}
+                        source={{
+                          uri: 'http://10.0.2.2:8080/gallery' + article.image,
+                        }}
+                      />
+                      <View style={styles.articleBelow}>
+                        <View style={styles.articleBtns}>
+                          <TouchableOpacity
+                            style={{marginRight: 10}}
+                            onPress={async () => {
+                              const token = await AsyncStorage.getItem(
+                                'auth-token',
+                              );
+                              fetch(
+                                `http://10.0.2.2:8080/articles/articleLikeBtn/`,
+                                {
+                                  method: 'POST',
+                                  body: JSON.stringify({articleId: article.id}),
+                                  headers: {
+                                    Authorization: `Token ${token}`,
+                                    'Content-Type': 'application/json',
+                                  },
+                                },
+                              )
+                                .then((response) => response.json())
+                                .then((response) => {
+                                  console.log(response);
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                });
                             }}>
-                            <Icon
-                              name="heart"
-                              style={{fontSize: 20, color: 'red'}}
-                            />{' '}
-                            abcdefg님 외 1명이 좋아합니다.
-                          </Text>
-                          <Text>{article.content}</Text>
+                            {article.isliked && (
+                              <Icon
+                                name="heart"
+                                style={{fontSize: 40, color: 'red'}}
+                              />
+                            )}
+                            {!article.isliked && (
+                              <Icon
+                                name="heart-outline"
+                                style={{fontSize: 40}}
+                              />
+                            )}
+                          </TouchableOpacity>
+                          <View
+                            style={{
+                              borderRadius: 40,
+                              width: 40,
+                              height: 40,
+                              backgroundColor: 'green',
+                              marginRight: 10,
+                            }}></View>
+                          <View
+                            style={{
+                              borderRadius: 40,
+                              width: 40,
+                              height: 40,
+                              backgroundColor: 'green',
+                              marginRight: 10,
+                            }}></View>
+                          <View
+                            style={{
+                              borderRadius: 40,
+                              width: 40,
+                              height: 40,
+                              backgroundColor: 'green',
+                              marginRight: 10,
+                            }}></View>
                         </View>
+                        <Text
+                          style={{
+                            marginBottom: 10,
+                            fontSize: 20,
+                          }}>
+                          <Icon
+                            name="heart"
+                            style={{fontSize: 20, color: 'red'}}
+                          />{' '}
+                          abcdefg님 외 1명이 좋아합니다.
+                        </Text>
+                        <Text>{article.content}</Text>
                       </View>
-                    );
-                  })}
-                </View>
+                    </View>
+                  );
+                })}
               </View>
-            )}
-            {this.state.active == 'btn2' && (
-              <View>
-                <Text>팔로워</Text>
-              </View>
-            )}
+            </View>
           </View>
         </ScrollView>
         <TouchableOpacity
@@ -191,6 +230,16 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
+  },
+  writerImg: {
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+  },
+  articleImg: {
+    width: '100%',
+    height: 400,
+    marginBottom: 10,
   },
   articleBelow: {
     marginLeft: '5%',

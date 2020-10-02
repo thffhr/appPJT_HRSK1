@@ -17,12 +17,18 @@ class CreateArticle extends Component {
     super(props);
 
     this.state = {
-      selected: this.props.route.params.selected,
       tags: '태그1 태그2',
       content: '',
       RswitchValue: false,
-      CswitchValue: false,
-      SswitchValue: false,
+      CswitchValue: true,
+      SswitchValue: true,
+      articleInfo: {
+        content: '',
+        recipe: '',
+        image: this.props.route.params.selected.image,
+        canComment: true,
+        canSearch: true,
+      },
     };
   }
 
@@ -32,7 +38,6 @@ class CreateArticle extends Component {
       username: await AsyncStorage.getItem('username'),
     });
     this.getInfo();
-    console.log(this.state.userId);
   }
 
   getInfo = () => {
@@ -54,8 +59,30 @@ class CreateArticle extends Component {
       });
   };
 
-  infoNext = async () => {
+  createArticle = async () => {
     const token = await AsyncStorage.getItem('auth-token');
+    fetch(`http://10.0.2.2:8080/articles/create/`, {
+      method: 'POST',
+      body: JSON.stringify(this.state.articleInfo),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.props.navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [{name: 'Home'}],
+          }),
+        );
+        this.props.navigation.push('Community');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   RtoggleSwitch = () => {
@@ -73,10 +100,24 @@ class CreateArticle extends Component {
     if (this.state.CswitchValue) {
       this.setState({
         CswitchValue: false,
+        articleInfo: {
+          content: this.state.articleInfo.content,
+          recipe: this.state.articleInfo.recipe,
+          image: this.state.articleInfo.image,
+          canComment: false,
+          canSearch: this.state.articleInfo.canSearch,
+        },
       });
     } else {
       this.setState({
         CswitchValue: true,
+        articleInfo: {
+          content: this.state.articleInfo.content,
+          recipe: this.state.articleInfo.recipe,
+          image: this.state.articleInfo.image,
+          canComment: true,
+          canSearch: this.state.articleInfo.canSearch,
+        },
       });
     }
   };
@@ -84,19 +125,32 @@ class CreateArticle extends Component {
     if (this.state.SswitchValue) {
       this.setState({
         SswitchValue: false,
+        articleInfo: {
+          content: this.state.articleInfo.content,
+          recipe: this.state.articleInfo.recipe,
+          image: this.state.articleInfo.image,
+          canComment: this.state.articleInfo.canComment,
+          canSearch: false,
+        },
       });
     } else {
       this.setState({
         SswitchValue: true,
+        articleInfo: {
+          content: this.state.articleInfo.content,
+          recipe: this.state.articleInfo.recipe,
+          image: this.state.articleInfo.image,
+          canComment: this.state.articleInfo.canComment,
+          canSearch: true,
+        },
       });
     }
   };
 
   render() {
-    console.log('받아온 데이터', this.state.selected);
     return (
       <View style={styles.container}>
-        <TouchableOpacity style={styles.next} onPress={this.infoNext}>
+        <TouchableOpacity style={styles.next} onPress={this.createArticle}>
           <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
             공유
           </Text>
@@ -138,7 +192,8 @@ class CreateArticle extends Component {
           <Image
             style={{width: 100, height: 100}}
             source={{
-              uri: 'http://10.0.2.2:8080/gallery' + this.state.selected.image,
+              uri:
+                'http://10.0.2.2:8080/gallery' + this.state.articleInfo.image,
             }}
           />
         </View>
@@ -153,7 +208,13 @@ class CreateArticle extends Component {
             placeholder="내용을 입력하세요"
             onChangeText={(text) => {
               this.setState({
-                content: text,
+                articleInfo: {
+                  content: text,
+                  recipe: this.state.articleInfo.recipe,
+                  image: this.state.articleInfo.image,
+                  canComment: this.state.articleInfo.canComment,
+                  canSearch: this.state.articleInfo.canSearch,
+                },
               });
             }}
             style={{flexShrink: 1}}
@@ -219,6 +280,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 15,
     top: 15,
+    zIndex: 1,
   },
   block: {
     width: '100%',
