@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import { Fonts } from '../src/Fonts'
 
 
 class Login extends Component {
@@ -120,12 +119,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 50,
-    fontFamily: "BMJUA",
-    marginTop: 10,
+    fontFamily: "BMJUAz",
     marginBottom: 50,
+    marginTop: 5,
   },
   image: {
-    marginTop: 15,
     marginRight: 10,
     width: 60,
     height: 60,

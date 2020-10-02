@@ -42,34 +42,8 @@ class Home extends Component {
       <View style={styles.Container}>
         <View style={styles.Nav}>
           <Text style={styles.title}>하루세끼</Text>
-          <TouchableOpacity
-            style={styles.user}
-            onPress={async () => {
-              const token = await AsyncStorage.getItem('auth-token');
-              console.log(token);
-              if (token !== null) {
-                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
-                  method: 'POST',
-                  header: {
-                    Authorization: `Token ${token}`,
-                  },
-                })
-                  .then(() => {
-                    console.log('로그아웃 성공');
-                    AsyncStorage.clear();
-                    this.props.navigation.dispatch(
-                      CommonActions.reset({
-                        index: 1,
-                        routes: [{name: 'Login'}],
-                      }),
-                    );
-                  })
-                  .catch((err) => console.error(err));
-              }
-            }}>
-            <Text style={styles.user}>로그아웃</Text>
-          </TouchableOpacity>
-          <Text style={styles.user} onPress={this.onProfile}>
+          
+          <TouchableOpacity onPress={this.onProfile}>
             <Image
               style={styles.profileImg}
               source={{
@@ -77,12 +51,12 @@ class Home extends Component {
                   'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
               }}
             />
-          </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.body1}>
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.photoBtn}>
             <Icon name="camera-outline" style={styles.photo}></Icon>
-            {/* <Text style={styles.photo}>사진 등록</Text> */}
+            <Text style={styles.photo_text}>사진 등록</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.body2}>
@@ -137,28 +111,24 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: width,
     flex: 1,
+    backgroundColor: '#FFFBE6',
   },
   Nav: {
-    backgroundColor: 'black',
+    backgroundColor: '#fca652',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: 20,
     flex: 1,
   },
   title: {
     fontSize: 25,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  user: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontFamily: "BMJUA",
     color: 'white',
   },
   profileImg: {
-    width: 25,
-    height: 25,
+    width: 35,
+    height: 35,
   },
   body1: {
     flexDirection: 'row',
@@ -166,11 +136,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 4,
     borderWidth: 1,
-    borderColor: 'black',
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
   },
   photo: {
-    fontSize: 100,
+    fontSize: 30,
     fontWeight: 'bold',
+  },
+  photo_text: {
+    fontFamily: "BMHANNA",
+    fontSize: 30
   },
   body2: {
     flexDirection: 'row',
@@ -186,7 +163,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   record: {
-    fontSize: 30,
+    fontSize: '10sp',
     fontWeight: 'bold',
   },
   body4: {
@@ -196,6 +173,14 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     backgroundColor: 'blue',
     padding: 0,
+  },
+  photoBtn:{
+    // flexDirection: 'row',
+    width: '100%',
+    height: '100%',
+    // backgroundColor: 'yellow',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   communityBtn: {
     flexDirection: 'row',
