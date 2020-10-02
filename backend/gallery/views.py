@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Menu, KindOf
-from .serializers import kindOfSerializer, MenueSerializer
+from .serializers import kindOfSerializer, MenuSerializer
 from accounts.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes

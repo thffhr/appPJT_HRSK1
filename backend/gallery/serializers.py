@@ -8,7 +8,7 @@ class kindOfSerializer(serializers.ModelSerializer):
         model = KindOf
         fields = '__all__'
 
-class MenueSerializer(serializers.ModelSerializer):
+class MenuSerializer(serializers.ModelSerializer):
     # user = UserSerializer(required=False)
     # image = serializers.ImageField(required=False)
     # image = Base64ImageField()
