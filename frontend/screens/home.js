@@ -53,8 +53,6 @@ class Home extends Component {
         console.log('User cancelled image picker');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
-      // } else if (response.customButton) {
-      //   console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = { uri: response.uri };
         // You can also display the image using data:
@@ -62,19 +60,22 @@ class Home extends Component {
         this.setState({
           avatarSource: source,
         });
+
         var data = new FormData();
-        data.append('file', response);
-        fetch('http://10.0.2.2:8080/gallery/saveImg/', {
-        method: 'POST',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Token ${this.state.authToken}`,
-        },
-      })
+        data.append('data', response.data);
+        data.append('type', response.type);
+        data.append('fileName', response.fileName);
+        fetch('http://10.0.2.2:8080/gallery/saveMenue/', {
+          method: 'POST',
+          body: data,
+          headers: {
+            // Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Token ${this.state.authToken}`,
+          },
+        })
+        .then(response => response.json())
         .then((response) => {
-          console.log('보내기 성공');
           console.log(response);
         })
         .catch((error) => console.log(error));
@@ -90,7 +91,6 @@ class Home extends Component {
   onRecord = () => {
     this.props.navigation.push('Record');
   };
-  
   render() {
     return (
       <View style={styles.Container}>
