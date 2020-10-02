@@ -11,6 +11,7 @@ class User(AbstractUser):
     active = models.CharField(max_length=45)
     sex = models.CharField(max_length=45)
     basal_metabolism = models.IntegerField(null=True)
+    profileImage = models.ImageField(null=True)
 
     followings = models.ManyToManyField(
         settings.AUTH_USER_MODEL,

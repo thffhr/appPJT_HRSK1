@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from .serializers import UserSerializer
 from django.http import HttpResponse
 import json
+import base64
+from django.core.files.base import ContentFile
+import os
 # from rest_framework.serializers import ModelSerializer
 
 # from django.views.decorators.csrf import csrf_exempt
@@ -109,6 +112,46 @@ def update_info(request):
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_profileImage(request):
+    user = request.user
+    old_img = 'media/' + str(user.profileImage)
+
+    decoded_data = base64.b64decode(request.data['data'])
+    new_profileImg = ContentFile(
+        decoded_data, name=f"image/{request.data['fileName']}")
+    save_data = {}
+    save_data['profileImage'] = new_profileImg
+    user = request.user
+    print('이름:', user.username)
+    serializer = UserSerializer(user, data=save_data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        if os.path.isfile(old_img):
+            os.remove(old_img)
+        return Response(serializer.data)
+
+
+def get_profile(request, uri):
+    images = []
+    data = open('media/image/' + uri, "rb").read()
+    images.append(data)
+    return HttpResponse(images, content_type="image/png")
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def del_profile(request):
+    user = request.user
+    if user.profileImage:
+        old_img = 'media/' + str(user.profileImage)
+        user.profileImage.delete(save=True)
+        if os.path.isfile(old_img):
+            os.remove(old_img)
+        return Response('프로필이미지 삭제')
 
 
 @api_view(['POST'])
