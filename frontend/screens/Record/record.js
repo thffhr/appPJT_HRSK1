@@ -1,13 +1,59 @@
-import React, { Component } from 'react';
-import { View, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import {Calendar, CalendarList, Agenda, LocaleConfig, Arrow} from 'react-native-calendars';
+import React, {Component} from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {
+  Calendar,
+  CalendarList,
+  Agenda,
+  LocaleConfig,
+  Arrow,
+} from 'react-native-calendars';
 
 LocaleConfig.locales['fr'] = {
-  monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'],
-  monthNamesShort: ['Janv.','Févr.','Mars','Avril','Mai','Juin','Juil.','Août','Sept.','Oct.','Nov.','Déc.'],
-  dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
-  dayNamesShort: ['일','월','화','수','목','금','토'],
-  today: 'Aujourd\'hui'
+  monthNames: [
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
+  ],
+  monthNamesShort: [
+    'Janv.',
+    'Févr.',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juil.',
+    'Août',
+    'Sept.',
+    'Oct.',
+    'Nov.',
+    'Déc.',
+  ],
+  dayNames: [
+    '일요일',
+    '월요일',
+    '화요일',
+    '수요일',
+    '목요일',
+    '금요일',
+    '토요일',
+  ],
+  dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+  today: "Aujourd'hui",
 };
 LocaleConfig.defaultLocale = 'fr';
 
@@ -16,23 +62,21 @@ const lunch = {key: 'lunch', color: '#d7ff96'};
 const dinner = {key: 'dinner', color: '#96faff'};
 const snack = {key: 'snack', color: '#e196ff'};
 
-const nextDays = [
-  ['2020-10-01', 100, 200, 300, 400],
-  ['2020-10-15', 600, 500, 400, 330],
-  ['2020-10-30', 10, 20, 30, 40],
-  ['2020-10-31', 20, 60, 70, 50],
-];
+const nextDays = {
+  '2020-10-01': [100, 200, 300, 400],
+  '2020-10-15': [600, 500, 400, 330],
+  '2020-10-30': [10, 20, 30, 40],
+  '2020-10-31': [20, 60, 70, 50],
+};
 let newDaysObject = {};
-for (var i = 0; i < nextDays.length; i++) {
-  nextDays[i].forEach((day) => {
-    newDaysObject = {
-      ...newDaysObject,
-      [day]: {
-        marked: true,
-        dotColor: '#FCA652',
-      }
-    };
-  });
+for (var key of Object.keys(nextDays)) {
+  newDaysObject = {
+    ...newDaysObject,
+    [key]: {
+      marked: true,
+      dotColor: '#FCA652',
+    },
+  };
 }
 
 class Record extends Component {
@@ -40,23 +84,25 @@ class Record extends Component {
     super(props);
 
     this.state = {
-    //   day: 1,      // day of month (1-31)
-    //   month: 1,    // month of year (1-12)
-    //   year: 2017,  // year
-    //   // timestamp,   // UTC timestamp representing 00:00 AM of this date
-    //   dateString: '2016-05-13' // date formatted as 'YYYY-MM-DD' string
+      //   day: 1,      // day of month (1-31)
+      //   month: 1,    // month of year (1-12)
+      //   year: 2017,  // year
+      //   // timestamp,   // UTC timestamp representing 00:00 AM of this date
+      //   dateString: '2016-05-13' // date formatted as 'YYYY-MM-DD' string
       btn1_color: '#FFFBE6',
       btn2_color: '#FFFBE6',
       btn3_color: '#FCA652',
       active: 'btn3',
-      // record = [
-      //   ['2020-10-06', 200, 300, 500, 200], // date, breakfast, lunch, dinner, snack 
-      //   ['2020-10-10', 200, 300, 500, 200],
-      //   ['2020-10-20', 200, 0, 500, 200],
-      // ],
+      selectedDate: {
+        date: null,
+        breakfast: 0,
+        lunch: 0,
+        dinner: 0,
+        snack: 0,
+      },
     };
-  };
-  
+  }
+
   onBtn1 = () => {
     this.setState({
       btn1_color: 'orange',
@@ -80,6 +126,31 @@ class Record extends Component {
       btn3_color: '#FCA652',
       active: 'btn3',
     });
+  };
+  onMacro = (day) => {
+    if (Object.keys(nextDays).includes(day.dateString)) {
+      this.setState({
+        selectedDate: {
+          ...this.state.selectedDate,
+          date: day.dateString,
+          breakfast: nextDays[day.dateString][0],
+          lunch: nextDays[day.dateString][1],
+          dinner: nextDays[day.dateString][2],
+          snack: nextDays[day.dateString][3],
+        },
+      });
+    } else {
+      this.setState({
+        selectedDate: {
+          ...this.state.selectedDate,
+          date: day.dateString,
+          breakfast: 0,
+          lunch: 0,
+          dinner: 0,
+          snack: 0,
+        },
+      });
+    }
   };
   render() {
     return (
@@ -110,24 +181,24 @@ class Record extends Component {
               <CalendarList
                 horizontal={true}
                 pagingEnabled={true}
-                // Initially visible month. Default = Date()
-                // current={'2020-10-01'}
                 // Minimum date that can be selected, dates before minDate will be grayed out. Default = undefined
                 minDate={'2020-01-01'}
                 // Maximum date that can be selected, dates after maxDate will be grayed out. Default = undefined
                 maxDate={'2022-12-31'}
                 // Handler which gets executed on day press. Default = undefined
-                onDayPress={(day) => {console.log('selected day', day)}}
-                // Handler which gets executed on day long press. Default = undefined
-                onDayLongPress={(day) => {console.log('selected day', day)}}
+                onDayPress={(day) => {
+                  this.onMacro(day);
+                }}
                 // Month format in calendar title. Formatting values: http://arshaw.com/xdate/#Formatting
                 monthFormat={'yyyy MM'}
                 // Handler which gets executed when visible month changes in calendar. Default = undefined
-                onMonthChange={(month) => {console.log('month changed', month)}}
+                onMonthChange={(month) => {
+                  console.log('month changed', month);
+                }}
                 // Hide month navigation arrows. Default = false
                 hideArrows={true}
                 // Replace default arrows with custom ones (direction can be 'left' or 'right')
-                renderArrow={(direction) => (<Arrow/>)}
+                renderArrow={(direction) => <Arrow />}
                 // Do not show days of other months in month page. Default = false
                 hideExtraDays={true}
                 // If hideArrows=false and hideExtraDays=false do not switch month when tapping on greyed out
@@ -140,9 +211,9 @@ class Record extends Component {
                 // Show week numbers to the left. Default = false
                 showWeekNumbers={false}
                 // Handler which gets executed when press arrow icon left. It receive a callback can go back month
-                onPressArrowLeft={subtractMonth => subtractMonth()}
+                onPressArrowLeft={(subtractMonth) => subtractMonth()}
                 // Handler which gets executed when press arrow icon right. It receive a callback can go next month
-                onPressArrowRight={addMonth => addMonth()}
+                onPressArrowRight={(addMonth) => addMonth()}
                 // Disable left arrow. Default = false
                 disableArrowLeft={true}
                 // Disable right arrow. Default = false
@@ -154,21 +225,21 @@ class Record extends Component {
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
                 markedDates={{
-                  '2020-10-05': {marked: true}
+                  '2020-10-05': {marked: true},
                 }}
                 theme={{
                   todayTextColor: '#FCA652',
-                  // dotColor: '#FCA652',
-                  // backgroundColor: '#FFFBE6',
                 }}
                 markedDates={newDaysObject}
-
               />
             </View>
           )}
         </View>
+        <View>
+          <Text>{this.state.selectedDate.date}</Text>
+        </View>
       </ScrollView>
-    )
+    );
   }
 }
 
@@ -211,7 +282,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 30,
   },
-
-})
+});
 
 export default Record;
