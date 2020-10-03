@@ -103,13 +103,15 @@ def commentsAll(request, article_id):
     comments = models.Comment.objects.order_by('-pk').filter(article=article)
     comments_All = []
     for comment in comments:
-        comments_All.append(serializers.CommentSerializer(comment).data)
+        comment = serializers.CommentSerializer(comment)
+        comments_All.append(comment.data)
     return Response(comments_All)
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_comment(request, article_id):
+    print('데이터:', request.data)
     article = get_object_or_404(models.Article, pk=article_id)
     new_comment = serializers.CommentSerializer(data=request.data)
     if new_comment.is_valid(raise_exception=True):
