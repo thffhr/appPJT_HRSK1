@@ -144,14 +144,12 @@ class Home extends Component {
             }}>
             <Text style={styles.user}>로그아웃</Text>
           </TouchableOpacity>
-          <Text style={styles.user} onPress={this.onProfile}>
+          <TouchableOpacity style={styles.userBtn} onPress={this.onProfile}>
             {this.state.profileImage && (
               <Image
                 style={styles.profileImg}
                 source={{
-                  uri:
-                    'http://10.0.2.2:8080/accounts/pimg' +
-                    this.state.profileImage,
+                  uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
                 }}
               />
             )}
@@ -164,7 +162,7 @@ class Home extends Component {
                 }}
               />
             )}
-          </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.body1}>
           <TouchableOpacity style={styles.btnBox} onPress={this.onCamera}>
@@ -241,9 +239,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'white',
   },
+  userBtn: {
+    width: 40,
+    height: 40,
+  },
   profileImg: {
-    width: 25,
-    height: 25,
+    width: 40,
+    height: 40,
+    borderRadius: 40,
   },
   body1: {
     flex: 4,

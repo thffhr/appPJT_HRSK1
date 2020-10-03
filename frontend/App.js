@@ -20,6 +20,7 @@ import Startinfo from './screens/Account/start_info';
 import Record from './screens/Record/record';
 import Rank from './screens/Rank/rank';
 import Community from './screens/Community/community';
+import Comment from './screens/Community/comment';
 import CreateSelect from './screens/Community/create_select';
 import CreateArticle from './screens/Community/create_article';
 import Home from './screens/home';
@@ -103,6 +104,11 @@ class App extends Component {
             name="Community"
             component={Community}
             options={{title: '커뮤니티'}}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={Comment}
+            options={{title: '댓글'}}
           />
           <Stack.Screen
             name="CreateSelect"
