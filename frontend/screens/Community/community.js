@@ -64,7 +64,7 @@ class Community extends Component {
           <View style={{width: '100%'}}>
             <View style={{width: '100%'}}>
               <View style={styles.articles}>
-                {this.state.articles.map((article) => {
+                {this.state.articles.map((article, i) => {
                   return (
                     <View style={styles.article} key={article.id}>
                       <View style={styles.writer}>
@@ -124,6 +124,15 @@ class Community extends Component {
                                 .then((response) => response.json())
                                 .then((response) => {
                                   console.log(response);
+                                  const isliked = article.isliked;
+                                  this.setState({
+                                    articles: this.state.articles.map((art) =>
+                                      article.id === art.id
+                                        ? {...art, isliked: !isliked}
+                                        : art,
+                                    ),
+                                  });
+                                  console.log(this.state.articles);
                                 })
                                 .catch((err) => {
                                   console.log(err);
