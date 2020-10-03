@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   record: {
-    fontSize: '10sp',
+    fontSize: 10,
     fontWeight: 'bold',
   },
   body4: {

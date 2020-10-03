@@ -10,6 +10,9 @@ import {
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
+const H = Dimensions.get('window').height
+const W = Dimensions.get('window').width
+
 class Signup extends Component {
   constructor(props) {
     super(props);
@@ -134,7 +137,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFBE6',
   },
   description: {
-    fontSize: 15,
+    fontSize: W*0.03,
     fontWeight: 'bold',
     marginVertical: 10,
   },
