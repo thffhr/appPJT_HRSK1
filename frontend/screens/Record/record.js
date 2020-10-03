@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import {
   Calendar,
@@ -57,42 +58,39 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-const breakfast = {key: 'breakfast', color: '#ffa696'};
-const lunch = {key: 'lunch', color: '#d7ff96'};
-const dinner = {key: 'dinner', color: '#96faff'};
-const snack = {key: 'snack', color: '#e196ff'};
+const serverUrl = 'http://10.0.2.2:8080/gallery/getCalendar/';
 
-const nextDays = {
-  '2020-10-01': [100, 200, 300, 400, 1000],
-  '2020-10-15': [600, 500, 400, 330, 5000],
-  '2020-10-30': [10, 20, 30, 40, 6300],
-  '2020-10-31': [20, 60, 70, 50, 350],
-};
-let newDaysObject = {};
-for (var key of Object.keys(nextDays)) {
-  newDaysObject = {
-    ...newDaysObject,
-    [key]: {
-      marked: true,
-      dotColor: '#FCA652',
-    },
-  };
-}
+// const breakfast = {key: 'breakfast', color: '#ffa696'};
+// const lunch = {key: 'lunch', color: '#d7ff96'};
+// const dinner = {key: 'dinner', color: '#96faff'};
+// const snack = {key: 'snack', color: '#e196ff'};
+
+// const nextDays = {
+//   '2020-10-01': [100, 200, 300, 400, 1000],
+//   '2020-10-15': [600, 500, 400, 330, 5000],
+//   '2020-10-30': [10, 20, 30, 40, 6300],
+//   '2020-10-31': [20, 60, 70, 50, 350],
+// };
+// let newDaysObject = {};
+// for (var key of Object.keys(nextDays)) {
+//   newDaysObject = {
+//     ...newDaysObject,
+//     [key]: {
+//       marked: true,
+//       dotColor: '#FCA652',
+//     },
+//   };
+// }
 
 class Record extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      //   day: 1,      // day of month (1-31)
-      //   month: 1,    // month of year (1-12)
-      //   year: 2017,  // year
-      //   // timestamp,   // UTC timestamp representing 00:00 AM of this date
-      //   dateString: '2016-05-13' // date formatted as 'YYYY-MM-DD' string
       btn1_color: '#FFFBE6',
       btn2_color: '#FFFBE6',
       btn3_color: '#FCA652',
-      active: 'btn3',
+      active: 'btn1',
       selectedDate: {
         date: null,
         breakfast: 0,
@@ -101,9 +99,16 @@ class Record extends Component {
         snack: 0,
         total: 0,
       },
+      nextDays: '',
+      newDaysObject: {},
+      authToken: '',
     };
   }
-
+  async componentDidMount() {
+    this.setState({
+      authToken: await AsyncStorage.getItem('auth-token'),
+    });
+  }
   onBtn1 = () => {
     this.setState({
       btn1_color: 'orange',
@@ -127,18 +132,43 @@ class Record extends Component {
       btn3_color: '#FCA652',
       active: 'btn3',
     });
+    fetch(`${serverUrl}getCalendar/`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Token ${this.state.authToken}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          nextDays: response.data,
+        });
+      })
+      .catch((err) => console.error(err));
+    for (var key of Object.keys(this.state.nextDays)) {
+      this.setState({
+        newDaysObject: {
+          ...newDaysObject,
+          [key]: {
+            marked: true,
+            dotColor: '#FCA652',
+          },
+        },
+      });
+    }
   };
   onMacro = (day) => {
-    if (Object.keys(nextDays).includes(day.dateString)) {
+    if (Object.keys(this.state.nextDays).includes(day.dateString)) {
       this.setState({
         selectedDate: {
           ...this.state.selectedDate,
           date: day.dateString,
-          breakfast: nextDays[day.dateString][0],
-          lunch: nextDays[day.dateString][1],
-          dinner: nextDays[day.dateString][2],
-          snack: nextDays[day.dateString][3],
-          total: nextDays[day.dateString][4],
+          breakfast: this.state.nextDays[day.dateString][0],
+          lunch: this.state.nextDays[day.dateString][1],
+          dinner: this.state.nextDays[day.dateString][2],
+          snack: this.state.nextDays[day.dateString][3],
+          total: this.state.nextDays[day.dateString][4],
         },
       });
     } else {
@@ -233,9 +263,11 @@ class Record extends Component {
                 theme={{
                   todayTextColor: '#FCA652',
                 }}
-                markedDates={newDaysObject}
+                markedDates={this.state.newDaysObject}
               />
-              {Object.keys(nextDays).includes(this.state.selectedDate.date) && (
+              {Object.keys(this.state.nextDays).includes(
+                this.state.selectedDate.date,
+              ) && (
                 <View style={styles.dateBox}>
                   <Text>{this.state.selectedDate.date}</Text>
                   {Object.entries(this.state.selectedDate)
@@ -250,22 +282,6 @@ class Record extends Component {
                         </View>
                       );
                     })}
-                  {/* <View style={styles.macroBox}>
-                    <Text>{this.state.selectedDate.breakfast}</Text>
-                    <Text>kcal</Text>
-                  </View>
-                  <View style={styles.macroBox}>
-                    <Text>{this.state.selectedDate.lunch}</Text>
-                    <Text>kcal</Text>
-                  </View>
-                  <View style={styles.macroBox}>
-                    <Text>{this.state.selectedDate.dinner}</Text>
-                    <Text>kcal</Text>
-                  </View>
-                  <View style={styles.macroBox}>
-                    <Text>{this.state.selectedDate.snack}</Text>
-                    <Text>kcal</Text>
-                  </View> */}
                 </View>
               )}
             </View>
