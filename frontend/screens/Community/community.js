@@ -190,7 +190,7 @@ class Community extends Component {
         <TouchableOpacity
           style={styles.createArticle}
           onPress={this.onCreateSelect}>
-          <Icon name="add-outline" style={{color: 'black', fontSize: 30}} />
+          <Icon name="create" style={{color: 'black', fontSize: 30}} />
         </TouchableOpacity>
       </View>
     );
