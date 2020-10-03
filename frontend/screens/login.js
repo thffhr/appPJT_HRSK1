@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {
+  PixelRatio,
   Image,
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
@@ -106,6 +108,9 @@ class Login extends Component {
     );
   }
 }
+
+const screenheight = Dimensions.get('window').height
+const screenwidth = Dimensions.get('window').width
 
 const styles = StyleSheet.create({
   container: {
