@@ -63,10 +63,10 @@ const dinner = {key: 'dinner', color: '#96faff'};
 const snack = {key: 'snack', color: '#e196ff'};
 
 const nextDays = {
-  '2020-10-01': [100, 200, 300, 400],
-  '2020-10-15': [600, 500, 400, 330],
-  '2020-10-30': [10, 20, 30, 40],
-  '2020-10-31': [20, 60, 70, 50],
+  '2020-10-01': [100, 200, 300, 400, 1000],
+  '2020-10-15': [600, 500, 400, 330, 5000],
+  '2020-10-30': [10, 20, 30, 40, 6300],
+  '2020-10-31': [20, 60, 70, 50, 350],
 };
 let newDaysObject = {};
 for (var key of Object.keys(nextDays)) {
@@ -99,6 +99,7 @@ class Record extends Component {
         lunch: 0,
         dinner: 0,
         snack: 0,
+        total: 0,
       },
     };
   }
@@ -137,6 +138,7 @@ class Record extends Component {
           lunch: nextDays[day.dateString][1],
           dinner: nextDays[day.dateString][2],
           snack: nextDays[day.dateString][3],
+          total: nextDays[day.dateString][4],
         },
       });
     } else {
@@ -148,6 +150,7 @@ class Record extends Component {
           lunch: 0,
           dinner: 0,
           snack: 0,
+          total: 0,
         },
       });
     }
@@ -224,19 +227,49 @@ class Record extends Component {
                 // renderHeader={(date) => {/*Return JSX*/}}
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
-                markedDates={{
-                  '2020-10-05': {marked: true},
-                }}
+                // markedDates={{
+                // '2020-10-05': {marked: true},
+                // }}
                 theme={{
                   todayTextColor: '#FCA652',
                 }}
                 markedDates={newDaysObject}
               />
+              {Object.keys(nextDays).includes(this.state.selectedDate.date) && (
+                <View style={styles.dateBox}>
+                  <Text>{this.state.selectedDate.date}</Text>
+                  {Object.entries(this.state.selectedDate)
+                    .filter(([key, value]) => key !== 'date')
+                    .map(([key, value], i) => {
+                      return (
+                        <View style={styles.macroBox} key={i}>
+                          <Text>
+                            {key} {value}
+                          </Text>
+                          <Text>kcal</Text>
+                        </View>
+                      );
+                    })}
+                  {/* <View style={styles.macroBox}>
+                    <Text>{this.state.selectedDate.breakfast}</Text>
+                    <Text>kcal</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text>{this.state.selectedDate.lunch}</Text>
+                    <Text>kcal</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text>{this.state.selectedDate.dinner}</Text>
+                    <Text>kcal</Text>
+                  </View>
+                  <View style={styles.macroBox}>
+                    <Text>{this.state.selectedDate.snack}</Text>
+                    <Text>kcal</Text>
+                  </View> */}
+                </View>
+              )}
             </View>
           )}
-        </View>
-        <View>
-          <Text>{this.state.selectedDate.date}</Text>
         </View>
       </ScrollView>
     );
@@ -281,6 +314,19 @@ const styles = StyleSheet.create({
   calendarArea: {
     width: '100%',
     marginBottom: 30,
+  },
+  dateBox: {
+    marginTop: 20,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#000000',
+  },
+  macroBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: 'gray',
   },
 });
 
