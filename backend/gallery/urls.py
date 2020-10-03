@@ -8,4 +8,5 @@ urlpatterns = [
     path('<int:image_id>/delImg/', views.delImg, name='delImg'),
     path('myImgs/', views.myImgs, name='myImgs'),
     path('media/image/<str:uri>/', views.getImage, name='getImage'),
+    path('getCalendar/', views.getCalendar, name='getCalendar'),
 ]

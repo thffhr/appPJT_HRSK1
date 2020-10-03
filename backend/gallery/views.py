@@ -56,3 +56,33 @@ def getImage(request, uri):
     data = open('media/image/' + uri, "rb").read()
     images.append(data)
     return HttpResponse(images, content_type="image/png")
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getChart():
+            # for key in Foods:
+        #     print('나는 키')
+        #     print(key.DESC_KOR)
+    pass
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getCalendar(request):
+    Menus = Menu.objects.filter(user=request.user)
+    MenusDict = {}
+    for i in range(len(Menus)):
+        print(Menus[i].mealTime)
+        created_at = str(Menus[i].created_at)
+        if created_at.split()[0] not in MenusDict.keys():
+            MenusDict[created_at.split()[0]]=[0, 0, 0, 0, 0, 0] #아침, 점심, 저녁, 간식, 야식, 총칼로리
+        if Menus[i].mealTime == '아침':
+            MenusDict[created_at.split()[0]][0] += Menus[i].totalCal
+        elif Menus[i].mealTime == '점심':
+            MenusDict[created_at.split()[0]][1] += Menus[i].totalCal
+        elif Menus[i].mealTime == '저녁':
+            MenusDict[created_at.split()[0]][2] += Menus[i].totalCal
+        elif Menus[i].mealTime == '간식':
+            MenusDict[created_at.split()[0]][3] += Menus[i].totalCal
+        else:
+            MenusDict[created_at.split()[0]][4] += Menus[i].totalCal
+    return Response(MenusDict)
