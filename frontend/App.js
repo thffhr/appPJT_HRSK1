@@ -6,21 +6,24 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
-import {
-  StyleSheet,
-  AsyncStorage,
-} from 'react-native';
+import React, {Component} from 'react';
+import {StyleSheet, AsyncStorage} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import Login from './screens/login';
+import SplashScreen from 'react-native-splash-screen';
+import Login from './screens/Account/login';
+import Signup from './screens/Account/signup';
+import Profile from './screens/Account/profile';
+import UpdateImg from './screens/Account/updateImg';
+import Startsex from './screens/Account/start_sex';
+import Startinfo from './screens/Account/start_info';
+import Record from './screens/Record/record';
+import Rank from './screens/Rank/rank';
+import Community from './screens/Community/community';
+import Comment from './screens/Community/comment';
+import CreateSelect from './screens/Community/create_select';
+import CreateArticle from './screens/Community/create_article';
 import Home from './screens/home';
-import Signup from './screens/signup';
-import Profile from './screens/profile';
-import Startsex from './screens/start_sex';
-import Startinfo from './screens/start_info';
-import Rank from './screens/rank';
-import Community from './screens/community';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +35,7 @@ class App extends Component {
     };
   }
   async componentDidMount() {
+    SplashScreen.hide();
     // you might want to do the I18N setup here
     const username = await AsyncStorage.getItem('username');
     if (username !== null) {
@@ -41,7 +45,11 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer style={styles.container}>
-        <Stack.Navigator initialRouteName="Signup" >
+        <Stack.Navigator
+          initialRouteName="Login"
+          screenOptions={{
+            headerShown: false,
+          }}>
           <Stack.Screen
             name="Login"
             component={Login}
@@ -63,9 +71,19 @@ class App extends Component {
             options={{title: '카메라'}}
           /> */}
           <Stack.Screen
+            name="Record"
+            component={Record}
+            options={{title: '내 기록'}}
+          />
+          <Stack.Screen
             name="Profile"
             component={Profile}
             options={{title: '프로필'}}
+          />
+          <Stack.Screen
+            name="UpdateImg"
+            component={UpdateImg}
+            options={{title: '프로필이미지변경'}}
           />
           <Stack.Screen
             name="Startsex"
@@ -86,6 +104,21 @@ class App extends Component {
             name="Community"
             component={Community}
             options={{title: '커뮤니티'}}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={Comment}
+            options={{title: '댓글'}}
+          />
+          <Stack.Screen
+            name="CreateSelect"
+            component={CreateSelect}
+            options={{title: '사진선택'}}
+          />
+          <Stack.Screen
+            name="CreateArticle"
+            component={CreateArticle}
+            options={{title: '게시물작성'}}
           />
         </Stack.Navigator>
       </NavigationContainer>
