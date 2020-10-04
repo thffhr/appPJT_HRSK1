@@ -7,9 +7,13 @@ import {
   TouchableOpacity,
   width,
   AsyncStorage,
-  Image
+  Image,
+  Dimensions
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+
+const H = Dimensions.get('window').height
+const W = Dimensions.get('window').width
 
 class Startinfo extends Component {
   constructor(props) {
@@ -52,22 +56,22 @@ class Startinfo extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fca652'}}>
+          <Text style={{fontSize: W*0.05, fontWeight: 'bold', color: '#fca652'}}>
             다음
           </Text>
         </TouchableOpacity>
         <Image
             source={
-              require('../assets/images/info.png')
+              require('../../assets/images/info.png')
             }
             style={styles.image}/>
         <Text
           style={{
-            fontSize: 20,
+            fontSize: W*0.05,
             fontWeight: 'bold',
             color: 'gray',
             textAlign: 'center',
-            marginVertical: 20,
+            marginVertical: W*0.05,
           }}>
           기초대사량 계산을 위해{'\n'}다음 정보를 입력해주세요.
         </Text>
@@ -80,7 +84,7 @@ class Startinfo extends Component {
                 this.setState({height: text});
               }}
             />
-            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>cm</Text>
+            <Text style={{marginTop: W*0.05, fontSize: W*0.04, color: "gray"}}>cm</Text>
           </View>
           <View style={styles.textGroup}>
             <TextInput
@@ -90,7 +94,7 @@ class Startinfo extends Component {
                 this.setState({weight: text});
               }}
             />
-            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>kg</Text>
+            <Text style={{marginTop:  W*0.05, fontSize: W*0.04, color: "gray"}}>kg</Text>
           </View>
           <View style={styles.textGroup}>
             <TextInput
@@ -100,7 +104,7 @@ class Startinfo extends Component {
                 this.setState({age: text});
               }}
             />
-            <Text style={{marginTop: 20, fontSize: 15, color: "gray"}}>세</Text>
+            <Text style={{marginTop:  W*0.05, fontSize: W*0.04, color: "gray"}}>세</Text>
           </View>
         </View>
         <View style={styles.location}>
@@ -122,44 +126,44 @@ const styles = StyleSheet.create({
   },
   next: {
     position: 'absolute',
-    right: 15,
-    top: 15,
+    right: W*0.03,
+    top: W*0.03,
   },
   image: {
-    width: 150,
-    height: 150,
+    width: W*0.4,
+    height: W*0.4,
   },
   textGroup:{
     flexDirection: "row"
   },
   inputArea: {
-    height: 40,
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    width: 200,
+    width: W*0.5,
+    height: W*0.1,
+    fontSize: W*0.03,
     borderBottomColor: 'gray',
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
+    borderWidth: 1,
+    marginTop: H*0.01,
+    marginBottom: H*0.01,
   },
   location: {
     position: 'absolute',
-    top: 600,
+    top: H*0.9,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    width: 120,
-    height: 50,
+    width: W*0.3,
   },
   ycircle: {
-    width: 20,
-    height: 20,
+    width: W*0.05,
+    height: W*0.05,
     borderRadius: 100,
     backgroundColor: '#fca652',
   },
   ncircle: {
-    width: 20,
-    height: 20,
+    width: W*0.05,
+    height: W*0.05,
     borderRadius: 100,
     backgroundColor: 'gray',
   },

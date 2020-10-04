@@ -64,7 +64,7 @@ class Login extends Component {
         <View style={styles.titleGroup}>
         <Image
             source={
-              require('../assets/images/로고.png')
+              require('../../assets/images/로고.png')
             }
             style={styles.image}/>
         <Text style={styles.title}>하루세끼</Text>
@@ -89,19 +89,19 @@ class Login extends Component {
           </View>
           <View style={styles.findBox}>
             <TouchableOpacity style={styles.findBtn} color="transparent">
-              <Text style={{fontSize: W*0.03,}}>아이디 찾기</Text>
+              <Text style={{fontSize: W*0.035}}>아이디 찾기</Text>
             </TouchableOpacity>
             <Text style={{fontSize: W*0.03}}>|</Text>
             <TouchableOpacity style={styles.findBtn}>
-              <Text style={{fontSize: W*0.03}}>비밀번호 찾기</Text>
+              <Text style={{fontSize: W*0.035}}>비밀번호 찾기</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.signupBox}>
-            <Text style={{textAlign: 'center', marginBottom: H*0.01, fontSize: W*0.03}}>
+            <Text style={{textAlign: 'center', marginBottom: H*0.01, fontSize: W*0.035}}>
               가입이 되어 있지 않으신가요?
             </Text>
             <TouchableOpacity style={styles.signupBtn} onPress={this.onSign}>
-              <Text style={{color: 'blue', textDecorationLine: 'underline', fontSize: W*0.03}}>
+              <Text style={{color: 'blue', textDecorationLine: 'underline', fontSize: W*0.035}}>
                 회원가입
               </Text>
             </TouchableOpacity>
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   },
   loginBtnText: {
     color: 'white',
-    fontSize: W*0.03,
+    fontSize: W*0.04,
     fontWeight: 'bold',
   },
   findBox: {

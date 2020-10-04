@@ -66,7 +66,7 @@ class App extends Component {
     return (
       <NavigationContainer style={styles.container}>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Home"
           screenOptions={{
             headerShown: false,
           }}>
