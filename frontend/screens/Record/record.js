@@ -1,10 +1,12 @@
-import React, {Component} from 'react';
+import React, {Component, useRef, useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  // ProgressBarAndroid,
+  Animated,
   Dimensions,
   Image,
   AsyncStorage,
@@ -16,7 +18,8 @@ import {
   LocaleConfig,
   Arrow,
 } from 'react-native-calendars';
-import Icon from 'react-native-vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
+import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -64,11 +67,35 @@ LocaleConfig.locales['fr'] = {
 LocaleConfig.defaultLocale = 'fr';
 
 const serverUrl = 'http://10.0.2.2:8080/';
-// const breakfast = {key: 'breakfast', color: '#ffa696'};
-// const lunch = {key: 'lunch', color: '#d7ff96'};
-// const dinner = {key: 'dinner', color: '#96faff'};
-// const snack = {key: 'snack', color: '#e196ff'};
 
+let today = new Date();
+let year = today.getFullYear(); // 년도
+let month = today.getMonth() + 1; // 월
+let date = today.getDate(); // 날짜
+let day = today.getDay(); // 요일
+
+//////////////////////////////////////////////
+let animation = useRef(new Animated.Value(0));
+const [progress, setProgress] = useState(0);
+useInterval(() => {
+  if (progress < 100) {
+    setProgress(progress + 1);
+  }
+}, 1000);
+
+useEffect(() => {
+  Animated.timing(animation.current, {
+    toValue: progress,
+    duration: 100,
+  }).start();
+}, [progress]);
+
+const width = animation.current.interpolate({
+  inputRange: [0, 100],
+  outputRange: ['0%', '100%'],
+  extrapolate: 'clamp',
+});
+//////////////////////////////////////////////
 export default class Record extends Component {
   constructor(props) {
     super(props);
@@ -95,8 +122,21 @@ export default class Record extends Component {
         f: 6,
       },
       nextDays: {},
+      dateTime: {
+        year: year,
+        month: month,
+        date: date,
+        day: day,
+      },
       authToken: '',
     };
+  }
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    this.setState({
+      authToken: await AsyncStorage.getItem('auth-token'),
+    });
+    this.onFetch();
   }
   onBtn1 = () => {
     this.setState({
@@ -177,6 +217,110 @@ export default class Record extends Component {
       });
     }
   };
+  getEndOfDay = (y, m) => {
+    switch (m) {
+      case 1:
+      case 3:
+      case 5:
+      case 7:
+      case 8:
+      case 10:
+      case 12:
+        return 31;
+      case 4:
+      case 6:
+      case 9:
+      case 11:
+        return 30;
+      case 2:
+        if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+          return 29;
+        } else {
+          return 28;
+        }
+      default:
+        return 0;
+    }
+  };
+
+  yesterday = (year, month, date) => {
+    if (date !== 1) {
+      date--;
+    } else {
+      month--;
+      if (month === 0) {
+        month = 12;
+        year--;
+      }
+      date = this.getEndOfDay(year, month);
+    }
+    this.onFetch(year, month, date);
+  };
+
+  tomorrow = (year, month, date) => {
+    var endDate = this.getEndOfDay(year, month);
+    if (date !== endDate) {
+      date++;
+    } else {
+      month++;
+      if (month > 12) {
+        month = 1;
+        year++;
+      }
+      date = 1;
+    }
+    this.onFetch(year, month, date);
+  };
+
+  onFetch = (year, month, date) => {
+    // this.setState({
+    //     dateTime: {
+    //         ...dateTime,
+    //         year = year,
+    //         month = month,
+    //         date = date,
+    //     }
+    //   })
+    //   var newYear = this.pad(`${year}`, 4);
+    //   var newMonth = this.pad(`${month}`, 2);
+    //   var newDate = this.pad(`${date}`, 2);
+    //   var sendDate = `${newYear}-${newMonth}-${newDate}`;
+    //   fetch('http://10.0.2.2/gallery/getCalendar/', {
+    //     method: 'GET',
+    //     body: sendDate,
+    //     headers: {
+    //         Authorization: `Token ${this.state.authToken}`,
+    //         'Content-Type': 'application/json',
+    //     },
+    //   })
+    //     .then(response => {
+    //         console.log(response);
+    //     })
+    //     .catch(err => console.error(err))
+  };
+
+  pad = (n, width) => {
+    n = n + '';
+    return n.length >= width
+      ? n
+      : new Array(width - n.length + 1).join('0') + n;
+  };
+
+  getDayInfo = () => {
+    const YMD = `${this.state.dateTime.year}-${this.state.dateTime.month}-${this.state.dateTime.day}`;
+    fetch('http://10.0.2.2:8080/gallery/getCalender/', {
+      method: 'GET',
+      body: YMD,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Token ${this.state.authToken}`,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.log(error));
+  };
   onDetailImage = (idx) => {
     this.props.navigation.push('DetailImage');
     console.log(idx);
@@ -205,6 +349,50 @@ export default class Record extends Component {
           </TouchableOpacity>
         </View>
         <View style={{width: '100%'}}>
+          {this.state.active == 'btn2' && ( // chart
+            <View style={styles.chartArea}>
+              {/* 여기는 요일 */}
+              <View style={styles.chartDay}>
+                <Icon
+                  name="chevron-back-outline"
+                  style={styles.chartDayicon}
+                  onPress={this.goYesterday}></Icon>
+                <View style={styles.chartDaybox}>
+                  <Text style={styles.chartDaytxt}>
+                    {month}월 {date}일 (
+                    {LocaleConfig.locales['fr'].dayNames[day]})
+                  </Text>
+                </View>
+                <Icon
+                  name="chevron-forward-outline"
+                  style={styles.chartDayicon}
+                  onPress={this.goNextday}></Icon>
+              </View>
+              {/* 여기는 칼로리 차트 */}
+              <Text style={styles.caltxt}>1000/1500</Text>
+              <View style={styles.progressBar}>
+                <Animated.View
+                  style={
+                    ([styles.progressBarFill],
+                    {backgroundColor: '#8BED4F', width})
+                  }
+                />
+              </View>
+              {/* 여기는 영양소 */}
+              <View style={styles.cal}>
+                <Text>아침</Text>
+                <View>
+                  <Text>밥</Text>
+                </View>
+                <View>
+                  <Text>밥</Text>
+                </View>
+                <View>
+                  <Text>밥</Text>
+                </View>
+              </View>
+            </View>
+          )}
           {this.state.active == 'btn1' && !this.state.selectedImage && (
             <View style={styles.pictureBox}>
               {Object.entries(this.state.pictures).map(([key, value], i) => {
@@ -340,6 +528,52 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 6,
+  },
+  chartArea: {
+    width: '100%',
+    marginBottom: 30,
+    alignItems: 'center',
+  },
+  chartDay: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  chartDayicon: {
+    fontSize: 50,
+  },
+  chartDaybox: {
+    width: '50%',
+    borderWidth: 1,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  chartDaytxt: {
+    fontSize: 20,
+    margin: 10,
+  },
+  calchart: {},
+  caltxt: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    margin: 10,
+  },
+  progressBar: {
+    height: 20,
+    width: '80%',
+    backgroundColor: 'white',
+    borderColor: '#000',
+    borderWidth: 2,
+    borderRadius: 5,
+    flexDirection: 'row',
+  },
+  progressBarFill: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
   },
   calendarArea: {
     width: '100%',
