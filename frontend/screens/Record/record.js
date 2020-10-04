@@ -111,7 +111,6 @@ class Record extends Component {
       btn3_color: '#FCA652',
       active: 'btn3',
     });
-
     fetch(`${serverUrl}gallery/getCalendar/`, {
       method: 'GET',
       headers: {
@@ -124,31 +123,19 @@ class Record extends Component {
         this.setState({
           nextDays: response,
         });
-        var tempArray = [];
-        for (var [key, values] of Object.entries(this.state.nextDays)) {
-          console.log('key: ', key);
-          tempArray.push({
+        var tempObject = {};
+        for (var key of Object.keys(this.state.nextDays)) {
+          tempObject = {
+            ...tempObject,
             [key]: {
               marked: true,
               dotColor: '#FCA652',
             },
-          });
+          };
         }
-        console.log(tempArray);
-        // this.setState({
-        //   newDaysObject: tempObject
-        // })
-        // for (var key of Object.keys(this.state.nextDays)) {
-        //   console.log('key: ', key);
-        //   this.setState({
-        //     newDaysObject: {
-        //       [key]: {
-        //         marked: true,
-        //         dotColor: '#FCA652',
-        //       },
-        //     },
-        //   });
-        // }
+        this.setState({
+          newDaysObject: tempObject,
+        });
       })
       .catch((err) => console.error(err));
   };
