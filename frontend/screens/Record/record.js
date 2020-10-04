@@ -58,29 +58,12 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-const serverUrl = 'http://10.0.2.2:8080/gallery/getCalendar/';
+const serverUrl = 'http://10.0.2.2:8080/';
 
 // const breakfast = {key: 'breakfast', color: '#ffa696'};
 // const lunch = {key: 'lunch', color: '#d7ff96'};
 // const dinner = {key: 'dinner', color: '#96faff'};
 // const snack = {key: 'snack', color: '#e196ff'};
-
-// const nextDays = {
-//   '2020-10-01': [100, 200, 300, 400, 1000],
-//   '2020-10-15': [600, 500, 400, 330, 5000],
-//   '2020-10-30': [10, 20, 30, 40, 6300],
-//   '2020-10-31': [20, 60, 70, 50, 350],
-// };
-// let newDaysObject = {};
-// for (var key of Object.keys(nextDays)) {
-//   newDaysObject = {
-//     ...newDaysObject,
-//     [key]: {
-//       marked: true,
-//       dotColor: '#FCA652',
-//     },
-//   };
-// }
 
 class Record extends Component {
   constructor(props) {
@@ -99,15 +82,10 @@ class Record extends Component {
         snack: 0,
         total: 0,
       },
-      nextDays: '',
-      newDaysObject: {},
+      nextDays: {},
+      // newDaysObject: {},
       authToken: '',
     };
-  }
-  async componentDidMount() {
-    this.setState({
-      authToken: await AsyncStorage.getItem('auth-token'),
-    });
   }
   onBtn1 = () => {
     this.setState({
@@ -125,38 +103,42 @@ class Record extends Component {
       active: 'btn2',
     });
   };
-  onBtn3 = () => {
+  onBtn3 = async () => {
+    const authToken = await AsyncStorage.getItem('auth-token');
     this.setState({
       btn1_color: '#FFFBE6',
       btn2_color: '#FFFBE6',
       btn3_color: '#FCA652',
       active: 'btn3',
     });
-    fetch(`${serverUrl}getCalendar/`, {
+    console.log(typeof this.state.nextDays);
+    fetch(`${serverUrl}gallery/getCalendar/`, {
       method: 'GET',
       headers: {
-        Authorization: `Token ${this.state.authToken}`,
+        Authorization: `Token ${authToken}`,
         'Content-Type': 'application/json',
       },
     })
       .then((response) => response.json())
       .then((response) => {
+        console.log('받은 데이터: ', response);
         this.setState({
-          nextDays: response.data,
+          nextDays: response,
         });
+        console.log(this.state.nextDays);
+        for (var key of Object.keys(this.state.nextDays)) {
+          console.log('key: ', key);
+          this.setState({
+            newDaysObject: {
+              [key]: {
+                marked: true,
+                dotColor: '#FCA652',
+              },
+            },
+          });
+        }
       })
       .catch((err) => console.error(err));
-    for (var key of Object.keys(this.state.nextDays)) {
-      this.setState({
-        newDaysObject: {
-          ...newDaysObject,
-          [key]: {
-            marked: true,
-            dotColor: '#FCA652',
-          },
-        },
-      });
-    }
   };
   onMacro = (day) => {
     if (Object.keys(this.state.nextDays).includes(day.dateString)) {
