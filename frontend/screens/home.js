@@ -14,6 +14,8 @@ import ImagePicker from 'react-native-image-picker';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 const {width, height} = Dimensions.get('screen');
+const H = Dimensions.get('window').height
+const W = Dimensions.get('window').width
 
 class Home extends Component {
   constructor(props) {
@@ -117,13 +119,13 @@ class Home extends Component {
       <View style={styles.Container}>
         <View style={styles.Nav}>
           <Text style={styles.title}>하루세끼</Text>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.user}
             onPress={async () => {
               const token = await AsyncStorage.getItem('auth-token');
               console.log(token);
               if (token !== null) {
-                fetch(`${serverUrl}rest-auth/logout/`, {
+                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
                   method: 'POST',
                   header: {
                     Authorization: `Token ${token}`,
@@ -143,7 +145,7 @@ class Home extends Component {
               }
             }}>
             <Text style={styles.user}>로그아웃</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <TouchableOpacity style={styles.userBtn} onPress={this.onProfile}>
             {this.state.profileImage && (
               <Image
@@ -167,8 +169,8 @@ class Home extends Component {
         <View style={styles.body1}>
           <TouchableOpacity style={styles.btnBox} onPress={this.onCamera}>
             <View style={styles.btnContent}>
-              <Icon name="camera" style={styles.photo}></Icon>
-              <Text style={styles.photoTitle}>사진 등록</Text>
+              <Icon name="camera" style={styles.bigLogo}></Icon>
+              <Text style={styles.logoTitle}>사진 등록</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -176,16 +178,16 @@ class Home extends Component {
           <View style={styles.body3}>
             <TouchableOpacity style={styles.btnBox} onPress={this.onRecord}>
               <View style={styles.btnContent}>
-                <Icon name="calendar-outline" style={styles.record} />
-                <Text style={styles.record}>내 기록</Text>
+                <Icon name="calendar-outline" style={styles.smallLogo} />
+                <Text style={styles.logoTitle}>내 기록</Text>
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.body4}>
             <TouchableOpacity style={styles.btnBox} onPress={this.onCommunity}>
               <View style={styles.btnContent}>
-                <Icon name="earth-outline" style={styles.community} />
-                <Text style={styles.community}>커뮤니티</Text>
+                <Icon name="earth-outline" style={styles.smallLogo} />
+                <Text style={styles.logoTitle}>커뮤니티</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -194,16 +196,16 @@ class Home extends Component {
           <View style={styles.body6}>
             <TouchableOpacity style={styles.btnBox} onPress={this.onRank}>
               <View style={styles.btnContent}>
-                <Icon name="medal-outline" style={styles.ranking} />
-                <Text style={styles.ranking}>랭킹</Text>
+                <Icon name="medal-outline" style={styles.smallLogo} />
+                <Text style={styles.logoTitle}>랭킹</Text>
               </View>
             </TouchableOpacity>
           </View>
           <View style={styles.body7}>
             <TouchableOpacity style={styles.btnBox}>
               <View style={styles.btnContent}>
-                <Icon name="trophy-outline" style={styles.game} />
-                <Text style={styles.game}>식단월드컵</Text>
+                <Icon name="trophy-outline" style={styles.smallLogo} />
+                <Text style={styles.logoTitle}>식단월드컵</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -217,48 +219,48 @@ export default Home;
 
 const styles = StyleSheet.create({
   Container: {
-    backgroundColor: 'white',
     width: width,
     flex: 1,
+    backgroundColor: '#FFFBE6',
   },
   Nav: {
-    backgroundColor: 'black',
+    backgroundColor: '#fca652',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: W*0.075,
     flex: 1,
   },
   title: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  user: {
-    fontSize: 25,
-    fontWeight: 'bold',
+    fontSize: W*0.075,
+    fontFamily: "BMJUA",
     color: 'white',
   },
   userBtn: {
-    width: 40,
-    height: 40,
+    width: W*0.1,
+    height: W*0.1,
   },
   profileImg: {
-    width: 40,
-    height: 40,
-    borderRadius: 40,
+    width: W*0.1,
+    height: W*0.1,
   },
   body1: {
     flex: 4,
     borderWidth: 1,
-    borderColor: 'black',
+    borderBottomColor: 'lightgray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
   },
-  photo: {
-    fontSize: 100,
+  bigLogo: {
+    fontSize: W*0.25,
   },
-  photoTitle: {
-    fontSize: 30,
-    fontWeight: 'bold',
+  smallLogo: {
+    fontSize: W*0.125,
+  },
+  logoTitle: {
+    fontSize: W*0.05,
+    fontFamily: "BMDOHYEON",
   },
   body2: {
     flexDirection: 'row',
@@ -268,30 +270,26 @@ const styles = StyleSheet.create({
   body3: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: 'lightgray',
   },
   record: {
-    fontSize: 30,
+    fontSize: W*0.05,
     fontWeight: 'bold',
   },
   body4: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'black',
-    backgroundColor: 'blue',
+    borderColor: 'lightgray',
+    backgroundColor: 'transparent',
     padding: 0,
   },
   btnBox: {
     flexDirection: 'row',
     width: '100%',
     height: '100%',
-    backgroundColor: 'yellow',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  community: {
-    fontSize: 30,
-    fontWeight: 'bold',
   },
   body5: {
     flexDirection: 'row',
@@ -301,20 +299,12 @@ const styles = StyleSheet.create({
   body6: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'black',
-  },
-  ranking: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    borderColor: 'lightgray',
   },
   body7: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'black',
-  },
-  game: {
-    fontSize: 30,
-    fontWeight: 'bold',
+    borderColor: 'lightgray',
   },
   btnContent: {
     alignItems: 'center',

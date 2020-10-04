@@ -66,7 +66,7 @@ class App extends Component {
     return (
       <NavigationContainer style={styles.container}>
         <Stack.Navigator
-          initialRouteName="Login"
+          initialRouteName="Home"
           screenOptions={{
             headerShown: false,
           }}>
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
   },
 });
 

@@ -1,15 +1,20 @@
 import React, {Component} from 'react';
 import {
+  PixelRatio,
+  Image,
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
 const serverUrl = 'http://10.0.2.2:8080/';
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 
 class Login extends Component {
   constructor(props) {
@@ -57,7 +62,13 @@ class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>하루세끼</Text>
+        <View style={styles.titleGroup}>
+          <Image
+            source={require('../../assets/images/로고.png')}
+            style={styles.image}
+          />
+          <Text style={styles.title}>하루세끼</Text>
+        </View>
         <View>
           <TextInput
             style={styles.inputArea}
@@ -70,28 +81,40 @@ class Login extends Component {
             secureTextEntry={true}
             onChangeText={this.handlePassword}
           />
-          <TouchableOpacity onPress={this.onLogin} style={styles.loginBtn}>
+        </View>
+        <View style={styles.loginBtn}>
+          <TouchableOpacity onPress={this.onLogin}>
             <Text style={styles.loginBtnText}>로그인</Text>
           </TouchableOpacity>
-          <View style={styles.findBox}>
-            <TouchableOpacity style={styles.findBtn} color="transparent">
-              <Text>아이디 찾기</Text>
-            </TouchableOpacity>
-            <Text style={{fontSize: 15}}>|</Text>
-            <TouchableOpacity style={styles.findBtn}>
-              <Text>비밀번호 찾기</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.signupBox}>
-            <Text style={{textAlign: 'center', marginBottom: 3}}>
-              가입이 되어 있지 않으신가요?
+        </View>
+        <View style={styles.findBox}>
+          <TouchableOpacity style={styles.findBtn} color="transparent">
+            <Text style={{fontSize: W * 0.035}}>아이디 찾기</Text>
+          </TouchableOpacity>
+          <Text style={{fontSize: W * 0.03}}>|</Text>
+          <TouchableOpacity style={styles.findBtn}>
+            <Text style={{fontSize: W * 0.035}}>비밀번호 찾기</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.signupBox}>
+          <Text
+            style={{
+              textAlign: 'center',
+              marginBottom: H * 0.01,
+              fontSize: W * 0.035,
+            }}>
+            가입이 되어 있지 않으신가요?
+          </Text>
+          <TouchableOpacity style={styles.signupBtn} onPress={this.onSign}>
+            <Text
+              style={{
+                color: 'blue',
+                textDecorationLine: 'underline',
+                fontSize: W * 0.035,
+              }}>
+              회원가입
             </Text>
-            <TouchableOpacity style={styles.signupBtn} onPress={this.onSign}>
-              <Text style={{color: 'blue', textDecorationLine: 'underline'}}>
-                회원가입
-              </Text>
-            </TouchableOpacity>
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -103,31 +126,47 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
+  },
+  titleGroup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 60,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 50,
+    fontSize: W * 0.13,
+    fontFamily: 'BMJUA',
+    marginBottom: H * 0.08,
+    marginTop: H * 0.01,
+  },
+  image: {
+    marginRight: W * 0.03,
+    width: W * 0.165,
+    height: W * 0.165,
   },
   inputArea: {
-    width: 300,
-    height: 40,
-    borderColor: 'gray',
+    width: W * 0.7,
+    height: W * 0.1,
+    fontSize: W * 0.03,
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
     borderWidth: 1,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: H * 0.01,
+    marginBottom: H * 0.01,
   },
   loginBtn: {
     alignItems: 'center',
-    backgroundColor: '#F1C40F',
-    padding: 15,
+    backgroundColor: '#fca652',
+    padding: W * 0.02,
     borderRadius: 5,
-    marginTop: 5,
-    marginBottom: 10,
+    marginTop: H * 0.01,
+    marginBottom: H * 0.01,
+    width: '70%',
   },
   loginBtnText: {
-    fontSize: 15,
+    color: 'white',
+    fontSize: W * 0.04,
     fontWeight: 'bold',
   },
   findBox: {
@@ -137,10 +176,10 @@ const styles = StyleSheet.create({
   findBtn: {
     backgroundColor: 'transparent',
     color: 'red',
-    marginHorizontal: 10,
+    marginHorizontal: W * 0.02,
   },
   signupBox: {
-    marginTop: 70,
+    marginTop: H * 0.1,
   },
   signupBtn: {
     backgroundColor: 'transparent',

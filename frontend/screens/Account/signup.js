@@ -5,9 +5,14 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  Image,
+  Dimensions
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+
+const H = Dimensions.get('window').height
+const W = Dimensions.get('window').width
 
 class Signup extends Component {
   constructor(props) {
@@ -60,9 +65,11 @@ class Signup extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>
-          생성할 아이디와{'\n'}비밀번호를 입력해주세요.
-        </Text>
+        <Image
+            source={
+              require('../../assets/images/로고.png')
+            }
+            style={styles.image}/>
         <View>
           <TextInput
             style={styles.inputArea}
@@ -114,10 +121,12 @@ class Signup extends Component {
               });
             }}
           />
-          <TouchableOpacity onPress={this.onSignup} style={styles.signupBtn}>
-            <Text style={{fontSize: 15, fontWeight: 'bold'}}>회원가입</Text>
-          </TouchableOpacity>
         </View>
+          <View style={styles.signupBtn}>
+            <TouchableOpacity onPress={this.onSignup} >
+              <Text style={styles.signBtnText}>회원가입</Text>
+            </TouchableOpacity>
+          </View>
       </View>
     );
   }
@@ -128,33 +137,43 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
   },
-  title: {
-    fontSize: 25,
+  description: {
+    fontSize: W*0.03,
     fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 40,
-    textAlign: 'center',
+    marginVertical: H*0.01,
   },
   signupBtn: {
-    backgroundColor: '#f5d742',
-    color: 'blue',
     alignItems: 'center',
-    marginTop: 40,
-    borderWidth: 1,
-    width: 100,
-    alignSelf: 'center',
-    padding: 20,
+    backgroundColor: '#fca652',
+    padding: W*0.02,
     borderRadius: 5,
+    marginTop: H*0.01,
+    marginBottom: H*0.01,
+    width: '70%'
+  },
+  signBtnText: {
+    color: 'white',
+    fontSize: W*0.04,
+    fontWeight: 'bold',
   },
   inputArea: {
-    height: 40,
-    borderColor: 'gray',
+    width: W*0.7,
+    height: W*0.1,
+    fontSize: W*0.03,
+    borderBottomColor: 'gray',
+    borderTopColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderLeftColor: 'transparent',
     borderWidth: 1,
-    marginTop: 7,
-    marginBottom: 7,
-    width: 300,
-    borderRadius: 5,
+    marginTop: H*0.01,
+    marginBottom: H*0.01,
+  },
+  image: {
+    width: W*0.3,
+    height: W*0.3,
+    marginBottom: W*0.15,
   },
 });
 

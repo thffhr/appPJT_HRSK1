@@ -164,6 +164,33 @@ class Profile extends Component {
             <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
+        <TouchableOpacity
+            style={styles.user}
+            onPress={async () => {
+              const token = await AsyncStorage.getItem('auth-token');
+              console.log(token);
+              if (token !== null) {
+                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
+                  method: 'POST',
+                  header: {
+                    Authorization: `Token ${token}`,
+                  },
+                })
+                  .then(() => {
+                    console.log('로그아웃 성공');
+                    AsyncStorage.clear();
+                    this.props.navigation.dispatch(
+                      CommonActions.reset({
+                        index: 1,
+                        routes: [{name: 'Login'}],
+                      }),
+                    );
+                  })
+                  .catch((err) => console.error(err));
+              }
+            }}>
+            <Text style={styles.user}>로그아웃</Text>
+          </TouchableOpacity>
         <TouchableOpacity onPress={this.onDelete} style={styles.deleteBtn}>
           <Text style={styles.delText}>회원탈퇴</Text>
         </TouchableOpacity>

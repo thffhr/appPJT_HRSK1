@@ -6,17 +6,21 @@ import {
   TouchableOpacity,
   width,
   AsyncStorage,
+  Image,
+  Dimensions,
 } from 'react-native';
 
 const serverUrl = 'http://10.0.2.2:8080/';
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 
 class Startsex extends Component {
   constructor(props) {
     super(props);
     this.state = {
       need: {sex: ''},
-      malecolor: 'white',
-      femalecolor: 'white',
+      malecolor: 'transparent',
+      femalecolor: 'transparent',
     };
   }
   infoNext = async () => {
@@ -44,32 +48,37 @@ class Startsex extends Component {
   setMale = () => {
     this.setState({
       need: {sex: 'male'},
-      malecolor: '#a2d5f2',
-      femalecolor: 'white',
+      malecolor: '#51adcf',
+      femalecolor: 'transparent',
     });
   };
   setFemale = () => {
     this.setState({
       need: {sex: 'female'},
-      malecolor: 'white',
-      femalecolor: '#ff9595',
+      malecolor: 'transparent',
+      femalecolor: '#f9c0c0',
     });
   };
   render() {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
+          <Text
+            style={{fontSize: W * 0.05, fontWeight: 'bold', color: '#fca652'}}>
             다음
           </Text>
         </TouchableOpacity>
-        <Text style={{marginTop: 150}}>아이콘</Text>
+        <Image
+          source={require('../../assets/images/sex.png')}
+          style={styles.image}
+        />
         <Text
           style={{
-            fontSize: 25,
+            fontSize: W * 0.06,
             fontWeight: 'bold',
             color: 'gray',
-            marginBottom: 100,
+            marginBottom: H * 0.04,
+            marginTop: H * 0.02,
           }}>
           성별을 입력해주세요.
         </Text>
@@ -77,17 +86,29 @@ class Startsex extends Component {
           <TouchableOpacity
             style={[styles.selectbox1, {backgroundColor: this.state.malecolor}]}
             onPress={this.setMale}>
-            <Text style={{fontSize: 30, fontWeight: 'bold'}}>남</Text>
+            <Image
+              source={require('../../assets/images/male.png')}
+              style={styles.selectsex}
+            />
+            <Text
+              style={{fontSize: W * 0.05, fontWeight: 'bold', color: 'gray'}}>
+              남
+            </Text>
           </TouchableOpacity>
-          <View
-            style={{width: 2, height: 200, backgroundColor: 'black'}}></View>
           <TouchableOpacity
             style={[
               styles.selectbox2,
               {backgroundColor: this.state.femalecolor},
             ]}
             onPress={this.setFemale}>
-            <Text style={{fontSize: 30, fontWeight: 'bold'}}>여</Text>
+            <Image
+              source={require('../../assets/images/female.png')}
+              style={styles.selectsex}
+            />
+            <Text
+              style={{fontSize: W * 0.05, fontWeight: 'bold', color: 'gray'}}>
+              여
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={styles.location}>
@@ -102,49 +123,58 @@ class Startsex extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    width: width,
     flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFBE6',
+  },
+  image: {
+    width: W * 0.5,
+    height: W * 0.4,
   },
   selectboxes: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
   selectbox1: {
-    width: 200,
-    height: 200,
+    width: W * 0.4,
+    height: W * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
   },
   selectbox2: {
-    width: 200,
-    height: 200,
+    width: W * 0.4,
+    height: W * 0.5,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  selectsex: {
+    width: W * 0.2,
+    height: W * 0.2,
   },
   next: {
     position: 'absolute',
-    right: 15,
-    top: 15,
+    right: W * 0.03,
+    top: W * 0.03,
   },
   location: {
     position: 'absolute',
-    top: 600,
+    top: H * 0.9,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    width: 120,
-    height: 50,
+    width: W * 0.3,
   },
   ycircle: {
-    width: 20,
-    height: 20,
+    width: W * 0.05,
+    height: W * 0.05,
     borderRadius: 100,
-    backgroundColor: 'orange',
+    backgroundColor: '#fca652',
   },
   ncircle: {
-    width: 20,
-    height: 20,
+    width: W * 0.05,
+    height: W * 0.05,
     borderRadius: 100,
     backgroundColor: 'gray',
   },
