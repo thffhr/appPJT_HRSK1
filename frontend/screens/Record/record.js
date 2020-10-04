@@ -74,9 +74,9 @@ export default class Record extends Component {
     super(props);
 
     this.state = {
-      btn1_color: '#FFFBE6',
+      btn1_color: '#FCA652',
       btn2_color: '#FFFBE6',
-      btn3_color: '#FCA652',
+      btn3_color: '#FFFBE6',
       active: 'btn1',
       selectedDate: {
         date: null,
@@ -95,7 +95,6 @@ export default class Record extends Component {
         f: 6,
       },
       nextDays: {},
-      // newDaysObject: {},
       authToken: '',
     };
   }
