@@ -43,25 +43,25 @@ class App extends Component {
       this.setState({isLoggedIn: true});
     }
   }
-  //////////////////////////////////////////
-  useInterval = (callback, delay) => {
-    const savedCallback = useRef();
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current();
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  };
-  /////////////////////////////////////////
+  // //////////////////////////////////////////
+  // useInterval = (callback, delay) => {
+  //   const savedCallback = useRef();
+  //   // Remember the latest callback.
+  //   useEffect(() => {
+  //     savedCallback.current = callback;
+  //   }, [callback]);
+  //   // Set up the interval.
+  //   useEffect(() => {
+  //     function tick() {
+  //       savedCallback.current();
+  //     }
+  //     if (delay !== null) {
+  //       let id = setInterval(tick, delay);
+  //       return () => clearInterval(id);
+  //     }
+  //   }, [delay]);
+  // };
+  // /////////////////////////////////////////
   render() {
     return (
       <NavigationContainer style={styles.container}>
@@ -95,10 +95,11 @@ class App extends Component {
             component={Record}
             options={{title: '내 기록'}}
           />
-          <Stack.Screen 
+          <Stack.Screen
             name="DetailImage"
             component={DetailImage}
-            options={{title: '상세 이미지'}}/>
+            options={{title: '상세 이미지'}}
+          />
           <Stack.Screen
             name="Profile"
             component={Profile}

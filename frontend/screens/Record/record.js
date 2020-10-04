@@ -75,26 +75,26 @@ let date = today.getDate(); // 날짜
 let day = today.getDay(); // 요일
 
 //////////////////////////////////////////////
-let animation = useRef(new Animated.Value(0));
-const [progress, setProgress] = useState(0);
-useInterval(() => {
-  if (progress < 100) {
-    setProgress(progress + 1);
-  }
-}, 1000);
+// let animation = useRef(new Animated.Value(0));
+// const [progress, setProgress] = useState(0);
+// useInterval(() => {
+//   if (progress < 100) {
+//     setProgress(progress + 1);
+//   }
+// }, 1000);
 
-useEffect(() => {
-  Animated.timing(animation.current, {
-    toValue: progress,
-    duration: 100,
-  }).start();
-}, [progress]);
+// useEffect(() => {
+//   Animated.timing(animation.current, {
+//     toValue: progress,
+//     duration: 100,
+//   }).start();
+// }, [progress]);
 
-const width = animation.current.interpolate({
-  inputRange: [0, 100],
-  outputRange: ['0%', '100%'],
-  extrapolate: 'clamp',
-});
+// const width = animation.current.interpolate({
+//   inputRange: [0, 100],
+//   outputRange: ['0%', '100%'],
+//   extrapolate: 'clamp',
+// });
 //////////////////////////////////////////////
 export default class Record extends Component {
   constructor(props) {
@@ -131,13 +131,13 @@ export default class Record extends Component {
       authToken: '',
     };
   }
-  async componentDidMount() {
-    // you might want to do the I18N setup here
-    this.setState({
-      authToken: await AsyncStorage.getItem('auth-token'),
-    });
-    this.onFetch();
-  }
+  // async componentDidMount() {
+  //   // you might want to do the I18N setup here
+  //   this.setState({
+  //     authToken: await AsyncStorage.getItem('auth-token'),
+  //   });
+  //   // this.onFetch();
+  // }
   onBtn1 = () => {
     this.setState({
       btn1_color: '#FCA652',
@@ -349,10 +349,10 @@ export default class Record extends Component {
           </TouchableOpacity>
         </View>
         <View style={{width: '100%'}}>
-          {this.state.active == 'btn2' && ( // chart
-            <View style={styles.chartArea}>
-              {/* 여기는 요일 */}
-              <View style={styles.chartDay}>
+          {/* {this.state.active == 'btn2' && ( // chart
+            <View style={styles.chartArea}> */}
+          {/* 여기는 요일 */}
+          {/* <View style={styles.chartDay}>
                 <Icon
                   name="chevron-back-outline"
                   style={styles.chartDayicon}
@@ -367,9 +367,9 @@ export default class Record extends Component {
                   name="chevron-forward-outline"
                   style={styles.chartDayicon}
                   onPress={this.goNextday}></Icon>
-              </View>
-              {/* 여기는 칼로리 차트 */}
-              <Text style={styles.caltxt}>1000/1500</Text>
+              </View> */}
+          {/* 여기는 칼로리 차트 */}
+          {/* <Text style={styles.caltxt}>1000/1500</Text>
               <View style={styles.progressBar}>
                 <Animated.View
                   style={
@@ -377,9 +377,9 @@ export default class Record extends Component {
                     {backgroundColor: '#8BED4F', width})
                   }
                 />
-              </View>
-              {/* 여기는 영양소 */}
-              <View style={styles.cal}>
+              </View> */}
+          {/* 여기는 영양소 */}
+          {/* <View style={styles.cal}>
                 <Text>아침</Text>
                 <View>
                   <Text>밥</Text>
@@ -392,8 +392,9 @@ export default class Record extends Component {
                 </View>
               </View>
             </View>
-          )}
-          {this.state.active == 'btn1' && !this.state.selectedImage && (
+          )} */}
+
+          {this.state.active == 'btn1' && (
             <View style={styles.pictureBox}>
               {Object.entries(this.state.pictures).map(([key, value], i) => {
                 return (
