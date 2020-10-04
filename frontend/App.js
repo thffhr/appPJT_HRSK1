@@ -85,11 +85,6 @@ class App extends Component {
             component={Home}
             options={{title: '하루세끼'}}
           />
-          {/* <Stack.Screen
-            name="Camera"
-            component={Camera}
-            options={{title: '카메라'}}
-          /> */}
           <Stack.Screen
             name="Record"
             component={Record}

@@ -12,6 +12,8 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 class Community extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +32,7 @@ class Community extends Component {
 
   getAllArticles = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-    fetch(`http://10.0.2.2:8080/articles/readAll/`, {
+    fetch(`${serverUrl}articles/readAll/`, {
       method: 'POST',
       headers: {
         Authorization: `Token ${token}`,
@@ -71,8 +73,7 @@ class Community extends Component {
                         style={styles.writerImg}
                         source={{
                           uri:
-                            'http://10.0.2.2:8080/gallery' +
-                            article.user.profileImage,
+                            `${serverUrl}gallery` + article.user.profileImage,
                         }}
                       />
                       <Text
@@ -98,7 +99,7 @@ class Community extends Component {
                     <Image
                       style={styles.articleImg}
                       source={{
-                        uri: 'http://10.0.2.2:8080/gallery' + article.image,
+                        uri: `${serverUrl}gallery` + article.image,
                       }}
                     />
                     <View style={styles.articleBelow}>
@@ -109,17 +110,14 @@ class Community extends Component {
                             const token = await AsyncStorage.getItem(
                               'auth-token',
                             );
-                            fetch(
-                              `http://10.0.2.2:8080/articles/articleLikeBtn/`,
-                              {
-                                method: 'POST',
-                                body: JSON.stringify({articleId: article.id}),
-                                headers: {
-                                  Authorization: `Token ${token}`,
-                                  'Content-Type': 'application/json',
-                                },
+                            fetch(`${serverUrl}articles/articleLikeBtn/`, {
+                              method: 'POST',
+                              body: JSON.stringify({articleId: article.id}),
+                              headers: {
+                                Authorization: `Token ${token}`,
+                                'Content-Type': 'application/json',
                               },
-                            )
+                            })
                               .then((response) => response.json())
                               .then((response) => {
                                 console.log(response);

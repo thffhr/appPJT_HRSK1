@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 class Startinfo extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +26,7 @@ class Startinfo extends Component {
   infoNext = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     if (this.state.height && this.state.weight && this.state.age) {
-      fetch('http://10.0.2.2:8080/accounts/need/info/', {
+      fetch(`${serverUrl}accounts/need/info/`, {
         method: 'PATCH',
         body: JSON.stringify(this.state),
         headers: {

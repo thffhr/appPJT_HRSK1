@@ -12,6 +12,8 @@ import {
 import ImagePicker from 'react-native-image-picker';
 import {CommonActions} from '@react-navigation/native';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 export default class UpdateImg extends React.Component {
   state = {
     username: null,
@@ -30,7 +32,7 @@ export default class UpdateImg extends React.Component {
   }
 
   getInfo = () => {
-    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ export default class UpdateImg extends React.Component {
       data.append('type', this.state.photo.type);
       data.append('fileName', this.state.photo.fileName);
 
-      fetch('http://10.0.2.2:8080/accounts/pimg/update/', {
+      fetch(`${serverUrl}accounts/pimg/update/`, {
         method: 'PATCH',
         body: data,
         headers: {
@@ -84,7 +86,7 @@ export default class UpdateImg extends React.Component {
           console.log(err);
         });
     } else if (!this.state.profileImage) {
-      fetch('http://10.0.2.2:8080/accounts/pimg/delete/', {
+      fetch(`${serverUrl}accounts/pimg/delete/`, {
         method: 'POST',
         headers: {
           Authorization: `Token ${token}`,
@@ -146,7 +148,7 @@ export default class UpdateImg extends React.Component {
         {!photo && this.state.profileImage && (
           <Image
             source={{
-              uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
+              uri: `${serverUrl}gallery` + this.state.profileImage,
             }}
             style={{width: 200, height: 200}}
           />

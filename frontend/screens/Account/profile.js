@@ -9,7 +9,7 @@ import {
 import {AsyncStorage, Image} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
-// const serverUrl = 'http:10.0.2.2:8080/'
+const serverUrl = 'http://10.0.2.2:8080/';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -35,7 +35,7 @@ class Profile extends Component {
     this.getInfo();
   }
   getInfo = () => {
-    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ class Profile extends Component {
   };
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-    fetch(`http://10.0.2.2:8080/accounts/delete/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/delete/${this.state.username}`, {
       method: 'POST',
       headers: {
         Authorization: `Token ${token}`,
@@ -123,7 +123,7 @@ class Profile extends Component {
             <Image
               style={styles.profileImg}
               source={{
-                uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
+                uri: `${serverUrl}gallery` + this.state.profileImage,
               }}
             />
           )}

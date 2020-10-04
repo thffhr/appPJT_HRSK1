@@ -8,6 +8,8 @@ import {
   AsyncStorage,
 } from 'react-native';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 class Startsex extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +22,7 @@ class Startsex extends Component {
   infoNext = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     if (this.state.need.sex) {
-      fetch('http://10.0.2.2:8080/accounts/need/', {
+      fetch(`${serverUrl}accounts/need/`, {
         method: 'PATCH',
         body: JSON.stringify(this.state.need),
         headers: {

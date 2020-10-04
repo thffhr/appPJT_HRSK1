@@ -9,6 +9,7 @@ import {
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
+const serverUrl = 'http://10.0.2.2:8080/';
 
 class Login extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Login extends Component {
     this.setState({password: text});
   };
   onLogin = () => {
-    fetch('http://10.0.2.2:8080/rest-auth/login/', {
+    fetch(`${serverUrl}rest-auth/login/`, {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {

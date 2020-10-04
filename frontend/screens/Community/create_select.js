@@ -15,6 +15,8 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 class CreateSelect extends Component {
   constructor(props) {
     super(props);
@@ -78,7 +80,7 @@ class CreateSelect extends Component {
 
   getAllPictures = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-    fetch(`http://10.0.2.2:8080/gallery/myImgs/`, {
+    fetch(`${serverUrl}gallery/myImgs/`, {
       method: 'POST',
       headers: {
         Authorization: `Token ${token}`,
@@ -117,7 +119,7 @@ class CreateSelect extends Component {
           <Image
             style={{width: '100%', height: '100%'}}
             source={{
-              uri: 'http://10.0.2.2:8080/gallery' + this.state.selected.image,
+              uri: `${serverUrl}gallery` + this.state.selected.image,
             }}
           />
         </Animated.View>
@@ -153,7 +155,7 @@ class CreateSelect extends Component {
                     <Image
                       style={styles.picture}
                       source={{
-                        uri: 'http://10.0.2.2:8080/gallery' + picture.image,
+                        uri: `${serverUrl}gallery` + picture.image,
                       }}
                     />
                   </TouchableOpacity>

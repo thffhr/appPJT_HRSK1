@@ -12,6 +12,8 @@ import {
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const serverUrl = 'http://10.0.2.2:8080/';
+
 class CreateArticle extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +43,7 @@ class CreateArticle extends Component {
   }
 
   getInfo = () => {
-    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -61,7 +63,7 @@ class CreateArticle extends Component {
 
   createArticle = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-    fetch(`http://10.0.2.2:8080/articles/create/`, {
+    fetch(`${serverUrl}articles/create/`, {
       method: 'POST',
       body: JSON.stringify(this.state.articleInfo),
       headers: {
@@ -164,7 +166,7 @@ class CreateArticle extends Component {
               <Image
                 style={styles.profileImg}
                 source={{
-                  uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
+                  uri: `${serverUrl}gallery` + this.state.profileImage,
                 }}
               />
             )}
@@ -192,8 +194,7 @@ class CreateArticle extends Component {
           <Image
             style={{width: 100, height: 100}}
             source={{
-              uri:
-                'http://10.0.2.2:8080/gallery' + this.state.articleInfo.image,
+              uri: `${serverUrl}gallery` + this.state.articleInfo.image,
             }}
           />
         </View>

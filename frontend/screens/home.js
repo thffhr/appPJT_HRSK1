@@ -149,7 +149,7 @@ class Home extends Component {
               <Image
                 style={styles.profileImg}
                 source={{
-                  uri: 'http://10.0.2.2:8080/gallery' + this.state.profileImage,
+                  uri: `${serverUrl}gallery` + this.state.profileImage,
                 }}
               />
             )}
