@@ -5,6 +5,8 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  Dimensions,
+  Image,
 } from 'react-native';
 import {
   Calendar,
@@ -13,6 +15,9 @@ import {
   LocaleConfig,
   Arrow,
 } from 'react-native-calendars';
+import Icon from 'react-native-vector-icons';
+
+const {width, height} = Dimensions.get('screen');
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -57,10 +62,10 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-const breakfast = {key: 'breakfast', color: '#ffa696'};
-const lunch = {key: 'lunch', color: '#d7ff96'};
-const dinner = {key: 'dinner', color: '#96faff'};
-const snack = {key: 'snack', color: '#e196ff'};
+// const breakfast = {key: 'breakfast', color: '#ffa696'};
+// const lunch = {key: 'lunch', color: '#d7ff96'};
+// const dinner = {key: 'dinner', color: '#96faff'};
+// const snack = {key: 'snack', color: '#e196ff'};
 
 const nextDays = {
   '2020-10-01': [100, 200, 300, 400],
@@ -92,13 +97,21 @@ class Record extends Component {
       btn1_color: '#FFFBE6',
       btn2_color: '#FFFBE6',
       btn3_color: '#FCA652',
-      active: 'btn3',
+      active: 'btn1',
       selectedDate: {
         date: null,
         breakfast: 0,
         lunch: 0,
         dinner: 0,
         snack: 0,
+      },
+      pictures: {
+        a: 1,
+        b: 2,
+        c: 3,
+        d: 4,
+        e: 5,
+        f: 6,
       },
     };
   }
@@ -152,6 +165,10 @@ class Record extends Component {
       });
     }
   };
+  onDetailImage = (idx) => {
+    this.props.navigation.push('DetailImage');
+    console.log(idx);
+  };
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -176,6 +193,24 @@ class Record extends Component {
           </TouchableOpacity>
         </View>
         <View style={{width: '100%'}}>
+          {this.state.active == 'btn1' && !this.state.selectedImage && (
+            <View style={styles.pictureBox}>
+              {Object.entries(this.state.pictures).map(([key, value], i) => {
+                return (
+                  <TouchableOpacity
+                    style={styles.imageBox}
+                    key={i}
+                    onPress={() => {
+                      this.onDetailImage(i);
+                    }}>
+                    <Text>
+                      {key} {value}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
           {this.state.active == 'btn3' && ( // calendar
             <View style={styles.calendarArea}>
               <CalendarList
@@ -281,6 +316,17 @@ const styles = StyleSheet.create({
   calendarArea: {
     width: '100%',
     marginBottom: 30,
+  },
+  // btn1
+  pictureBox: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  imageBox: {
+    width: width * 0.2,
+    height: width * 0.2,
+    backgroundColor: 'orange',
+    margin: 5,
   },
 });
 

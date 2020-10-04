@@ -18,6 +18,7 @@ import UpdateImg from './screens/Account/updateImg';
 import Startsex from './screens/Account/start_sex';
 import Startinfo from './screens/Account/start_info';
 import Record from './screens/Record/record';
+import DetailImage from './screens/Record/detail_image';
 import Rank from './screens/Rank/rank';
 import Community from './screens/Community/community';
 import CreateSelect from './screens/Community/create_select';
@@ -74,6 +75,10 @@ class App extends Component {
             component={Record}
             options={{title: '내 기록'}}
           />
+          <Stack.Screen 
+            name="DetailImage"
+            component={DetailImage}
+            options={{title: '상세 이미지'}}/>
           <Stack.Screen
             name="Profile"
             component={Profile}
