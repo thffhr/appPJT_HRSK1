@@ -59,11 +59,13 @@ def getImage(request, uri):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getChart():
-            # for key in Foods:
-        #     print('나는 키')
-        #     print(key.DESC_KOR)
-    pass
+def getChart(request):
+    Menus = Menu.objects.filter(user=request.user)
+    for i in range(len(Menus)):
+        Foods = Menus[i].foods
+        for food in Foods:
+            print(food.DESC_KOR)
+    return Response('보냈당')
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
