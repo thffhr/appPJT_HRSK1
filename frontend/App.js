@@ -18,6 +18,7 @@ import UpdateImg from './screens/Account/updateImg';
 import Startsex from './screens/Account/start_sex';
 import Startinfo from './screens/Account/start_info';
 import Record from './screens/Record/record';
+import DetailImage from './screens/Record/detail_image';
 import Rank from './screens/Rank/rank';
 import Community from './screens/Community/community';
 import Comment from './screens/Community/comment';
@@ -42,6 +43,25 @@ class App extends Component {
       this.setState({isLoggedIn: true});
     }
   }
+  // //////////////////////////////////////////
+  // useInterval = (callback, delay) => {
+  //   const savedCallback = useRef();
+  //   // Remember the latest callback.
+  //   useEffect(() => {
+  //     savedCallback.current = callback;
+  //   }, [callback]);
+  //   // Set up the interval.
+  //   useEffect(() => {
+  //     function tick() {
+  //       savedCallback.current();
+  //     }
+  //     if (delay !== null) {
+  //       let id = setInterval(tick, delay);
+  //       return () => clearInterval(id);
+  //     }
+  //   }, [delay]);
+  // };
+  // /////////////////////////////////////////
   render() {
     return (
       <NavigationContainer style={styles.container}>
@@ -74,6 +94,11 @@ class App extends Component {
             name="Record"
             component={Record}
             options={{title: '내 기록'}}
+          />
+          <Stack.Screen
+            name="DetailImage"
+            component={DetailImage}
+            options={{title: '상세 이미지'}}
           />
           <Stack.Screen
             name="Profile"

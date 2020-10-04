@@ -12,6 +12,7 @@ import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePicker from 'react-native-image-picker';
 
+const serverUrl = 'http://10.0.2.2:8080/';
 const {width, height} = Dimensions.get('screen');
 
 class Home extends Component {
@@ -34,7 +35,7 @@ class Home extends Component {
   }
 
   getInfo = () => {
-    fetch(`http://10.0.2.2:8080/accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -42,13 +43,12 @@ class Home extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         this.setState({
           profileImage: response.profileImage,
         });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
   onProfile = () => {
@@ -86,7 +86,7 @@ class Home extends Component {
         data.append('data', response.data);
         data.append('type', response.type);
         data.append('fileName', response.fileName);
-        fetch('http://10.0.2.2:8080/gallery/saveMenu/', {
+        fetch(`${serverUrl}gallery/saveMenu/`, {
           method: 'POST',
           body: data,
           headers: {
@@ -123,7 +123,7 @@ class Home extends Component {
               const token = await AsyncStorage.getItem('auth-token');
               console.log(token);
               if (token !== null) {
-                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
+                fetch(`${serverUrl}rest-auth/logout/`, {
                   method: 'POST',
                   header: {
                     Authorization: `Token ${token}`,
