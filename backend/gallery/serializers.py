@@ -1,12 +1,8 @@
 from rest_framework import serializers
-from .models import Menu, KindOf
+from .models import Menu
 from accounts.serializers import UserSerializer
 # from drf_extra_fields.fields import Base64ImageField
 
-class kindOfSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = KindOf
-        fields = '__all__'
 
 class MenuSerializer(serializers.ModelSerializer):
     # user = UserSerializer(required=False)

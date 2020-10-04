@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Menu, KindOf
-from .serializers import kindOfSerializer, MenuSerializer
+from .models import Menu
+from .serializers import MenuSerializer
 from accounts.serializers import UserSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
@@ -57,6 +57,7 @@ def getImage(request, uri):
     images.append(data)
     return HttpResponse(images, content_type="image/png")
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getChart(request):
@@ -67,6 +68,7 @@ def getChart(request):
             print(food.DESC_KOR)
     return Response('보냈당')
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getCalendar(request):
@@ -76,7 +78,8 @@ def getCalendar(request):
         print(Menus[i].mealTime)
         created_at = str(Menus[i].created_at)
         if created_at.split()[0] not in MenusDict.keys():
-            MenusDict[created_at.split()[0]]=[0, 0, 0, 0, 0, 0] #아침, 점심, 저녁, 간식, 야식, 총칼로리
+            # 아침, 점심, 저녁, 간식, 야식, 총칼로리
+            MenusDict[created_at.split()[0]] = [0, 0, 0, 0, 0, 0]
         if Menus[i].mealTime == '아침':
             MenusDict[created_at.split()[0]][0] += Menus[i].totalCal
         elif Menus[i].mealTime == '점심':

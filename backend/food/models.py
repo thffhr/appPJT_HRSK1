@@ -3,10 +3,6 @@ from django.db import models
 # Create your models here.
 
 
-class KindOf(models.Model):
-    kindOf_name = models.CharField(max_length=2)
-
-
 class Food(models.Model):
     NUM = models.IntegerField(null=True)  # 번호
     FOOD_CD = models.CharField(max_length=20)  # 식품코드
