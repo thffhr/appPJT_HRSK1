@@ -83,7 +83,7 @@ class Login extends Component {
           />
         </View>
         <View style={styles.loginBtn}>
-          <TouchableOpacity onPress={this.onLogin}>
+          <TouchableOpacity style={styles.loginButton} onPress={this.onLogin}>
             <Text style={styles.loginBtnText}>로그인</Text>
           </TouchableOpacity>
         </View>
@@ -156,13 +156,17 @@ const styles = StyleSheet.create({
     marginBottom: H * 0.01,
   },
   loginBtn: {
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: '#fca652',
     padding: W * 0.02,
     borderRadius: 5,
     marginTop: H * 0.01,
     marginBottom: H * 0.01,
     width: '70%',
+  },
+  loginButton: {
+    width: '100%',
+    alignItems: 'center',
   },
   loginBtnText: {
     color: 'white',

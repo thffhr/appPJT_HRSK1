@@ -151,8 +151,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   selectsex: {
-    width: W * 0.2,
-    height: W * 0.2,
+    width: W * 0.15,
+    height: W * 0.15,
   },
   next: {
     position: 'absolute',

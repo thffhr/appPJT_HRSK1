@@ -14,8 +14,8 @@ import ImagePicker from 'react-native-image-picker';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 const {width, height} = Dimensions.get('screen');
-const H = Dimensions.get('window').height
-const W = Dimensions.get('window').width
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 
 class Home extends Component {
   constructor(props) {
@@ -114,6 +114,9 @@ class Home extends Component {
   onRecord = () => {
     this.props.navigation.push('Record');
   };
+  onWorldCup = () => {
+    alert('서비스 중입니다..\n조금만 기다려주세요');
+  };
   render() {
     return (
       <View style={styles.Container}>
@@ -202,7 +205,7 @@ class Home extends Component {
             </TouchableOpacity>
           </View>
           <View style={styles.body7}>
-            <TouchableOpacity style={styles.btnBox}>
+            <TouchableOpacity style={styles.btnBox} onPress={this.onWorldCup}>
               <View style={styles.btnContent}>
                 <Icon name="trophy-outline" style={styles.smallLogo} />
                 <Text style={styles.logoTitle}>식단월드컵</Text>
@@ -228,21 +231,21 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: W*0.075,
+    paddingHorizontal: W * 0.075,
     flex: 1,
   },
   title: {
-    fontSize: W*0.075,
-    fontFamily: "BMJUA",
+    fontSize: W * 0.075,
+    fontFamily: 'BMJUA',
     color: 'white',
   },
   userBtn: {
-    width: W*0.1,
-    height: W*0.1,
+    width: W * 0.1,
+    height: W * 0.1,
   },
   profileImg: {
-    width: W*0.1,
-    height: W*0.1,
+    width: W * 0.1,
+    height: W * 0.1,
   },
   body1: {
     flex: 4,
@@ -253,14 +256,17 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
   },
   bigLogo: {
-    fontSize: W*0.25,
+    fontSize: W * 0.25,
+    color: '#787878',
   },
   smallLogo: {
-    fontSize: W*0.125,
+    fontSize: W * 0.125,
+    color: '#787878',
   },
   logoTitle: {
-    fontSize: W*0.05,
-    fontFamily: "BMDOHYEON",
+    fontSize: W * 0.05,
+    fontFamily: 'BMDOHYEON',
+    color: '#787878',
   },
   body2: {
     flexDirection: 'row',
@@ -273,7 +279,7 @@ const styles = StyleSheet.create({
     borderColor: 'lightgray',
   },
   record: {
-    fontSize: W*0.05,
+    fontSize: W * 0.05,
     fontWeight: 'bold',
   },
   body4: {

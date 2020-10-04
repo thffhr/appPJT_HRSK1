@@ -6,13 +6,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
-const H = Dimensions.get('window').height
-const W = Dimensions.get('window').width
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 
 class Signup extends Component {
   constructor(props) {
@@ -66,10 +66,9 @@ class Signup extends Component {
     return (
       <View style={styles.container}>
         <Image
-            source={
-              require('../../assets/images/로고.png')
-            }
-            style={styles.image}/>
+          source={require('../../assets/images/로고.png')}
+          style={styles.image}
+        />
         <View>
           <TextInput
             style={styles.inputArea}
@@ -122,11 +121,11 @@ class Signup extends Component {
             }}
           />
         </View>
-          <View style={styles.signupBtn}>
-            <TouchableOpacity onPress={this.onSignup} >
-              <Text style={styles.signBtnText}>회원가입</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.signupBtn}>
+          <TouchableOpacity style={styles.signupButton} onPress={this.onSignup}>
+            <Text style={styles.signBtnText}>회원가입</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -140,40 +139,43 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFBE6',
   },
   description: {
-    fontSize: W*0.03,
+    fontSize: W * 0.03,
     fontWeight: 'bold',
-    marginVertical: H*0.01,
+    marginVertical: H * 0.01,
   },
   signupBtn: {
-    alignItems: 'center',
     backgroundColor: '#fca652',
-    padding: W*0.02,
+    padding: W * 0.02,
     borderRadius: 5,
-    marginTop: H*0.01,
-    marginBottom: H*0.01,
-    width: '70%'
+    marginTop: H * 0.01,
+    marginBottom: H * 0.01,
+    width: '70%',
+  },
+  signupButton: {
+    width: '100%',
+    alignItems: 'center',
   },
   signBtnText: {
     color: 'white',
-    fontSize: W*0.04,
+    fontSize: W * 0.04,
     fontWeight: 'bold',
   },
   inputArea: {
-    width: W*0.7,
-    height: W*0.1,
-    fontSize: W*0.03,
+    width: W * 0.7,
+    height: W * 0.1,
+    fontSize: W * 0.03,
     borderBottomColor: 'gray',
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
     borderWidth: 1,
-    marginTop: H*0.01,
-    marginBottom: H*0.01,
+    marginTop: H * 0.01,
+    marginBottom: H * 0.01,
   },
   image: {
-    width: W*0.3,
-    height: W*0.3,
-    marginBottom: W*0.15,
+    width: W * 0.3,
+    height: W * 0.3,
+    marginBottom: W * 0.15,
   },
 });
 
