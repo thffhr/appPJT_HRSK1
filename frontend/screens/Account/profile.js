@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     position: 'absolute',
     right: 15,
-    top: -40,
+    top: 10,
     zIndex: 2,
   },
   updateText: {
