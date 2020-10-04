@@ -5,7 +5,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Image
+  Image,
+  Dimensions
 } from 'react-native';
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
@@ -66,7 +67,7 @@ class Signup extends Component {
       <View style={styles.container}>
         <Image
             source={
-              require('../assets/images/로고.png')
+              require('../../assets/images/로고.png')
             }
             style={styles.image}/>
         <View>
@@ -120,10 +121,12 @@ class Signup extends Component {
               });
             }}
           />
-          <TouchableOpacity onPress={this.onSignup} style={styles.signupBtn}>
-            <Text style={styles.signBtnText}>회원가입</Text>
-          </TouchableOpacity>
         </View>
+          <View style={styles.signupBtn}>
+            <TouchableOpacity onPress={this.onSignup} >
+              <Text style={styles.signBtnText}>회원가입</Text>
+            </TouchableOpacity>
+          </View>
       </View>
     );
   }
@@ -139,44 +142,38 @@ const styles = StyleSheet.create({
   description: {
     fontSize: W*0.03,
     fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  title: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    marginTop: 10,
-    marginBottom: 40,
-    textAlign: 'center',
+    marginVertical: H*0.01,
   },
   signupBtn: {
     alignItems: 'center',
     backgroundColor: '#fca652',
-    padding: 15,
+    padding: W*0.02,
     borderRadius: 5,
-    marginTop: 10,
-    marginBottom: 10,
-    width: 300,
+    marginTop: H*0.01,
+    marginBottom: H*0.01,
+    width: '70%'
   },
   signBtnText: {
     color: 'white',
-    fontSize: 15,
+    fontSize: W*0.04,
     fontWeight: 'bold',
   },
   inputArea: {
-    height: 40,
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 10,
-    width: 300,
+    width: W*0.7,
+    height: W*0.1,
+    fontSize: W*0.03,
     borderBottomColor: 'gray',
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
+    borderWidth: 1,
+    marginTop: H*0.01,
+    marginBottom: H*0.01,
   },
   image: {
-    width: 100,
-    height: 100,
-    marginBottom: 30
+    width: W*0.3,
+    height: W*0.3,
+    marginBottom: W*0.15,
   },
 });
 

@@ -7,7 +7,11 @@ import {
   width,
   AsyncStorage,
   Image,
+  Dimensions
 } from 'react-native';
+
+const H = Dimensions.get('window').height
+const W = Dimensions.get('window').width
 
 class Startsex extends Component {
   constructor(props) {
@@ -58,21 +62,22 @@ class Startsex extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.infoNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fca652'}}>
+          <Text style={{fontSize: W*0.05, fontWeight: 'bold', color: '#fca652'}}>
             다음
           </Text>
         </TouchableOpacity>
         <Image
             source={
-              require('../assets/images/sex.png')
+              require('../../assets/images/sex.png')
             }
             style={styles.image}/>
         <Text
           style={{
-            fontSize: 25,
+            fontSize: W*0.06,
             fontWeight: 'bold',
             color: 'gray',
-            marginVertical: 20,
+            marginBottom: H*0.04,
+            marginTop: H*0.02
           }}>
           성별을 입력해주세요.
         </Text>
@@ -81,19 +86,19 @@ class Startsex extends Component {
             style={[styles.selectbox1, {backgroundColor: this.state.malecolor}]}
             onPress={this.setMale}>
             <Image source={
-              require('../assets/images/male.png')
+              require('../../assets/images/male.png')
             }
             style={styles.selectsex}/>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'gray'}}>남</Text>
+            <Text style={{fontSize: W*0.05, fontWeight: 'bold', color: 'gray'}}>남</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.selectbox2, {backgroundColor: this.state.femalecolor}]}
             onPress={this.setFemale}>
             <Image source={
-              require('../assets/images/female.png')
+              require('../../assets/images/female.png')
             }
             style={styles.selectsex}/>
-            <Text style={{fontSize: 25, fontWeight: 'bold', color: 'gray'}}>여</Text>
+            <Text style={{fontSize: W*0.05, fontWeight: 'bold', color: 'gray'}}>여</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.location}>
@@ -114,53 +119,52 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFBE6',
   },
   image: {
-    width: 188,
-    height: 150,
+    width: W*0.5,
+    height: W*0.4,
   },
   selectboxes: {
     flexDirection: 'row',
     justifyContent: 'center',
   },
   selectbox1: {
-    width: 150,
-    height: 200,
+    width: W*0.4,
+    height: W*0.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent' 
   },
   selectbox2: {
-    width: 150,
-    height: 200,
+    width: W*0.4,
+    height: W*0.5,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent' 
   },
   selectsex: {
-    width: 100,
-    height: 100
+    width: W*0.2,
+    height: W*0.2,
   },
   next: {
     position: 'absolute',
-    right: 15,
-    top: 15,
+    right: W*0.03,
+    top: W*0.03,
   },
   location: {
     position: 'absolute',
-    top: 600,
+    top: H*0.9,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    width: 120,
-    height: 50,
+    width: W*0.3,
   },
   ycircle: {
-    width: 20,
-    height: 20,
+    width: W*0.05,
+    height: W*0.05,
     borderRadius: 100,
     backgroundColor: '#fca652',
   },
   ncircle: {
-    width: 20,
-    height: 20,
+    width: W*0.05,
+    height: W*0.05,
     borderRadius: 100,
     backgroundColor: 'gray',
   },
