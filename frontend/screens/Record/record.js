@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useRef, useState, useEffect} from 'react';
 import {
   View,
   ScrollView,
@@ -89,14 +89,27 @@ for (var key of Object.keys(nextDays)) {
   };
 }
 //////////////////////////////////////////////
-// const [progress, setProgress] = useState(0);
-// useInterval(() => {
-//   if (progress < 100) {
-//     setProgress(progress + 5);
-//   }
-// }, 1000);
-//////////////////////////////////////////////
+let animation = useRef(new Animated.Value(0));
+const [progress, setProgress] = useState(0);
+useInterval(() => {
+  if (progress < 100) {
+    setProgress(progress + 1);
+  }
+}, 1000);
 
+useEffect(() => {
+  Animated.timing(animation.current, {
+    toValue: progress,
+    duration: 100,
+  }).start();
+}, [progress]);
+
+const width = animation.current.interpolate({
+  inputRange: [0, 100],
+  outputRange: ['0%', '100%'],
+  extrapolate: 'clamp',
+});
+//////////////////////////////////////////////
 class Record extends Component {
   constructor(props) {
     super(props);
@@ -334,7 +347,12 @@ class Record extends Component {
               {/* 여기는 칼로리 차트 */}
               <Text style={styles.caltxt}>1000/1500</Text>
               <View style={styles.progressBar}>
-                <Animated.View style={styles.progressBarFill} />
+                <Animated.View
+                  style={
+                    ([styles.progressBarFill],
+                    {backgroundColor: '#8BED4F', width})
+                  }
+                />
               </View>
               {/* 여기는 영양소 */}
               <View style={styles.cal}>
@@ -500,8 +518,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundColor: '#8BED4F',
-    width: '50%',
   },
   calendarArea: {
     width: '100%',
