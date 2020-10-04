@@ -111,7 +111,7 @@ class Record extends Component {
       btn3_color: '#FCA652',
       active: 'btn3',
     });
-    console.log(typeof this.state.nextDays);
+
     fetch(`${serverUrl}gallery/getCalendar/`, {
       method: 'GET',
       headers: {
@@ -121,22 +121,34 @@ class Record extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log('받은 데이터: ', response);
         this.setState({
           nextDays: response,
         });
-        console.log(this.state.nextDays);
-        for (var key of Object.keys(this.state.nextDays)) {
+        var tempArray = [];
+        for (var [key, values] of Object.entries(this.state.nextDays)) {
           console.log('key: ', key);
-          this.setState({
-            newDaysObject: {
-              [key]: {
-                marked: true,
-                dotColor: '#FCA652',
-              },
+          tempArray.push({
+            [key]: {
+              marked: true,
+              dotColor: '#FCA652',
             },
           });
         }
+        console.log(tempArray);
+        // this.setState({
+        //   newDaysObject: tempObject
+        // })
+        // for (var key of Object.keys(this.state.nextDays)) {
+        //   console.log('key: ', key);
+        //   this.setState({
+        //     newDaysObject: {
+        //       [key]: {
+        //         marked: true,
+        //         dotColor: '#FCA652',
+        //       },
+        //     },
+        //   });
+        // }
       })
       .catch((err) => console.error(err));
   };
