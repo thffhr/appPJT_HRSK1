@@ -86,12 +86,12 @@ class Startsex extends Component {
           <TouchableOpacity
             style={[styles.selectbox1, {backgroundColor: this.state.malecolor}]}
             onPress={this.setMale}>
-            <Image
+            {/* <Image
               source={require('../../assets/images/male.png')}
               style={styles.selectsex}
-            />
+            /> */}
             <Text
-              style={{fontSize: W * 0.05, fontWeight: 'bold', color: 'gray'}}>
+              style={{fontSize: W * 0.1, fontWeight: 'bold', color: 'gray'}}>
               남
             </Text>
           </TouchableOpacity>
@@ -101,12 +101,12 @@ class Startsex extends Component {
               {backgroundColor: this.state.femalecolor},
             ]}
             onPress={this.setFemale}>
-            <Image
+            {/* <Image
               source={require('../../assets/images/female.png')}
               style={styles.selectsex}
-            />
+            /> */}
             <Text
-              style={{fontSize: W * 0.05, fontWeight: 'bold', color: 'gray'}}>
+              style={{fontSize: W * 0.1, fontWeight: 'bold', color: 'gray'}}>
               여
             </Text>
           </TouchableOpacity>
@@ -150,10 +150,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
-  selectsex: {
-    width: W * 0.15,
-    height: W * 0.15,
-  },
+  // selectsex: {
+  //   width: W * 0.15,
+  //   height: W * 0.15,
+  // },
   next: {
     position: 'absolute',
     right: W * 0.03,

@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   body1: {
     flex: 4,
     borderWidth: 1,
-    borderBottomColor: 'lightgray',
+    borderBottomColor: '#737373',
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
@@ -261,12 +261,12 @@ const styles = StyleSheet.create({
   },
   smallLogo: {
     fontSize: W * 0.125,
-    color: '#787878',
+    color: '#737373',
   },
   logoTitle: {
     fontSize: W * 0.05,
     fontFamily: 'BMDOHYEON',
-    color: '#787878',
+    color: '#737373',
   },
   body2: {
     flexDirection: 'row',
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   body3: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: '#737373',
   },
   record: {
     fontSize: W * 0.05,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   body4: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: '#737373',
     backgroundColor: 'transparent',
     padding: 0,
   },
@@ -305,12 +305,12 @@ const styles = StyleSheet.create({
   body6: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: '#737373',
   },
   body7: {
     width: '50%',
     borderWidth: 1,
-    borderColor: 'lightgray',
+    borderColor: '#737373',
   },
   btnContent: {
     alignItems: 'center',

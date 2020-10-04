@@ -103,9 +103,10 @@ class CreateSelect extends Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.onNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', color: '#fff'}}>
             다음
           </Text>
+          <Icon name="chevron-forward" size={26} color={'#fff'}></Icon>
         </TouchableOpacity>
         <View style={styles.navbar}>
           <Text style={styles.title}>사진선택</Text>
@@ -127,11 +128,11 @@ class CreateSelect extends Component {
           style={[
             styles.description,
             this.state.isDividerClicked
-              ? {backgroundColor: '#666'}
-              : {backgroundColor: '#e2e2e2'},
+              ? {backgroundColor: '#fca652'}
+              : {backgroundColor: '#ffb46b'},
           ]}
           {...this._panResponder.panHandlers}>
-          <Text style={{color: '#08ceff'}}>사진에서 선택</Text>
+          <Text style={{color: '#fff'}}>사진에서 선택</Text>
         </View>
         <Animated.View
           style={[
@@ -142,7 +143,9 @@ class CreateSelect extends Component {
             <View style={styles.pictures}>
               {this.state.pictures.map((picture) => {
                 const borderColor =
-                  picture.id === this.state.selected.id ? 'red' : 'white';
+                  picture.id === this.state.selected.id
+                    ? '#fca652'
+                    : 'transparent';
                 return (
                   <TouchableOpacity
                     style={[styles.imgBtn, {borderColor: borderColor}]}
@@ -171,7 +174,7 @@ class CreateSelect extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFBE6',
     width: '100%',
     flex: 1,
   },
@@ -180,14 +183,18 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 2,
+    backgroundColor: '#fca652',
   },
   title: {
     fontSize: 30,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'BMJUA',
+    color: '#fff',
   },
   next: {
+    flexDirection: 'row',
     position: 'absolute',
     right: 15,
     top: 15,
@@ -201,7 +208,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#ededed',
+    backgroundColor: '#ffb46b',
   },
   pictures: {
     width: '100%',

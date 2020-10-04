@@ -190,7 +190,7 @@ class Community extends Component {
         <TouchableOpacity
           style={styles.createArticle}
           onPress={this.onCreateSelect}>
-          <Icon name="create" style={{color: 'black', fontSize: 30}} />
+          <Icon name="create" style={{color: '#FFFBE6', fontSize: 30}} />
         </TouchableOpacity>
       </View>
     );
@@ -199,7 +199,7 @@ class Community extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFBE6',
     width: '100%',
     flex: 1,
   },
@@ -208,12 +208,16 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    // borderBottomColor: 'gray',
+    // borderBottomWidth: 2,
+    backgroundColor: '#fca652',
+    elevation: 5,
   },
   haru: {
     fontSize: 30,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontFamily: 'BMJUA',
   },
   articles: {
     width: '100%',
@@ -259,14 +263,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 30,
     bottom: 30,
-    width: 70,
-    height: 70,
-    borderRadius: 70,
-    borderWidth: 3,
-    borderColor: 'black',
+    width: 65,
+    height: 65,
+    borderRadius: 100,
+    elevation: 5,
+    // borderWidth: 3,
+    // borderColor: 'black',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'yellow',
+    backgroundColor: '#fca652',
   },
 });
 
