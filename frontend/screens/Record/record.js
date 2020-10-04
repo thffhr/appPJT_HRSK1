@@ -22,6 +22,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
 const {width, height} = Dimensions.get('screen');
+const serverUrl = 'http://10.0.2.2:8080/';
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -65,8 +66,6 @@ LocaleConfig.locales['fr'] = {
   today: "Aujourd'hui",
 };
 LocaleConfig.defaultLocale = 'fr';
-
-const serverUrl = 'http://10.0.2.2:8080/';
 
 let today = new Date();
 let year = today.getFullYear(); // 년도
@@ -128,16 +127,8 @@ export default class Record extends Component {
         date: date,
         day: day,
       },
-      authToken: '',
     };
   }
-  // async componentDidMount() {
-  //   // you might want to do the I18N setup here
-  //   this.setState({
-  //     authToken: await AsyncStorage.getItem('auth-token'),
-  //   });
-  //   // this.onFetch();
-  // }
   onBtn1 = () => {
     this.setState({
       btn1_color: '#FCA652',
@@ -153,6 +144,7 @@ export default class Record extends Component {
       btn3_color: '#FFFBE6',
       active: 'btn2',
     });
+    this.onFetch(year, month, date, day);
   };
   onBtn3 = async () => {
     const authToken = await AsyncStorage.getItem('auth-token');
@@ -243,7 +235,7 @@ export default class Record extends Component {
     }
   };
 
-  yesterday = (year, month, date) => {
+  yesterday = (year, month, date, day) => {
     if (date !== 1) {
       date--;
     } else {
@@ -254,10 +246,14 @@ export default class Record extends Component {
       }
       date = this.getEndOfDay(year, month);
     }
-    this.onFetch(year, month, date);
+    day--;
+    if (day === -1) {
+      day = 6;
+    }
+    this.onFetch(year, month, date, day);
   };
 
-  tomorrow = (year, month, date) => {
+  tomorrow = (year, month, date, day) => {
     var endDate = this.getEndOfDay(year, month);
     if (date !== endDate) {
       date++;
@@ -269,34 +265,41 @@ export default class Record extends Component {
       }
       date = 1;
     }
-    this.onFetch(year, month, date);
+    day++;
+    if (day === 7) {
+      day = 0;
+    }
+    this.onFetch(year, month, date, day);
   };
 
-  onFetch = (year, month, date) => {
-    // this.setState({
-    //     dateTime: {
-    //         ...dateTime,
-    //         year = year,
-    //         month = month,
-    //         date = date,
-    //     }
+  onFetch = (year, month, date, day) => {
+    console.log(this.state.dateTime);
+    this.setState({
+      dateTime: {
+        ...this.state.dateTime,
+        year: year,
+        month: month,
+        date: date,
+        day: day,
+      },
+    });
+    var newYear = this.pad(`${year}`, 4);
+    var newMonth = this.pad(`${month}`, 2);
+    var newDate = this.pad(`${date}`, 2);
+    var sendDate = `${newYear}-${newMonth}-${newDate}`;
+    console.log(sendDate);
+    // fetch('http://10.0.2.2/gallery/getCalendar/', {
+    //   method: 'GET',
+    //   body: JSON.stringify(sendDate),
+    //   headers: {
+    //       Authorization: `Token ${this.state.authToken}`,
+    //       'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => {
+    //       console.log(response);
     //   })
-    //   var newYear = this.pad(`${year}`, 4);
-    //   var newMonth = this.pad(`${month}`, 2);
-    //   var newDate = this.pad(`${date}`, 2);
-    //   var sendDate = `${newYear}-${newMonth}-${newDate}`;
-    //   fetch('http://10.0.2.2/gallery/getCalendar/', {
-    //     method: 'GET',
-    //     body: sendDate,
-    //     headers: {
-    //         Authorization: `Token ${this.state.authToken}`,
-    //         'Content-Type': 'application/json',
-    //     },
-    //   })
-    //     .then(response => {
-    //         console.log(response);
-    //     })
-    //     .catch(err => console.error(err))
+    //   .catch(err => console.error(err))
   };
 
   pad = (n, width) => {
@@ -308,7 +311,7 @@ export default class Record extends Component {
 
   getDayInfo = () => {
     const YMD = `${this.state.dateTime.year}-${this.state.dateTime.month}-${this.state.dateTime.day}`;
-    fetch('http://10.0.2.2:8080/gallery/getCalender/', {
+    fetch('http://10.0.2.2:8080/gallery/', {
       method: 'GET',
       body: YMD,
       headers: {
@@ -349,27 +352,46 @@ export default class Record extends Component {
           </TouchableOpacity>
         </View>
         <View style={{width: '100%'}}>
-          {/* {this.state.active == 'btn2' && ( // chart
-            <View style={styles.chartArea}> */}
-          {/* 여기는 요일 */}
-          {/* <View style={styles.chartDay}>
+          {this.state.active == 'btn2' && ( // chart
+            <View style={styles.chartArea}>
+              {/* 여기는 요일 */}
+              <View style={styles.chartDay}>
                 <Icon
                   name="chevron-back-outline"
                   style={styles.chartDayicon}
-                  onPress={this.goYesterday}></Icon>
+                  onPress={() =>
+                    this.yesterday(
+                      this.state.dateTime.year,
+                      this.state.dateTime.month,
+                      this.state.dateTime.date,
+                      this.state.dateTime.day,
+                    )
+                  }></Icon>
                 <View style={styles.chartDaybox}>
                   <Text style={styles.chartDaytxt}>
-                    {month}월 {date}일 (
-                    {LocaleConfig.locales['fr'].dayNames[day]})
+                    {this.state.dateTime.month}월 {this.state.dateTime.date}일 (
+                    {
+                      LocaleConfig.locales['fr'].dayNames[
+                        this.state.dateTime.day
+                      ]
+                    }
+                    )
                   </Text>
                 </View>
                 <Icon
                   name="chevron-forward-outline"
                   style={styles.chartDayicon}
-                  onPress={this.goNextday}></Icon>
-              </View> */}
-          {/* 여기는 칼로리 차트 */}
-          {/* <Text style={styles.caltxt}>1000/1500</Text>
+                  onPress={() =>
+                    this.tomorrow(
+                      this.state.dateTime.year,
+                      this.state.dateTime.month,
+                      this.state.dateTime.date,
+                      this.state.dateTime.day,
+                    )
+                  }></Icon>
+              </View>
+              {/* 여기는 칼로리 차트 */}
+              {/* <Text style={styles.caltxt}>1000/1500</Text>
               <View style={styles.progressBar}>
                 <Animated.View
                   style={
@@ -378,8 +400,8 @@ export default class Record extends Component {
                   }
                 />
               </View> */}
-          {/* 여기는 영양소 */}
-          {/* <View style={styles.cal}>
+              {/* 여기는 영양소 */}
+              <View style={styles.cal}>
                 <Text>아침</Text>
                 <View>
                   <Text>밥</Text>
@@ -392,7 +414,7 @@ export default class Record extends Component {
                 </View>
               </View>
             </View>
-          )} */}
+          )}
 
           {this.state.active == 'btn1' && (
             <View style={styles.pictureBox}>
