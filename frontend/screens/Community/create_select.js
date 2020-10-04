@@ -153,8 +153,7 @@ class CreateSelect extends Component {
                     <Image
                       style={styles.picture}
                       source={{
-                        uri:
-                          'http://10.0.2.2:8080/accounts/pimg' + picture.image,
+                        uri: 'http://10.0.2.2:8080/gallery' + picture.image,
                       }}
                     />
                   </TouchableOpacity>

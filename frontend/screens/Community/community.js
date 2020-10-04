@@ -62,30 +62,29 @@ class Community extends Component {
         )}
         <ScrollView>
           <View style={{width: '100%'}}>
-            <View style={{width: '100%'}}>
-              <View style={styles.articles}>
-                {this.state.articles.map((article) => {
-                  return (
-                    <View style={styles.article} key={article.id}>
-                      <View style={styles.writer}>
-                        <Image
-                          style={styles.writerImg}
-                          source={{
-                            uri:
-                              'http://10.0.2.2:8080/gallery' +
-                              article.user.profileImage,
-                          }}
-                        />
-                        <Text
-                          style={{
-                            marginLeft: 10,
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                          }}>
-                          {article.user.username}
-                        </Text>
-                      </View>
-                      {/* <View style={styles.tags}>
+            <View style={styles.articles}>
+              {this.state.articles.map((article) => {
+                return (
+                  <View style={styles.article} key={article.id}>
+                    <View style={styles.writer}>
+                      <Image
+                        style={styles.writerImg}
+                        source={{
+                          uri:
+                            'http://10.0.2.2:8080/gallery' +
+                            article.user.profileImage,
+                        }}
+                      />
+                      <Text
+                        style={{
+                          marginLeft: 10,
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                        }}>
+                        {article.user.username}
+                      </Text>
+                    </View>
+                    {/* <View style={styles.tags}>
                           {article.tags.map((tag) => {
                             return (
                               <Text
@@ -96,94 +95,97 @@ class Community extends Component {
                             );
                           })}
                         </View> */}
-                      <Image
-                        style={styles.articleImg}
-                        source={{
-                          uri: 'http://10.0.2.2:8080/gallery' + article.image,
-                        }}
-                      />
-                      <View style={styles.articleBelow}>
-                        <View style={styles.articleBtns}>
-                          <TouchableOpacity
-                            style={{marginRight: 10}}
-                            onPress={async () => {
-                              const token = await AsyncStorage.getItem(
-                                'auth-token',
-                              );
-                              fetch(
-                                `http://10.0.2.2:8080/articles/articleLikeBtn/`,
-                                {
-                                  method: 'POST',
-                                  body: JSON.stringify({articleId: article.id}),
-                                  headers: {
-                                    Authorization: `Token ${token}`,
-                                    'Content-Type': 'application/json',
-                                  },
+                    <Image
+                      style={styles.articleImg}
+                      source={{
+                        uri: 'http://10.0.2.2:8080/gallery' + article.image,
+                      }}
+                    />
+                    <View style={styles.articleBelow}>
+                      <View style={styles.articleBtns}>
+                        <TouchableOpacity
+                          style={{marginRight: 10}}
+                          onPress={async () => {
+                            const token = await AsyncStorage.getItem(
+                              'auth-token',
+                            );
+                            fetch(
+                              `http://10.0.2.2:8080/articles/articleLikeBtn/`,
+                              {
+                                method: 'POST',
+                                body: JSON.stringify({articleId: article.id}),
+                                headers: {
+                                  Authorization: `Token ${token}`,
+                                  'Content-Type': 'application/json',
                                 },
-                              )
-                                .then((response) => response.json())
-                                .then((response) => {
-                                  console.log(response);
-                                })
-                                .catch((err) => {
-                                  console.log(err);
+                              },
+                            )
+                              .then((response) => response.json())
+                              .then((response) => {
+                                console.log(response);
+                                const isliked = article.isliked;
+                                this.setState({
+                                  articles: this.state.articles.map((art) =>
+                                    article.id === art.id
+                                      ? {...art, isliked: !isliked}
+                                      : art,
+                                  ),
                                 });
-                            }}>
-                            {article.isliked && (
-                              <Icon
-                                name="heart"
-                                style={{fontSize: 40, color: 'red'}}
-                              />
-                            )}
-                            {!article.isliked && (
-                              <Icon
-                                name="heart-outline"
-                                style={{fontSize: 40}}
-                              />
-                            )}
-                          </TouchableOpacity>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                        </View>
-                        <Text
-                          style={{
-                            marginBottom: 10,
-                            fontSize: 20,
+                                console.log(this.state.articles);
+                              })
+                              .catch((err) => {
+                                console.log(err);
+                              });
+                          }}>
+                          {article.isliked && (
+                            <Icon
+                              name="heart"
+                              style={{fontSize: 40, color: 'red'}}
+                            />
+                          )}
+                          {!article.isliked && (
+                            <Icon name="heart-outline" style={{fontSize: 40}} />
+                          )}
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{marginRight: 10}}
+                          onPress={() => {
+                            this.props.navigation.push('Comment', {
+                              articleId: article.id,
+                            });
                           }}>
                           <Icon
-                            name="heart"
-                            style={{fontSize: 20, color: 'red'}}
-                          />{' '}
-                          abcdefg님 외 1명이 좋아합니다.
-                        </Text>
-                        <Text>{article.content}</Text>
+                            name="chatbubble-ellipses-outline"
+                            style={{fontSize: 40}}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{marginRight: 10}}
+                          onPress={() => {
+                            alert('레시피가 없습니다');
+                          }}>
+                          <Icon
+                            name="list-circle-outline"
+                            style={{fontSize: 40}}
+                          />
+                        </TouchableOpacity>
                       </View>
+                      <Text
+                        style={{
+                          marginBottom: 10,
+                          fontSize: 20,
+                        }}>
+                        <Icon
+                          name="heart"
+                          style={{fontSize: 20, color: 'red'}}
+                        />{' '}
+                        abcdefg님 외 1명이 좋아합니다.
+                      </Text>
+                      <Text>{article.content}</Text>
                     </View>
-                  );
-                })}
-              </View>
+                  </View>
+                );
+              })}
             </View>
           </View>
         </ScrollView>
