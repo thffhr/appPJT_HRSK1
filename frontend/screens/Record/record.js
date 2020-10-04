@@ -104,6 +104,17 @@ export default class Record extends Component {
       btn2_color: '#FFFBE6',
       btn3_color: '#FFFBE6',
       active: 'btn1',
+      // btn1
+      pictures: [],
+      selected: {id: null, image: null},
+      // btn2
+      dateTime: {
+        year: year,
+        month: month,
+        date: date,
+        day: day,
+      },
+      // btn3
       selectedDate: {
         date: null,
         breakfast: 0,
@@ -112,30 +123,37 @@ export default class Record extends Component {
         snack: 0,
         total: 0,
       },
-      pictures: {
-        a: 1,
-        b: 2,
-        c: 3,
-        d: 4,
-        e: 5,
-        f: 6,
-      },
       nextDays: {},
-      dateTime: {
-        year: year,
-        month: month,
-        date: date,
-        day: day,
-      },
     };
   }
-  onBtn1 = () => {
+  componentDidMount() {
+    this.onBtn1();
+  }
+  onBtn1 = async () => {
     this.setState({
       btn1_color: '#FCA652',
       btn2_color: '#FFFBE6',
       btn3_color: '#FFFBE6',
       active: 'btn1',
     });
+    const token = await AsyncStorage.getItem('auth-token');
+    fetch(`${serverUrl}gallery/myImgs/`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          pictures: response,
+          selected: {id: response[0].id, image: response[0].image},
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   onBtn2 = () => {
     this.setState({
@@ -182,6 +200,7 @@ export default class Record extends Component {
       })
       .catch((err) => console.error(err));
   };
+  // btn3
   onMacro = (day) => {
     if (Object.keys(this.state.nextDays).includes(day.dateString)) {
       this.setState({
@@ -209,6 +228,7 @@ export default class Record extends Component {
       });
     }
   };
+  // btn2
   getEndOfDay = (y, m) => {
     switch (m) {
       case 1:
@@ -311,7 +331,7 @@ export default class Record extends Component {
 
   getDayInfo = () => {
     const YMD = `${this.state.dateTime.year}-${this.state.dateTime.month}-${this.state.dateTime.day}`;
-    fetch('http://10.0.2.2:8080/gallery/', {
+    fetch(`${serverUrl}gallery/`, {
       method: 'GET',
       body: YMD,
       headers: {
@@ -324,10 +344,13 @@ export default class Record extends Component {
       })
       .catch((error) => console.log(error));
   };
-  onDetailImage = (idx) => {
-    this.props.navigation.push('DetailImage');
-    console.log(idx);
-  };
+  // onDetailImage = (key, value, idx) => {
+  //   this.props.navigation.push('DetailImage', {
+  //     key: key,
+  //     value: value,
+  //     index: idx,
+  //   });
+  // };
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -418,20 +441,48 @@ export default class Record extends Component {
 
           {this.state.active == 'btn1' && (
             <View style={styles.pictureBox}>
-              {Object.entries(this.state.pictures).map(([key, value], i) => {
+              {this.state.pictures.map((picture) => {
+                const borderColor =
+                  picture.id === this.state.selected.id
+                    ? '#FCA652'
+                    : 'transparent';
+                return (
+                  <TouchableOpacity
+                    style={[styles.imgBtn, {borderColor: borderColor}]}
+                    key={picture.id}
+                    onPress={() => {
+                      this.setState({
+                        selected: {id: picture.id, image: picture.image},
+                      });
+                      this.props.navigation.push('DetailImage', {
+                        imageId: picture.id,
+                        image: picture.image,
+                        dateTime: this.state.dateTime,
+                      });
+                    }}>
+                    <Image
+                      style={styles.picture}
+                      source={{
+                        uri: `${serverUrl}gallery` + picture.image,
+                      }}
+                    />
+                  </TouchableOpacity>
+                );
+              })}
+              {/* {Object.entries(this.state.pictures).map(([key, value], i) => {
                 return (
                   <TouchableOpacity
                     style={styles.imageBox}
                     key={i}
                     onPress={() => {
-                      this.onDetailImage(i);
+                      this.onDetailImage(key, value, i);
                     }}>
                     <Text>
                       {key} {value}
                     </Text>
                   </TouchableOpacity>
                 );
-              })}
+              })} */}
             </View>
           )}
           {this.state.active == 'btn3' && ( // calendar
@@ -552,6 +603,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 6,
   },
+  // btn2
   chartArea: {
     width: '100%',
     marginBottom: 30,
@@ -598,21 +650,23 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
   },
-  calendarArea: {
-    width: '100%',
-    marginBottom: 30,
-  },
   // btn1
   pictureBox: {
+    // width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  imageBox: {
-    width: width * 0.2,
-    height: width * 0.2,
-    backgroundColor: 'orange',
-    margin: 5,
+  imgBtn: {
+    width: '25%',
+    height: 100,
+    borderColor: 'white',
+    borderWidth: 2,
   },
+  picture: {
+    width: '100%',
+    height: '100%',
+  },
+  // btn3
   dateBox: {
     marginTop: 20,
     marginHorizontal: 10,
@@ -625,5 +679,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
+  },
+  calendarArea: {
+    width: '100%',
+    marginBottom: 30,
   },
 });
