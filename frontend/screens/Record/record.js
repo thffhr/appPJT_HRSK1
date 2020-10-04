@@ -538,6 +538,7 @@ export default class Record extends Component {
                 // }}
                 theme={{
                   todayTextColor: '#FCA652',
+                  backgroundColor: '#FFFBE6',
                 }}
                 markedDates={this.state.newDaysObject}
               />
@@ -581,18 +582,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
+    backgroundColor: '#fca652',
   },
   haru: {
     fontSize: 30,
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
+    fontFamily: 'BMJUA',
+    color: '#fff',
   },
   btnList: {
     width: '100%',
     height: 60,
     flexDirection: 'row',
     borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
     marginBottom: 20,
   },
   btn: {
@@ -602,6 +606,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomWidth: 6,
+  },
+  btnText: {
+    fontFamily: 'BMJUA',
+    color: '#737373',
   },
   // btn2
   chartArea: {
