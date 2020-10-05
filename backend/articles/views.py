@@ -41,7 +41,7 @@ def create(request):
 def articlesAll(request):
     # 스크롤할 때마다 게시물 불러오기(추가 필요)
     user = request.user
-    articles = models.Article.objects.all().order_by('-pk')
+    articles = models.Article.objects.order_by('-pk')
     articles_All = []
     for article in articles:
         data = {}
@@ -49,11 +49,42 @@ def articlesAll(request):
             data['isliked'] = True
         else:
             data['isliked'] = False
-        article = serializers.ArticleSerializer(
+
+        serializer = serializers.ArticleSerializer(
             article, data=data, partial=True)
-        if article.is_valid(raise_exception=True):
-            article.save()
-            articles_All.append(article.data)
+
+        if article.num_of_like > 2:
+            for likeuser in article.like_users.order_by('-pk'):
+                if user.followings.filter(id=likeuser.id).exists():
+                    user_1 = likeuser
+                    break
+            else:
+                user_1 = article.like_users.last()
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+
+        elif article.num_of_like == 2:
+            if request.user != article.like_users.last():
+                user_1 = article.like_users.last()
+                user_2 = article.like_users.first()
+            else:
+                user_1 = article.like_users.first()
+                user_2 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1, user_2=user_2)
+                articles_All.append(serializer.data)
+        elif article.num_of_like == 1:
+            user_1 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+        else:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                articles_All.append(serializer.data)
+
     return Response(articles_All)
 
 
@@ -65,9 +96,14 @@ def articleLikeBtn(request):
 
     if article.like_users.filter(id=user.id).exists():
         article.like_users.remove(user)
+        article.num_of_like -= 1
+        article.save()
+        return (Response("dislike"))
     else:
         article.like_users.add(user)
-    return Response("게시물 좋아요 버튼")
+        article.num_of_like += 1
+        article.save()
+        return Response("like")
 
 
 @api_view(['GET'])

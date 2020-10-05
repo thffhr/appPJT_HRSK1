@@ -23,7 +23,12 @@ class Article(models.Model):
     canSearch = models.BooleanField(default=True)
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                         related_name='like_articles')
+    num_of_like = models.IntegerField(default=0)
     isliked = models.BooleanField(default=False)
+    user_1 = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_1', null=True)
+    user_2 = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_2', null=True)
 
 
 class Comment(models.Model):

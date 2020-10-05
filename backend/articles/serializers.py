@@ -9,6 +9,8 @@ class ArticleSerializer(serializers.ModelSerializer):
         format="%Y-%m-%d %H:%M:%S", required=False)
     updated_at = serializers.DateTimeField(
         format="%Y-%m-%d %H:%M:%S", required=False)
+    user_1 = UserSerializer(required=False)
+    user_2 = UserSerializer(required=False)
 
     class Meta:
         model = models.Article
