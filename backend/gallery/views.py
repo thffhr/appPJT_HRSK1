@@ -78,8 +78,8 @@ def getChart(request, date):
                     D += int(food.NUTR_CONT3)
                     G += int(food.NUTR_CONT4)
                 print(T, D, G)
-                Send[time[t]]['nutrient'] = []
-                Send[time[t]]['nutrient'].append([T, D, G])
+                total = T+D+G
+                Send[time[t]]['nutrient'] = [(T/total)*100, (D/total)*100, (G/total)*100]
     print(Send)
     return Response(Send)
 
