@@ -56,6 +56,7 @@ class Community extends Component {
       <View style={styles.container}>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
+          <Icon name="menu" style={styles.menuBtn}></Icon>
         </View>
         {!this.state.articles[0] && (
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
@@ -206,18 +207,25 @@ const styles = StyleSheet.create({
   navbar: {
     width: '100%',
     height: 60,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     // borderBottomColor: 'gray',
     // borderBottomWidth: 2,
     backgroundColor: '#fca652',
     elevation: 5,
+    flexDirection: 'row',
   },
   haru: {
     fontSize: 30,
     // fontWeight: 'bold',
     color: '#FFFFFF',
     fontFamily: 'BMJUA',
+    marginLeft: 15,
+  },
+  menuBtn: {
+    fontSize: 30,
+    color: '#fff',
+    marginRight: 15,
   },
   articles: {
     width: '100%',
