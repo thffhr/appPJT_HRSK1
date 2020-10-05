@@ -6,6 +6,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {roundToNearestPixel} from 'react-native/Libraries/Utilities/PixelRatio';
@@ -20,11 +21,13 @@ export default class DetatilImage extends Component {
       imageId: this.props.route.params.imageId,
       image: this.props.route.params.image,
       dateTime: this.props.route.params.dateTime,
+      searchInfo: {search: ''},
     };
   }
   onBack = () => {
     this.props.navigation.navigate('Record');
   };
+
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -47,6 +50,34 @@ export default class DetatilImage extends Component {
               }}
             />
           </View>
+          <TextInput
+            placeholder="음식 이름"
+            onChangeText={(text) => {
+              this.setState(
+                {
+                  searchInfo: {search: text},
+                },
+                () => {
+                  fetch(`${serverUrl}food/search/`, {
+                    method: 'POST',
+                    body: JSON.stringify(this.state.searchInfo),
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                  })
+                    .then((response) => response.json())
+                    .then((response) => {
+                      console.log(response);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                },
+              );
+            }}
+            style={{flexShrink: 1}}
+            multiline={true}
+          />
         </View>
       </ScrollView>
     );
