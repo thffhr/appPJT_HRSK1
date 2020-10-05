@@ -8,6 +8,7 @@ import {
   AsyncStorage,
   Switch,
   Image,
+  ScrollView,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -19,16 +20,16 @@ class CreateArticle extends Component {
     this.state = {
       tags: '태그1 태그2',
       content: '',
-      RswitchValue: false,
       CswitchValue: true,
       SswitchValue: true,
       articleInfo: {
         content: '',
-        recipe: '',
+        recipe: {},
         image: this.props.route.params.selected.image,
         canComment: true,
         canSearch: true,
       },
+      count: 1,
     };
   }
 
@@ -60,6 +61,14 @@ class CreateArticle extends Component {
   };
 
   createArticle = async () => {
+    var myRecipe = '';
+    Object.values(this.state.articleInfo.recipe).map((value) => {
+      if (value) {
+        myRecipe = myRecipe + value + '|';
+      }
+    });
+    this.state.articleInfo.recipe = myRecipe;
+
     const token = await AsyncStorage.getItem('auth-token');
     fetch(`http://10.0.2.2:8080/articles/create/`, {
       method: 'POST',
@@ -85,17 +94,6 @@ class CreateArticle extends Component {
       });
   };
 
-  RtoggleSwitch = () => {
-    if (this.state.RswitchValue) {
-      this.setState({
-        RswitchValue: false,
-      });
-    } else {
-      this.setState({
-        RswitchValue: true,
-      });
-    }
-  };
   CtoggleSwitch = () => {
     if (this.state.CswitchValue) {
       this.setState({
@@ -145,6 +143,18 @@ class CreateArticle extends Component {
         },
       });
     }
+  };
+
+  addRecipe = () => {
+    this.state.articleInfo.recipe[`sentence${this.state.count}`] = '';
+    this.setState({
+      count: this.state.count + 1,
+    });
+  };
+
+  delRecipe = (key) => {
+    delete this.state.articleInfo.recipe[key];
+    this.setState({});
   };
 
   render() {
@@ -222,18 +232,6 @@ class CreateArticle extends Component {
           />
         </View>
         <View style={styles.block}>
-          <View>
-            <Text style={styles.fs1}>레시피 추가</Text>
-            <Text style={{fontSize: 12, color: 'gray', marginTop: 10}}>
-              게시물 하단에 레시피 추가 버튼이 생성됩니다.
-            </Text>
-          </View>
-          <Switch
-            onValueChange={this.RtoggleSwitch}
-            value={this.state.RswitchValue}
-          />
-        </View>
-        <View style={styles.block}>
           <Text style={styles.fs1}>댓글 허용</Text>
           <Switch
             onValueChange={this.CtoggleSwitch}
@@ -247,6 +245,39 @@ class CreateArticle extends Component {
             value={this.state.SswitchValue}
           />
         </View>
+        <ScrollView>
+          {Object.entries(this.state.articleInfo.recipe).map(
+            ([key, value], i) => {
+              return (
+                <View key={i} style={styles.recipeBox}>
+                  <Text>{i + 1}. </Text>
+                  <TextInput
+                    placeholder="레시피를 입력해주세요"
+                    value={value}
+                    onChangeText={(text) => {
+                      this.state.articleInfo.recipe[key] = text;
+                      this.setState({});
+                    }}
+                    style={styles.recipeText}
+                  />
+                  <Icon
+                    name="remove-circle-outline"
+                    style={{fontSize: 30}}
+                    onPress={() => this.delRecipe(key)}></Icon>
+                </View>
+              );
+            },
+          )}
+        </ScrollView>
+        <TouchableOpacity
+          style={{
+            flexDirection: 'row',
+            marginBottom: 20,
+          }}
+          onPress={this.addRecipe}>
+          <Text>레시피 추가</Text>
+          <Icon name="add-circle-outline"></Icon>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -257,6 +288,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     width: '100%',
     flex: 1,
+    alignItems: 'center',
   },
   navbar: {
     width: '100%',
@@ -291,6 +323,15 @@ const styles = StyleSheet.create({
     borderBottomColor: 'gray',
     paddingHorizontal: 20,
     paddingVertical: 10,
+  },
+  recipeBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+  },
+  recipeText: {
+    width: '80%',
   },
   fs1: {
     fontSize: 16,
