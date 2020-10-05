@@ -28,7 +28,7 @@ export default class Community extends Component {
   }
   componentDidMount() {
     this.getAllArticles();
-    this.getMyAticles();
+    this.getMyArticles();
   }
   onCreateSelect = () => {
     this.props.navigation.push('CreateSelect');
@@ -57,24 +57,23 @@ export default class Community extends Component {
         console.error(err);
       });
   };
-  getMyAticles = async () => {
-    // const token = await AsyncStorage.getItem('auth-token');
-    // fetch(`${serverUrl}articles/readAll/`, {
-    //   method: 'POST',
-    //   headers: {
-    //     Authorization: `Token ${token}`,
-    //   },
-    // })
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     console.log('My Articles: ', response);
-    //     this.setState({
-    //       myArticles: response,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+  getMyArticles = async () => {
+    const username = await AsyncStorage.getItem('username'); // 로그인한 유저 본인인 경우
+    // username과 article의 username이 다르면 다른 사용자 이므로 username을 article의 username으로 바꿔야함
+
+    fetch(`${serverUrl}articles/read/${username}/`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log('My Articles: ', response);
+        this.setState({
+          myArticles: response,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
   swtichBtn = (flag) => {
     this.setState({
