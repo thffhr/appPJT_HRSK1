@@ -400,10 +400,9 @@ export default class Community extends Component {
                         this.setState({
                           selected: {id: article.id, image: article.image},
                         });
-                        // this.props.navigation.push('DetailImage', {
-                        //   imageId: article.id,
-                        //   image: article.image,
-                        // });
+                        this.props.navigation.push('MyFeed', {
+                          article: article,
+                        });
                       }}>
                       <Image
                         style={styles.picture}
