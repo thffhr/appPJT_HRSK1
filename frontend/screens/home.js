@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   body1: {
     flex: 4,
     borderWidth: 1,
-    borderBottomColor: '#737373',
+    borderBottomColor: '#d6d6d6',
     borderTopColor: 'transparent',
     borderRightColor: 'transparent',
     borderLeftColor: 'transparent',
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   body3: {
     width: '50%',
     borderWidth: 1,
-    borderColor: '#737373',
+    borderColor: '#d6d6d6',
   },
   record: {
     fontSize: W * 0.05,
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   body4: {
     width: '50%',
     borderWidth: 1,
-    borderColor: '#737373',
+    borderColor: '#d6d6d6',
     backgroundColor: 'transparent',
     padding: 0,
   },
@@ -305,12 +305,12 @@ const styles = StyleSheet.create({
   body6: {
     width: '50%',
     borderWidth: 1,
-    borderColor: '#737373',
+    borderColor: '#d6d6d6',
   },
   body7: {
     width: '50%',
     borderWidth: 1,
-    borderColor: '#737373',
+    borderColor: '#d6d6d6',
   },
   btnContent: {
     alignItems: 'center',
