@@ -89,15 +89,17 @@ export default class MyFeed extends Component {
           </View> */}
           <View style={styles.article}>
             <View style={styles.writer}>
-              {this.state.profileImage && (
+              {this.state.article.user.profileImage && (
                 <Image
                   style={styles.writerImg}
                   source={{
-                    uri: `${serverUrl}gallery` + this.state.profileImage,
+                    uri:
+                      `${serverUrl}gallery` +
+                      this.state.article.user.profileImage,
                   }}
                 />
               )}
-              {!this.state.profileImage && (
+              {!this.state.article.user.profileImage && (
                 <Image
                   style={styles.writerImg}
                   source={{

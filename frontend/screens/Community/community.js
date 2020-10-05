@@ -181,17 +181,15 @@ export default class Community extends Component {
                   return (
                     <View style={styles.article} key={article.id}>
                       <View style={styles.writer}>
-                        {this.state.profileImage && (
+                        {article.user.profileImage && (
                           <Image
                             style={styles.writerImg}
                             source={{
-                              uri:
-                                'http://10.0.2.2:8080/gallery' +
-                                this.state.profileImage,
+                              uri: `${serverUrl}gallery${article.user.profileImage}`,
                             }}
                           />
                         )}
-                        {!this.state.profileImage && (
+                        {!article.user.profileImage && (
                           <Image
                             style={styles.writerImg}
                             source={{
