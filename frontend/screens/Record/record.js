@@ -18,6 +18,7 @@ import {
   LocaleConfig,
   Arrow,
 } from 'react-native-calendars';
+import Pie from 'react-native-pie';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
@@ -331,6 +332,7 @@ export default class Record extends Component {
       .catch((err) => console.error(err));
   };
 
+  //댓글
   touchCalbox = () => {
     this.setState({
       whatInfo: !this.state.whatInfo,
@@ -481,11 +483,31 @@ export default class Record extends Component {
                             })}
                           </>
                         )}
-                        {/* {this.state.whatInfo && (
-                            v['nutrient'][0] //탄수화물
+                        {this.state.whatInfo && (
+                          //  v['nutrient'][0] //탄수화물
                           // v['nutrient'][1] //단백질
                           // v['nutrient'][2] //지방
-                        )} */}
+                          <View style={{margin: 20, alignContent: 'center'}}>
+                            <Pie
+                              radius={80}
+                              sections={[
+                                {
+                                  percentage: v['nutrient'][0],
+                                  color: '#FBC02D',
+                                },
+                                {
+                                  percentage: v['nutrient'][1],
+                                  color: '#FFEB3B',
+                                },
+                                {
+                                  percentage: v['nutrient'][2],
+                                  color: '#FFF59D',
+                                },
+                              ]}
+                              strokeCap={'butt'}
+                            />
+                          </View>
+                        )}
                       </View>
                     </>
                   );
