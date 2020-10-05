@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import {
   View,
   Text,
@@ -8,11 +8,16 @@ import {
   AsyncStorage,
   ScrollView,
   Image,
+  Modal,
+  TouchableHighlight,
+  Alert,
+  Dimensions,
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const serverUrl = 'http://10.0.2.2:8080/';
+const {width, height} = Dimensions.get('screen');
 
 export default class Community extends Component {
   constructor(props) {
@@ -24,6 +29,8 @@ export default class Community extends Component {
       selectedMenuBtn: false,
       selectedHome: true,
       selected: {id: null, image: null},
+      modalData: '',
+      modalVisible: false,
     };
   }
   componentDidMount() {
@@ -80,6 +87,19 @@ export default class Community extends Component {
       selectedHome: flag,
     });
   };
+  setModalVisible = (visible, recipe) => {
+    if (visible) {
+      this.setState({
+        modalData: recipe,
+      });
+    } else {
+      this.setState({
+        modalData: '',
+      });
+    }
+    this.setState({modalVisible: visible});
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -111,6 +131,48 @@ export default class Community extends Component {
             아직 게시물이 없습니다. ㅠㅠ
           </Text>
         )}
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View
+            style={{
+              width: '100%',
+              height: height,
+              backgroundColor: 'black',
+              opacity: 0.5,
+            }}></View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={{marginBottom: 10}}>레시피 내용</Text>
+              {this.state.modalData
+                .split('|')
+                .filter((word) => word)
+                .map((line, i) => {
+                  return (
+                    <Text>
+                      {i + 1}. {line}
+                    </Text>
+                  );
+                })}
+              <TouchableHighlight
+                style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
         <ScrollView>
           <View style={{width: '100%'}}>
             {this.state.selectedHome && ( // all articles
@@ -119,13 +181,25 @@ export default class Community extends Component {
                   return (
                     <View style={styles.article} key={article.id}>
                       <View style={styles.writer}>
-                        <Image
-                          style={styles.writerImg}
-                          source={{
-                            uri:
-                              `${serverUrl}gallery` + article.user.profileImage,
-                          }}
-                        />
+                        {this.state.profileImage && (
+                          <Image
+                            style={styles.writerImg}
+                            source={{
+                              uri:
+                                'http://10.0.2.2:8080/gallery' +
+                                this.state.profileImage,
+                            }}
+                          />
+                        )}
+                        {!this.state.profileImage && (
+                          <Image
+                            style={styles.writerImg}
+                            source={{
+                              uri:
+                                'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                            }}
+                          />
+                        )}
                         <Text
                           style={{
                             marginLeft: 10,
@@ -136,16 +210,16 @@ export default class Community extends Component {
                         </Text>
                       </View>
                       {/* <View style={styles.tags}>
-                            {article.tags.map((tag) => {
-                              return (
-                                <Text
-                                  key={tag}
-                                  style={{marginRight: 5, fontSize: 20}}>
-                                  #{tag}
-                                </Text>
-                              );
-                            })}
-                          </View> */}
+                          {article.tags.map((tag) => {
+                            return (
+                              <Text
+                                key={tag}
+                                style={{marginRight: 5, fontSize: 20}}>
+                                #{tag}
+                              </Text>
+                            );
+                          })}
+                        </View> */}
                       <Image
                         style={styles.articleImg}
                         source={{
@@ -172,14 +246,32 @@ export default class Community extends Component {
                                 .then((response) => {
                                   console.log(response);
                                   const isliked = article.isliked;
-                                  this.setState({
-                                    articles: this.state.articles.map((art) =>
-                                      article.id === art.id
-                                        ? {...art, isliked: !isliked}
-                                        : art,
-                                    ),
-                                  });
-                                  console.log(this.state.articles);
+                                  const num_of_like = article.num_of_like;
+                                  if (response === 'like') {
+                                    this.setState({
+                                      articles: this.state.articles.map((art) =>
+                                        article.id === art.id
+                                          ? {
+                                              ...art,
+                                              isliked: !isliked,
+                                              num_of_like: num_of_like + 1,
+                                            }
+                                          : art,
+                                      ),
+                                    });
+                                  } else if (response === 'dislike') {
+                                    this.setState({
+                                      articles: this.state.articles.map((art) =>
+                                        article.id === art.id
+                                          ? {
+                                              ...art,
+                                              isliked: !isliked,
+                                              num_of_like: num_of_like - 1,
+                                            }
+                                          : art,
+                                      ),
+                                    });
+                                  }
                                 })
                                 .catch((err) => {
                                   console.log(err);
@@ -198,40 +290,94 @@ export default class Community extends Component {
                               />
                             )}
                           </TouchableOpacity>
-                          <TouchableOpacity
-                            style={{marginRight: 10}}
-                            onPress={() => {
-                              this.props.navigation.push('Comment', {
-                                articleId: article.id,
-                              });
-                            }}>
-                            <Icon
-                              name="chatbubble-ellipses-outline"
-                              style={{fontSize: 40}}
-                            />
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            style={{marginRight: 10}}
-                            onPress={() => {
-                              alert('레시피가 없습니다');
-                            }}>
-                            <Icon
-                              name="list-circle-outline"
-                              style={{fontSize: 40}}
-                            />
-                          </TouchableOpacity>
+                          {article.canComment && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                this.props.navigation.push('Comment', {
+                                  articleId: article.id,
+                                });
+                              }}>
+                              <Icon
+                                name="chatbubble-ellipses-outline"
+                                style={{fontSize: 40}}
+                              />
+                            </TouchableOpacity>
+                          )}
+                          {article.recipe !== '' && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                this.setModalVisible(true, article.recipe);
+                              }}>
+                              <Icon name="list-circle" style={{fontSize: 40}} />
+                            </TouchableOpacity>
+                          )}
+                          {!article.recipe && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                alert('레시피가 없습니다');
+                              }}>
+                              <Icon
+                                name="list-circle-outline"
+                                style={{fontSize: 40}}
+                              />
+                            </TouchableOpacity>
+                          )}
                         </View>
-                        <Text
-                          style={{
-                            marginBottom: 10,
-                            fontSize: 20,
-                          }}>
-                          <Icon
-                            name="heart"
-                            style={{fontSize: 20, color: 'red'}}
-                          />{' '}
-                          abcdefg님 외 1명이 좋아합니다.
-                        </Text>
+                        <View
+                          style={{flexDirection: 'row', alignItems: 'center'}}>
+                          {article.num_of_like > 0 && (
+                            <Icon
+                              name="heart"
+                              style={{
+                                fontSize: 20,
+                                color: 'red',
+                                marginRight: 5,
+                              }}
+                            />
+                          )}
+                          {article.num_of_like === 0 && (
+                            <Icon
+                              name="heart-outline"
+                              style={{fontSize: 20, marginRight: 5}}
+                            />
+                          )}
+                          {article.num_of_like > 2 && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}외{' '}
+                              {article.num_of_like - 1}
+                              명이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 2 && article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님과 회원님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 2 && !article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님과{' '}
+                              {article.user_2.username}님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 1 && article.isliked && (
+                            <Text style={styles.likeText}>
+                              회원님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 1 && !article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 0 && (
+                            <Text style={styles.likeText}>
+                              이 게시물에 첫 좋아요를 눌러주세요!
+                            </Text>
+                          )}
+                        </View>
                         <Text>{article.content}</Text>
                       </View>
                     </View>
@@ -340,6 +486,11 @@ const styles = StyleSheet.create({
   articleBelow: {
     marginLeft: '5%',
   },
+  likeText: {
+    marginBottom: 10,
+    fontSize: 20,
+    textAlign: 'center',
+  },
   tags: {
     marginBottom: 10,
     marginLeft: '5%',
@@ -392,5 +543,37 @@ const styles = StyleSheet.create({
   picture: {
     width: '100%',
     height: '100%',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
