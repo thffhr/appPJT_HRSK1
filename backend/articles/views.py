@@ -187,7 +187,7 @@ def delete(request, article_id):
 @api_view(['GET'])
 def commentsAll(request, article_id):
     article = get_object_or_404(models.Article, pk=article_id)
-    comments = models.Comment.objects.order_by('-pk').filter(article=article)
+    comments = models.Comment.objects.order_by('pk').filter(article=article)
     comments_All = []
     for comment in comments:
         comment = serializers.CommentSerializer(comment)
@@ -230,7 +230,7 @@ def del_comment(request, comment_id):
 @api_view(['GET'])
 def replysAll(request, comment_id):
     comment = get_object_or_404(models.Comment, pk=comment_id)
-    replys = models.Reply.objects.order_by('-pk').filter(comment=comment)
+    replys = models.Reply.objects.order_by('pk').filter(comment=comment)
     replys_All = []
     for reply in replys:
         replys_All.append(serializers.ReplySerializer(reply).data)
