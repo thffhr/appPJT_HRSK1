@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
+from accounts.models import User
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -42,6 +43,56 @@ def articlesAll(request):
     # 스크롤할 때마다 게시물 불러오기(추가 필요)
     user = request.user
     articles = models.Article.objects.order_by('-pk')
+    articles_All = []
+    for article in articles:
+        data = {}
+        if article.like_users.filter(id=user.id).exists():
+            data['isliked'] = True
+        else:
+            data['isliked'] = False
+
+        serializer = serializers.ArticleSerializer(
+            article, data=data, partial=True)
+
+        if article.num_of_like > 2:
+            for likeuser in article.like_users.order_by('-pk'):
+                if user.followings.filter(id=likeuser.id).exists():
+                    user_1 = likeuser
+                    break
+            else:
+                user_1 = article.like_users.last()
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+
+        elif article.num_of_like == 2:
+            if request.user != article.like_users.last():
+                user_1 = article.like_users.last()
+                user_2 = article.like_users.first()
+            else:
+                user_1 = article.like_users.first()
+                user_2 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1, user_2=user_2)
+                articles_All.append(serializer.data)
+        elif article.num_of_like == 1:
+            user_1 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+        else:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                articles_All.append(serializer.data)
+
+    return Response(articles_All)
+
+
+@api_view(['GET'])
+def userArticles(request, username):
+    user = get_object_or_404(User, username=username)
+    articles = models.Article.objects.order_by('-pk').filter(user=user)
     articles_All = []
     for article in articles:
         data = {}
