@@ -14,22 +14,29 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 
-class Community extends Component {
+export default class Community extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       articles: [],
+      myArticles: [],
+      selectedMenuBtn: false,
+      selectedHome: true,
     };
+  }
+  componentDidMount() {
+    this.getAllArticles();
+    this.getMyAticles();
   }
   onCreateSelect = () => {
     this.props.navigation.push('CreateSelect');
   };
-
-  componentDidMount() {
-    this.getAllArticles();
-  }
-
+  onMenuBtn = () => {
+    this.setState({
+      selectedMenuBtn: !this.state.selectedMenuBtn,
+    });
+  };
   getAllArticles = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     fetch(`${serverUrl}articles/readAll/`, {
@@ -40,24 +47,65 @@ class Community extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        console.log('All Articles: ', response);
         this.setState({
           articles: response,
         });
-        console.log(this.state.articles);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
-
+  getMyAticles = async () => {
+    // const token = await AsyncStorage.getItem('auth-token');
+    // fetch(`${serverUrl}articles/readAll/`, {
+    //   method: 'POST',
+    //   headers: {
+    //     Authorization: `Token ${token}`,
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     console.log('My Articles: ', response);
+    //     this.setState({
+    //       myArticles: response,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+  };
+  swtichBtn = (flag) => {
+    this.setState({
+      selectedHome: flag,
+    });
+  };
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
-          <Icon name="menu" style={styles.menuBtn}></Icon>
+          <Icon
+            name="menu"
+            style={styles.menuBtn}
+            onPress={this.onMenuBtn}></Icon>
         </View>
+        {this.state.selectedMenuBtn && (
+          <View style={styles.menuList}>
+            <View style={styles.menuItem}>
+              <Icon
+                name="home"
+                style={styles.menutTxt}
+                onPress={() => this.swtichBtn(true)}></Icon>
+            </View>
+            <View style={styles.menuItem}>
+              <Icon
+                name="images"
+                style={styles.menutTxt}
+                onPress={() => this.swtichBtn(false)}></Icon>
+            </View>
+          </View>
+        )}
         {!this.state.articles[0] && (
           <Text style={{fontSize: 20, fontWeight: 'bold'}}>
             아직 게시물이 없습니다. ㅠㅠ
@@ -65,127 +113,139 @@ class Community extends Component {
         )}
         <ScrollView>
           <View style={{width: '100%'}}>
-            <View style={styles.articles}>
-              {this.state.articles.map((article) => {
-                return (
-                  <View style={styles.article} key={article.id}>
-                    <View style={styles.writer}>
+            {this.state.selectedHome && ( // all articles
+              <View style={styles.articles}>
+                {this.state.articles.map((article) => {
+                  return (
+                    <View style={styles.article} key={article.id}>
+                      <View style={styles.writer}>
+                        <Image
+                          style={styles.writerImg}
+                          source={{
+                            uri:
+                              `${serverUrl}gallery` + article.user.profileImage,
+                          }}
+                        />
+                        <Text
+                          style={{
+                            marginLeft: 10,
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                          }}>
+                          {article.user.username}
+                        </Text>
+                      </View>
+                      {/* <View style={styles.tags}>
+                            {article.tags.map((tag) => {
+                              return (
+                                <Text
+                                  key={tag}
+                                  style={{marginRight: 5, fontSize: 20}}>
+                                  #{tag}
+                                </Text>
+                              );
+                            })}
+                          </View> */}
                       <Image
-                        style={styles.writerImg}
+                        style={styles.articleImg}
                         source={{
-                          uri:
-                            `${serverUrl}gallery` + article.user.profileImage,
+                          uri: `${serverUrl}gallery` + article.image,
                         }}
                       />
-                      <Text
-                        style={{
-                          marginLeft: 10,
-                          fontSize: 20,
-                          fontWeight: 'bold',
-                        }}>
-                        {article.user.username}
-                      </Text>
-                    </View>
-                    {/* <View style={styles.tags}>
-                          {article.tags.map((tag) => {
-                            return (
-                              <Text
-                                key={tag}
-                                style={{marginRight: 5, fontSize: 20}}>
-                                #{tag}
-                              </Text>
-                            );
-                          })}
-                        </View> */}
-                    <Image
-                      style={styles.articleImg}
-                      source={{
-                        uri: `${serverUrl}gallery` + article.image,
-                      }}
-                    />
-                    <View style={styles.articleBelow}>
-                      <View style={styles.articleBtns}>
-                        <TouchableOpacity
-                          style={{marginRight: 10}}
-                          onPress={async () => {
-                            const token = await AsyncStorage.getItem(
-                              'auth-token',
-                            );
-                            fetch(`${serverUrl}articles/articleLikeBtn/`, {
-                              method: 'POST',
-                              body: JSON.stringify({articleId: article.id}),
-                              headers: {
-                                Authorization: `Token ${token}`,
-                                'Content-Type': 'application/json',
-                              },
-                            })
-                              .then((response) => response.json())
-                              .then((response) => {
-                                console.log(response);
-                                const isliked = article.isliked;
-                                this.setState({
-                                  articles: this.state.articles.map((art) =>
-                                    article.id === art.id
-                                      ? {...art, isliked: !isliked}
-                                      : art,
-                                  ),
-                                });
-                                console.log(this.state.articles);
+                      <View style={styles.articleBelow}>
+                        <View style={styles.articleBtns}>
+                          <TouchableOpacity
+                            style={{marginRight: 10}}
+                            onPress={async () => {
+                              const token = await AsyncStorage.getItem(
+                                'auth-token',
+                              );
+                              fetch(`${serverUrl}articles/articleLikeBtn/`, {
+                                method: 'POST',
+                                body: JSON.stringify({articleId: article.id}),
+                                headers: {
+                                  Authorization: `Token ${token}`,
+                                  'Content-Type': 'application/json',
+                                },
                               })
-                              .catch((err) => {
-                                console.log(err);
+                                .then((response) => response.json())
+                                .then((response) => {
+                                  console.log(response);
+                                  const isliked = article.isliked;
+                                  this.setState({
+                                    articles: this.state.articles.map((art) =>
+                                      article.id === art.id
+                                        ? {...art, isliked: !isliked}
+                                        : art,
+                                    ),
+                                  });
+                                  console.log(this.state.articles);
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                });
+                            }}>
+                            {article.isliked && (
+                              <Icon
+                                name="heart"
+                                style={{fontSize: 40, color: 'red'}}
+                              />
+                            )}
+                            {!article.isliked && (
+                              <Icon
+                                name="heart-outline"
+                                style={{fontSize: 40}}
+                              />
+                            )}
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{marginRight: 10}}
+                            onPress={() => {
+                              this.props.navigation.push('Comment', {
+                                articleId: article.id,
                               });
-                          }}>
-                          {article.isliked && (
+                            }}>
                             <Icon
-                              name="heart"
-                              style={{fontSize: 40, color: 'red'}}
+                              name="chatbubble-ellipses-outline"
+                              style={{fontSize: 40}}
                             />
-                          )}
-                          {!article.isliked && (
-                            <Icon name="heart-outline" style={{fontSize: 40}} />
-                          )}
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={{marginRight: 10}}
-                          onPress={() => {
-                            this.props.navigation.push('Comment', {
-                              articleId: article.id,
-                            });
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={{marginRight: 10}}
+                            onPress={() => {
+                              alert('레시피가 없습니다');
+                            }}>
+                            <Icon
+                              name="list-circle-outline"
+                              style={{fontSize: 40}}
+                            />
+                          </TouchableOpacity>
+                        </View>
+                        <Text
+                          style={{
+                            marginBottom: 10,
+                            fontSize: 20,
                           }}>
                           <Icon
-                            name="chatbubble-ellipses-outline"
-                            style={{fontSize: 40}}
-                          />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={{marginRight: 10}}
-                          onPress={() => {
-                            alert('레시피가 없습니다');
-                          }}>
-                          <Icon
-                            name="list-circle-outline"
-                            style={{fontSize: 40}}
-                          />
-                        </TouchableOpacity>
+                            name="heart"
+                            style={{fontSize: 20, color: 'red'}}
+                          />{' '}
+                          abcdefg님 외 1명이 좋아합니다.
+                        </Text>
+                        <Text>{article.content}</Text>
                       </View>
-                      <Text
-                        style={{
-                          marginBottom: 10,
-                          fontSize: 20,
-                        }}>
-                        <Icon
-                          name="heart"
-                          style={{fontSize: 20, color: 'red'}}
-                        />{' '}
-                        abcdefg님 외 1명이 좋아합니다.
-                      </Text>
-                      <Text>{article.content}</Text>
                     </View>
-                  </View>
-                );
-              })}
-            </View>
+                  );
+                })}
+              </View>
+            )}
+            {!this.state.selectedHome && ( // My article
+              <View style={styles.articles}>
+                {this.state.myArticles.map((article) => {
+                  return <View></View>;
+                })}
+              </View>
+            )}
           </View>
         </ScrollView>
         <TouchableOpacity
@@ -281,6 +341,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fca652',
   },
+  menuList: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  menuItem: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+  },
+  menutTxt: {
+    color: '#000000',
+    fontSize: 20,
+  },
 });
-
-export default Community;
