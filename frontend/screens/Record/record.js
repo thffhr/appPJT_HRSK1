@@ -18,6 +18,7 @@ import {
   LocaleConfig,
   Arrow,
 } from 'react-native-calendars';
+import Pie from 'react-native-pie';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {get} from 'react-native/Libraries/Utilities/PixelRatio';
 
@@ -95,6 +96,7 @@ let day = today.getDay(); // 요일
 //   extrapolate: 'clamp',
 // });
 //////////////////////////////////////////////
+
 export default class Record extends Component {
   constructor(props) {
     super(props);
@@ -114,6 +116,8 @@ export default class Record extends Component {
         date: date,
         day: day,
       },
+      whatInfo: false,
+      dayMenus: {},
       // btn3
       selectedDate: {
         date: null,
@@ -155,12 +159,15 @@ export default class Record extends Component {
         console.log(err);
       });
   };
-  onBtn2 = () => {
+  onBtn2 = async () => {
+    const authToken = await AsyncStorage.getItem('auth-token');
     this.setState({
       btn1_color: '#FFFBE6',
       btn2_color: '#FCA652',
       btn3_color: '#FFFBE6',
       active: 'btn2',
+      token: authToken,
+      whatInfo: false,
     });
     this.onFetch(year, month, date, day);
   };
@@ -293,7 +300,7 @@ export default class Record extends Component {
   };
 
   onFetch = (year, month, date, day) => {
-    console.log(this.state.dateTime);
+    // console.log(this.state.dateTime);
     this.setState({
       dateTime: {
         ...this.state.dateTime,
@@ -307,19 +314,29 @@ export default class Record extends Component {
     var newMonth = this.pad(`${month}`, 2);
     var newDate = this.pad(`${date}`, 2);
     var sendDate = `${newYear}-${newMonth}-${newDate}`;
-    console.log(sendDate);
-    // fetch('http://10.0.2.2/gallery/getCalendar/', {
-    //   method: 'GET',
-    //   body: JSON.stringify(sendDate),
-    //   headers: {
-    //       Authorization: `Token ${this.state.authToken}`,
-    //       'Content-Type': 'application/json',
-    //   },
-    // })
-    //   .then(response => {
-    //       console.log(response);
-    //   })
-    //   .catch(err => console.error(err))
+    // console.log(sendDate);
+    fetch(`${serverUrl}gallery/getChart/${sendDate}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Token ${this.state.token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          dayMenus: response,
+        });
+        // console.log(this.state.dayMenus);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  //댓글
+  touchCalbox = () => {
+    this.setState({
+      whatInfo: !this.state.whatInfo,
+    });
   };
 
   pad = (n, width) => {
@@ -406,32 +423,91 @@ export default class Record extends Component {
                     )
                   }></Icon>
               </View>
-              {/* 여기는 칼로리 차트 */}
-              {/* <Text style={styles.caltxt}>1000/1500</Text>
+              {/* 여기는 총 칼로리*/}
+              <Text style={styles.caltxt}>1000/1500</Text>
               <View style={styles.progressBar}>
                 <Animated.View
                   style={
                     ([styles.progressBarFill],
-                    {backgroundColor: '#8BED4F', width})
+                    {backgroundColor: '#8BED4F', width: '66%'}) //, chartwidth
                   }
                 />
-              </View> */}
+              </View>
               {/* 여기는 영양소 */}
-              <View style={styles.cal}>
-                <Text>아침</Text>
-                <View>
-                  <Text>밥</Text>
-                </View>
-                <View>
-                  <Text>밥</Text>
-                </View>
-                <View>
-                  <Text>밥</Text>
-                </View>
+              <View
+                style={{
+                  width: '100%',
+                  marginTop: 50,
+                  alignItems: 'center',
+                }}>
+                {Object.entries(this.state.dayMenus).map(([k, v], idx) => {
+                  return (
+                    <>
+                      {/* <Text key={idx}>{k}</Text> */}
+                      <View style={styles.calbox} key={idx}>
+                        <TouchableOpacity onPress={this.touchCalbox}>
+                          <Text>차트보기</Text>
+                        </TouchableOpacity>
+                        <View style={styles.calboxTitle}>
+                          <Icon
+                            name="restaurant-outline"
+                            style={{fontSize: 20, marginTop: 2}}></Icon>
+                          <Text style={{fontSize: 20, marginLeft: 5}}>{k}</Text>
+                        </View>
+                        {!this.state.whatInfo && (
+                          <>
+                            {v['meal'].map((m, i) => {
+                              return (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    borderBottomWidth: 1,
+                                    marginTop: 10,
+                                  }}
+                                  key={i}>
+                                  <Text style={{fontSize: 18, marginLeft: 10}}>
+                                    {m[0]}
+                                  </Text>
+                                  <Text style={{fontSize: 18}}>{m[1]}kcal</Text>
+                                  <Text style={{fontSize: 18}}>1그릇</Text>
+                                </View>
+                              );
+                            })}
+                          </>
+                        )}
+                        {this.state.whatInfo && (
+                          //  v['nutrient'][0] //탄수화물
+                          // v['nutrient'][1] //단백질
+                          // v['nutrient'][2] //지방
+                          <View style={{margin: 20, alignContent: 'center'}}>
+                            <Pie
+                              radius={80}
+                              sections={[
+                                {
+                                  percentage: v['nutrient'][0],
+                                  color: '#FBC02D',
+                                },
+                                {
+                                  percentage: v['nutrient'][1],
+                                  color: '#FFEB3B',
+                                },
+                                {
+                                  percentage: v['nutrient'][2],
+                                  color: '#FFF59D',
+                                },
+                              ]}
+                              strokeCap={'butt'}
+                            />
+                          </View>
+                        )}
+                      </View>
+                    </>
+                  );
+                })}
               </View>
             </View>
           )}
-
           {this.state.active == 'btn1' && (
             <View style={styles.pictureBox}>
               {this.state.pictures.map((picture) => {
@@ -629,6 +705,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     margin: 10,
   },
+  calbox: {
+    marginTop: 20,
+    padding: 10,
+    width: '90%',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  calboxTitle: {
+    flexDirection: 'row',
+  },
   calchart: {},
   caltxt: {
     fontSize: 30,
@@ -650,6 +736,7 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
+    width: '50%',
   },
   // btn1
   pictureBox: {
