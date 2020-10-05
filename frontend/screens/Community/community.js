@@ -23,6 +23,7 @@ export default class Community extends Component {
       myArticles: [],
       selectedMenuBtn: false,
       selectedHome: true,
+      selected: {id: null, image: null},
     };
   }
   componentDidMount() {
@@ -239,10 +240,34 @@ export default class Community extends Component {
                 })}
               </View>
             )}
-            {!this.state.selectedHome && ( // My article
-              <View style={styles.articles}>
+            {!this.state.selectedHome && ( // My articles
+              <View style={styles.pictureBox}>
                 {this.state.myArticles.map((article) => {
-                  return <View></View>;
+                  const borderColor =
+                    article.id === this.state.selected.id
+                      ? '#FCA652'
+                      : 'transparent';
+                  return (
+                    <TouchableOpacity
+                      style={[styles.imgBtn, {borderColor: borderColor}]}
+                      key={article.id}
+                      onPress={() => {
+                        this.setState({
+                          selected: {id: article.id, image: article.image},
+                        });
+                        // this.props.navigation.push('DetailImage', {
+                        //   imageId: article.id,
+                        //   image: article.image,
+                        // });
+                      }}>
+                      <Image
+                        style={styles.picture}
+                        source={{
+                          uri: `${serverUrl}gallery` + article.image,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  );
                 })}
               </View>
             )}
@@ -352,5 +377,21 @@ const styles = StyleSheet.create({
   menutTxt: {
     color: '#000000',
     fontSize: 20,
+  },
+  // my articles
+  pictureBox: {
+    // width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  imgBtn: {
+    width: '25%',
+    height: 100,
+    borderColor: 'white',
+    borderWidth: 2,
+  },
+  picture: {
+    width: '100%',
+    height: '100%',
   },
 });
