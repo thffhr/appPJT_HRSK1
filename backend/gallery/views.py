@@ -60,13 +60,28 @@ def getImage(request, uri):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def getChart(request):
-    Menus = Menu.objects.filter(user=request.user)
+def getChart(request, date):
+    Menus = Menu.objects.filter(user=request.user, created_at__contains=date)
+    Send = {}
     for i in range(len(Menus)):
-        Foods = Menus[i].foods
-        for food in Foods:
-            print(food.DESC_KOR)
-    return Response('보냈당')
+        time = ['아침', '점심', '저녁', '간식', '야식']
+        for t in range(len(time)):
+            if Menus[i].mealTime == time[t]:
+                print(t, Menus[i].mealTime)
+                Foods = Menus[i].foods.all()
+                T, D, G = 0, 0, 0
+                Send[time[t]] = {}
+                Send[time[t]]['meal'] = []
+                for food in Foods:
+                    Send[time[t]]['meal'].append([food.DESC_KOR, food.NUTR_CONT1])
+                    T += int(food.NUTR_CONT2)
+                    D += int(food.NUTR_CONT3)
+                    G += int(food.NUTR_CONT4)
+                print(T, D, G)
+                total = T+D+G
+                Send[time[t]]['nutrient'] = [(T/total)*100, (D/total)*100, (G/total)*100]
+    print(Send)
+    return Response(Send)
 
 
 @api_view(['GET'])
@@ -76,6 +91,10 @@ def getCalendar(request):
     MenusDict = {}
     for i in range(len(Menus)):
         print(Menus[i].mealTime)
+        # Foods = Menus[i].foods
+        # print(Foods)
+        # for food in Foods:
+        #     print(food.DESC_KOR)
         created_at = str(Menus[i].created_at)
         if created_at.split()[0] not in MenusDict.keys():
             # 아침, 점심, 저녁, 간식, 야식, 총칼로리
@@ -90,4 +109,5 @@ def getCalendar(request):
             MenusDict[created_at.split()[0]][3] += Menus[i].totalCal
         else:
             MenusDict[created_at.split()[0]][4] += Menus[i].totalCal
+        # print(MenusDict)
     return Response(MenusDict)
