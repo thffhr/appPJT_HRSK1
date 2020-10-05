@@ -1,0 +1,156 @@
+CIRFOOD-808_Pasta with garlic, oil and chili peppers
+CIRFOOD-809_Cauliflower soup
+CIRFOOD-810_Beef stew
+CIRFOOD-811_Vegetable pie
+CIRFOOD-812_Baked potatoes
+CIRFOOD-813_Pasta with parmesan and ricotta cheese
+CIRFOOD-814_Grilled salmon fillet
+CIRFOOD-815_Pasta with bean sauce
+CIRFOOD-816_Baked trout fillet
+CIRFOOD-817_Steamed carrots
+CIRFOOD-818_Baked Cauliflower
+CIRFOOD-819_Cornmeal Polenta
+CIRFOOD-820_Baked pumpkin
+CIRFOOD-821_Pasta with meat sauce
+CIRFOOD-822_Fume Pasta
+CIRFOOD-823_Tomato and ricotta cheese pasta
+CIRFOOD-824_Rice and zucchini soup
+CIRFOOD-825_Vegetable strudel
+CIRFOOD-826_Carrots with bay leaves
+CIRFOOD-827_Baked mackerel fillet
+CIRFOOD-828_Pasta with Arrabbiata sauce
+CIRFOOD-829_Chickpeas Hamburger
+CIRFOOD-830_Carrots soup
+CIRFOOD-831_Steamed brussels sprouts
+CIRFOOD-832_Tomato and basil potato dumplings
+CIRFOOD-833_Vegetable soup
+CIRFOOD-834_Baked sea bream
+CIRFOOD-835_Pasta with tomato sauce and olives
+CIRFOOD-836_Mushrooms soup
+CIRFOOD-837_Pasta with pizzaiola sauce
+CIRFOOD-838_Pumpkin risotto
+CIRFOOD-839_Sweet-and-sour onions
+CIRFOOD-840_Braised cabbage
+CIRFOOD-841_Pasta with bacon and beans
+CIRFOOD-842_Vegetable barley soup
+CIRFOOD-843_Purea of potatoes
+CIRFOOD-844_Steamed green beans
+CIRFOOD-845_Radicchio chicory pie
+CIRFOOD-846_Pasta with carbonara sauce
+CIRFOOD-847_Pumpkin soup
+CIRFOOD-848_Oil pasta
+CIRFOOD-849_Pasta with tomato sauce
+CIRFOOD-850_Rice with oil
+CIRFOOD-851_Risotto with tomato sauce
+CIRFOOD-852_Seasoned cod fillet
+CIRFOOD-853_Chicken breast in the Valle d'Aosta style
+CIRFOOD-854_Seasoned roasted pork
+CIRFOOD-855_Scrambled eggs
+CIRFOOD-856_Fish nuggets
+CIRFOOD-857_Green bean loaf
+CIRFOOD-858_Cauliflower with cream
+CIRFOOD-859_Carrots in balsamic vinegar
+CIRFOOD-860_Curry chickpea soup
+CIRFOOD-861_Fish cous cous
+CIRFOOD-862_Legume soup with pumpkin and spelt
+CIRFOOD-863_Potato pastry
+CIRFOOD-864_Vegetarian stuffed peppers
+CIRFOOD-865_Vegetable loaf
+CIRFOOD-866_Chili with meat and beans
+CIRFOOD-867_Mexican pork loin rolls
+CIRFOOD-868_Potatoes with mushrooms
+CIRFOOD-869_Pasta with Casaro sauce
+CIRFOOD-870_Risotto with Teroldego wine and sausage
+CIRFOOD-871_Basmati rice with tikka masala chicken
+CIRFOOD-872_Broccoli pie
+CIRFOOD-873_Potatoes with Franciacorta wine
+CIRFOOD-874_Saffron scented basmati rice
+CIRFOOD-875_Valencian Paella
+CIRFOOD-876_Chicken wings
+CIRFOOD-877_Vegetable focaccia bread
+CIRFOOD-878_Black beans
+CIRFOOD-879_Chicken with curry
+CIRFOOD-880_Pasta with sausage, peppers and onion
+CIRFOOD-881_Pasta with pink sauce
+CIRFOOD-882_Lentil and mushroom soup
+CIRFOOD-883_Pasta vegetarian ragu sauce
+CIRFOOD-884_Chard soup
+CIRFOOD-885_Tortellini with cream
+CIRFOOD-886_Pasta with cheese and artichokes
+CIRFOOD-887_Risotto with zucchini and saffron
+CIRFOOD-888_Carrot soup with barley
+CIRFOOD-889_Spaetzle with tomato sauce
+CIRFOOD-890_Bean soup
+CIRFOOD-891_Toasted bread with taleggio and gorgonzola cheese
+CIRFOOD-892_Mixed Cheeses
+CIRFOOD-894_Potato crusted plaice fillet
+CIRFOOD-895_Grilled scamorza cheese
+CIRFOOD-896_Lemon chicken strips
+CIRFOOD-897_Smooth-hound fillet in Aquapazza Crazy water style
+CIRFOOD-898_Pork loin escalope with speck and walnuts
+CIRFOOD-899_Gratineed broccoli
+CIRFOOD-900_Caponata
+CIRFOOD-901_Braised chicory
+CIRFOOD-902_Parsley potatoes
+CIRFOOD-903_Grilled spinach
+CIRFOOD-904_Raw vegetable buffet
+CIRFOOD-905_Kebab
+CIRFOOD-906_Pasta with speck and rosemary
+CIRFOOD-907_Pasta with broccoli rabe
+CIRFOOD-908_Pasta with Radicchio chicory
+CIRFOOD-909_Ricotta and spinach Tortellini with butter and sage
+CIRFOOD-911_Pea Soup
+CIRFOOD-912_Cheese pasta
+CIRFOOD-913_Mushroom risotto
+CIRFOOD-914_Onion and potato soup
+CIRFOOD-916_Turkey strips with olives
+CIRFOOD-917_Toasted bread with Boscaiola sauce
+CIRFOOD-918_Curry hake fillet
+CIRFOOD-919_Omelette with potatoes
+CIRFOOD-920_Sauteed zucchini
+CIRFOOD-921_Spicy chard
+CIRFOOD-922_Lentils soup
+CIRFOOD-923_Onion soup
+CIRFOOD-924_Pasta with zucchini and bacon
+CIRFOOD-925_Walnut pesto and ricotta cheese pasta
+CIRFOOD-926_Cacio e Pepe Pasta
+CIRFOOD-927_Pasta with tomato and capers
+CIRFOOD-928_Italian farmer's soup
+CIRFOOD-929_Chicken cutlet
+CIRFOOD-930_Baked Praga ham
+CIRFOOD-931_Carrozza or Mozzarella stiks
+CIRFOOD-932_Seasoned carrots
+CIRFOOD-933_Green beans in agro sauce
+CIRFOOD-934_Rosemary cannellini beans
+CIRFOOD-935_Steamed broccoli
+CIRFOOD-936_Peperonata
+CIRFOOD-937_Steamed spinach
+CIRFOOD-938_Pumpkin with rosemary
+CIRFOOD-939_Broccoletti in oil
+CIRFOOD-940_Cauliflower with oregano
+CIRFOOD-941_Pasta with mussels
+CIRFOOD-942_Tortellini in broth
+CIRFOOD-943_Lemon turkey escalope
+CIRFOOD-944_Toasted bread with cheese
+CIRFOOD-945_Omelette with radicchio
+CIRFOOD-946_Boiled beef with green sauce
+CIRFOOD-947_Breaded Calamari
+CIRFOOD-948_Carrots in oil
+CIRFOOD-949_Gatineed Fennels
+CIRFOOD-950_Stewed peas
+CIRFOOD-951_Calamari rings with peas
+CIRFOOD-952_Polenta casserole and goulash with stewed beans
+CIRFOOD-953_Tilapia fish fillet with oregano
+CIRFOOD-954_Gurnard fillet with lemon and parsley
+CIRFOOD-955_Tilapia fish fillet with tomatoes and olives
+CIRFOOD-956_Pork loin with apples
+CIRFOOD-957_Cod fillet with fennel and capers
+CIRFOOD-958_Potato and green bean loaf
+CIRFOOD-959_Red wine braised beef with potatoes
+CIRFOOD-960_Perch fillet with chardonnay sauce
+CIRFOOD-961_Gurnard fillet with marinara sauce
+CIRFOOD-962_Octopus Soup
+CIRFOOD-963_Hake fillet with white wine
+CIRFOOD-964_Pasta with cherry tomatoes and arugula
+CIRFOOD-965_Plaice fillet with sage
+CIRFOOD-966_Seasoned roasted turkey
