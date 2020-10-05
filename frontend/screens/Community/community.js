@@ -378,7 +378,9 @@ export default class Community extends Component {
                             </Text>
                           )}
                         </View>
-                        <Text>{article.content}</Text>
+                        <Text style={styles.articleContent}>
+                          {article.content}
+                        </Text>
                       </View>
                     </View>
                   );
@@ -574,5 +576,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  articleContent: {
+    fontSize: 20,
+    fontFamily: 'BMEULJROTTF',
   },
 });

@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   AsyncStorage,
   Dimensions,
+  Modal,
+  TouchableHighlight,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -21,6 +23,8 @@ export default class MyFeed extends Component {
     this.state = {
       article: this.props.route.params.article,
       profileImage: null,
+      modalData: '',
+      modalVisible: false,
     };
   }
   onBack = () => {
@@ -32,6 +36,50 @@ export default class MyFeed extends Component {
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
+
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View
+            style={{
+              width: '100%',
+              height: height,
+              backgroundColor: 'black',
+              opacity: 0.5,
+            }}></View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={{marginBottom: 10}}>레시피 내용</Text>
+              {this.state.modalData
+                .split('|')
+                .filter((word) => word)
+                .map((line, i) => {
+                  return (
+                    <Text>
+                      {i + 1}. {line}
+                    </Text>
+                  );
+                })}
+              <TouchableHighlight
+                style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
+
         <ScrollView>
           {/* <View style={styles.detailHeader}>
             <Icon
@@ -139,10 +187,9 @@ export default class MyFeed extends Component {
               {this.state.article.recipe !== '' && (
                 <TouchableOpacity
                   style={{marginRight: 10}}
-                  // onPress={() => {
-                  // 	this.setModalVisible(true, article.recipe);
-                  // }}
-                >
+                  onPress={() => {
+                    this.setModalVisible(true, this.state.article.recipe);
+                  }}>
                   <Icon name="list-circle" style={{fontSize: 40}} />
                 </TouchableOpacity>
               )}
@@ -210,7 +257,9 @@ export default class MyFeed extends Component {
                 </Text>
               )}
             </View>
-            <Text>{this.state.article.content}</Text>
+            <Text style={styles.articleContent}>
+              {this.state.article.content}
+            </Text>
           </View>
         </ScrollView>
       </View>
@@ -275,5 +324,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     textAlign: 'center',
+  },
+  articleContent: {
+    fontSize: 20,
+    fontFamily: 'BMEULJROTTF',
   },
 });
