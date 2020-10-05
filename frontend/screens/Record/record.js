@@ -344,13 +344,6 @@ export default class Record extends Component {
       })
       .catch((error) => console.log(error));
   };
-  // onDetailImage = (key, value, idx) => {
-  //   this.props.navigation.push('DetailImage', {
-  //     key: key,
-  //     value: value,
-  //     index: idx,
-  //   });
-  // };
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -457,7 +450,7 @@ export default class Record extends Component {
                       this.props.navigation.push('DetailImage', {
                         imageId: picture.id,
                         image: picture.image,
-                        dateTime: this.state.dateTime,
+                        // dateTime: this.state.dateTime,
                       });
                     }}>
                     <Image
