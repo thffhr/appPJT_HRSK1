@@ -7,9 +7,11 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ScrollView,
-  Dimensions
+  Image,
+  Dimensions,
 } from 'react-native';
 
+const serverUrl = 'http://10.0.2.2:8080/';
 
 const H = Dimensions.get('window').height;
 const W = Dimensions.get('window').width;
@@ -36,33 +38,7 @@ class Rank extends Component {
           tags: ['태그1', '태그2', '태그3'],
         },
       ],
-      users: [
-        {
-          id: 1,
-          username: '김태희',
-          follower: 567
-        },
-        {
-          id: 2,
-          username: '트와이스',
-          follower: 456
-        },
-        {
-          id: 3,
-          username: '레드벨벳',
-          follower: 345
-        },
-        {
-          id: 4,
-          username: '방탄소년단',
-          follower: 234
-        },
-        {
-          id: 5,
-          username: 'exo',
-          follower: 123
-        },
-      ],
+      BestUser: '',
       btn1_color: '#fca652',
       btn2_color: 'transparent',
       active: 'btn1',
@@ -82,7 +58,27 @@ class Rank extends Component {
       active: 'btn2',
     });
   };
-
+  getDatas = () => {
+    fetch(`${serverUrl}accounts/bestusers/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          BestUser: response,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  componentDidMount() {
+    this.getDatas();
+  }
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -105,17 +101,11 @@ class Rank extends Component {
           {this.state.active == 'btn1' && (
             <View style={{width: '100%'}}>
               <View style={styles.rankArea}>
-                <Text
-                  style={styles.title}>
-                  Top 3
-                </Text>
+                <Text style={styles.title}>Top 3</Text>
                 <View style={styles.rankBox}></View>
               </View>
               <View style={styles.articles}>
-                  <Text
-                      style={styles.title}>
-                      인기식단
-                    </Text>
+                <Text style={styles.title}>인기식단</Text>
                 {this.state.articles.map((article) => {
                   return (
                     <View style={styles.article} key={article.id}>
@@ -142,8 +132,7 @@ class Rank extends Component {
                             <View style={styles.tag}>
                               <Text
                                 key={tag}
-                                style={{fontSize: 15, color: 'white'}}
-                                >
+                                style={{fontSize: 15, color: 'white'}}>
                                 #{tag}
                               </Text>
                             </View>
@@ -205,28 +194,33 @@ class Rank extends Component {
           )}
           {this.state.active == 'btn2' && (
             <View>
-              {this.state.users.map((user) => {
+              {this.state.BestUser.map((user, i) => {
                 return (
-                  <View style={styles.follow} key={user.follower}>
-                    <Text style={styles.ranking}>
-                      {user.id}
-                    </Text>
-                    <View
-                          style={{
-                            borderRadius: W*0.15,
-                            width: W*0.15,
-                            height: W*0.15,
-                            marginRight: '5%',
-                            backgroundColor: 'green',
-                          }}></View>
-                    <Text style={styles.followUser}>
-                      {user.username}
-                    </Text>
+                  <View style={styles.follow} key={user.id}>
+                    <Text style={styles.ranking}>{i + 1}</Text>
+                    {this.state.profileImage && (
+                      <Image
+                        style={styles.profileImg}
+                        source={{
+                          uri: `${serverUrl}gallery` + this.state.profileImage,
+                        }}
+                      />
+                    )}
+                    {!this.state.profileImage && (
+                      <Image
+                        style={styles.profileImg}
+                        source={{
+                          uri:
+                            'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                        }}
+                      />
+                    )}
+                    <Text style={styles.followUser}>{user.username}</Text>
                     <Text style={styles.followCnt}>
-                      {user.follower}
+                      {user.num_of_followers}
                     </Text>
                   </View>
-                )
+                );
               })}
             </View>
           )}
@@ -290,18 +284,17 @@ const styles = StyleSheet.create({
   rankBox: {
     alignSelf: 'center',
     height: 200,
-    width:"90%",
-    borderWidth: 1,
-    borderColor: 'gray',
-    backgroundColor:"transparent",
-    borderRadius:10,
+    width: '90%',
+    borderRadius: 10,
+    elevation: 5,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 25,
     marginLeft: '5%',
     marginBottom: 10,
     color: '#696969',
-    fontFamily: 'BMDOHYEON'
+    fontFamily: 'BMDOHYEON',
   },
   articles: {
     width: '100%',
@@ -334,7 +327,7 @@ const styles = StyleSheet.create({
     borderColor: '#FFFBE6',
     backgroundColor: '#fca652',
     padding: 7.5,
-    marginRight: 10
+    marginRight: 10,
   },
   articleBtns: {
     width: '100%',
@@ -344,26 +337,32 @@ const styles = StyleSheet.create({
   follow: {
     flexDirection: 'row',
     marginTop: '10%',
-    marginLeft: '10%'
+    marginLeft: '10%',
   },
   ranking: {
     marginRight: '5%',
-    fontSize: W*0.07,
+    fontSize: W * 0.08,
     fontFamily: 'BMHANNA',
-    width: W*0.05
+    width: W * 0.05,
   },
   followUser: {
     marginRight: '5%',
-    fontSize: W*0.07,
+    fontSize: W * 0.07,
     fontFamily: 'BMHANNA',
-    width: W*0.35
+    width: W * 0.35,
   },
   followCnt: {
     marginRight: '5%',
-    fontSize: W*0.07,
+    fontSize: W * 0.07,
     fontFamily: 'BMHANNA',
-    width: W*0.25
-  }
+    width: W * 0.25,
+  },
+  profileImg: {
+    borderRadius: W * 0.15,
+    width: W * 0.15,
+    height: W * 0.15,
+    marginRight: '5%',
+  },
 });
 
 export default Rank;
