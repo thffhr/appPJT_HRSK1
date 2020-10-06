@@ -66,7 +66,7 @@ class Update extends Component {
   };
   onProfile = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-
+    console.log(1);
     if (this.state.height && this.state.weight && this.state.age) {
       fetch(`${serverUrl}accounts/update/`, {
         method: 'PATCH',
@@ -166,63 +166,59 @@ class Update extends Component {
           </TouchableOpacity>
         </View>
         <View style={styles.userInfo}>
-          <View style={styles.infoTitle}>
-            <Text style={styles.infotitle}>아이디</Text>
-            <Text style={styles.infotitle}>나이</Text>
-            <Text style={styles.infotitle}>성별</Text>
-            <Text style={styles.infotitle}>키</Text>
-            <Text style={styles.infotitle}>몸무게</Text>
-            <Text style={styles.infotitle}>기초대사량</Text>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>아이디</Text>
+            <Text style={styles.infoValue}>{this.state.username}</Text>
           </View>
-          <View style={styles.infoCon}>
-            <Text style={styles.infoText}>{this.state.username}</Text>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>성별</Text>
+            <Text style={styles.infoValue}>{gender}</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>나이</Text>
             <TextInput
+              style={styles.infoInput}
+              placeholder="나이"
+              keyboardType="number-pad"
               value={this.state.age}
               onChangeText={(age) => {
                 this.setState({
                   age: age,
                 });
-              }}
-              style={
-                (styles.infoText,
-                {
-                  borderBottomWidth: 1,
-                  paddingBottom: 0,
-                  marginBottom: H * 0.015,
-                })
-              }></TextInput>
-            <Text style={styles.infoText}>{gender}</Text>
+              }}></TextInput>
+            {/* <Text style={styles.infoValue}>{age}</Text> */}
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>키</Text>
             <TextInput
+              style={styles.infoInput}
+              placeholder="키"
+              keyboardType="number-pad"
               value={this.state.height}
               onChangeText={(height) => {
                 this.setState({
                   height: height,
                 });
-              }}
-              style={
-                (styles.infoText,
-                {
-                  borderBottomWidth: 1,
-                  paddingBottom: 0,
-                  marginBottom: H * 0.017,
-                })
-              }></TextInput>
+              }}></TextInput>
+            {/* <Text style={styles.infoValue}>{height}</Text> */}
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>몸무게</Text>
             <TextInput
+              style={styles.infoInput}
+              placeholder="몸무게"
+              keyboardType="number-pad"
               value={this.state.weight}
               onChangeText={(weight) => {
                 this.setState({
                   weight: weight,
                 });
-              }}
-              style={
-                (styles.infoText,
-                {
-                  borderBottomWidth: 1,
-                  paddingBottom: 0,
-                  marginBottom: H * 0.019,
-                })
-              }></TextInput>
-            <Text style={styles.infoText}>{this.state.bm}kcal</Text>
+              }}></TextInput>
+            {/* <Text style={styles.infoValue}>{weight}</Text> */}
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>기초대사량</Text>
+            <Text style={styles.infoValue}>{this.state.bm} kcal</Text>
           </View>
         </View>
 
@@ -263,44 +259,52 @@ const styles = StyleSheet.create({
     height: W * 0.05,
     margin: W * 0.015,
   },
+  // infobox
   userInfo: {
     borderRadius: 10,
     width: '70%',
-    flexDirection: 'row',
     elevation: 5,
     backgroundColor: '#fff',
-    // shadowColor: '#000',
-    // shadowOffset: {width: 0, height: 2},
-    // shadowOpacity: 0.5,
   },
+  infoBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: W * 0.05,
+    marginVertical: H * 0.015,
+  },
+  infoTitle: {
+    fontFamily: 'BMDOHYEON',
+    fontSize: W * 0.05,
+  },
+  infoValue: {
+    fontFamily: 'BMHANNAAir',
+    fontSize: W * 0.05,
+  },
+  infoInput: {
+    fontFamily: 'BMHANNAAir',
+    fontSize: W * 0.05,
+    height: H * 0.07,
+    width: W * 0.15,
+    borderBottomWidth: 1,
+    borderBottomColor: 'darkgray',
+    textAlign: 'center',
+  },
+
   infoItem: {
     marginTop: H * 0.02,
     marginBottom: H * 0.02,
     marginLeft: W * 0.03,
     marginRight: W * 0.03,
   },
-  infoTitle: {
-    marginTop: H * 0.02,
-    marginBottom: H * 0.02,
-    marginLeft: W * 0.03,
-    marginRight: W * 0.03,
-  },
+
   infoCon: {
     marginTop: H * 0.02,
     marginBottom: H * 0.02,
     marginLeft: W * 0.03,
     marginRight: W * 0.03,
   },
-  infotitle: {
-    fontFamily: 'BMDOHYEON',
-    fontSize: W * 0.05,
-    margin: H * 0.019,
-  },
-  infoText: {
-    fontFamily: 'BMHANNAAir',
-    fontSize: W * 0.05,
-    margin: H * 0.02,
-  },
+
   gohomeBtn: {
     backgroundColor: 'transparent',
     color: 'black',

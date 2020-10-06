@@ -154,21 +154,29 @@ class Profile extends Component {
           )}
         </View>
         <View style={styles.userInfo}>
-          <View style={styles.infoTitle}>
-            <Text style={styles.infotitle}>아이디</Text>
-            <Text style={styles.infotitle}>나이</Text>
-            <Text style={styles.infotitle}>성별</Text>
-            <Text style={styles.infotitle}>키</Text>
-            <Text style={styles.infotitle}>몸무게</Text>
-            <Text style={styles.infotitle}>기초대사량</Text>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>아이디</Text>
+            <Text style={styles.infoValue}>{this.state.username}</Text>
           </View>
-          <View style={styles.infoCon}>
-            <Text style={styles.infoText}>{this.state.username}</Text>
-            <Text style={styles.infoText}>{age}</Text>
-            <Text style={styles.infoText}>{gender}</Text>
-            <Text style={styles.infoText}>{height}</Text>
-            <Text style={styles.infoText}>{weight}</Text>
-            <Text style={styles.infoText}>{this.state.bm}kcal</Text>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>성별</Text>
+            <Text style={styles.infoValue}>{gender}</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>나이</Text>
+            <Text style={styles.infoValue}>{age}</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>키</Text>
+            <Text style={styles.infoValue}>{height}</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>몸무게</Text>
+            <Text style={styles.infoValue}>{weight}</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Text style={styles.infoTitle}>기초대사량</Text>
+            <Text style={styles.infoValue}>{this.state.bm} kcal</Text>
           </View>
         </View>
         <TouchableOpacity
@@ -225,17 +233,10 @@ const styles = StyleSheet.create({
   userInfo: {
     borderRadius: 10,
     width: '70%',
-    flexDirection: 'row',
     elevation: 5,
     backgroundColor: '#fff',
   },
   infoItem: {
-    marginTop: H * 0.02,
-    marginBottom: H * 0.02,
-    marginLeft: W * 0.03,
-    marginRight: W * 0.03,
-  },
-  infoTitle: {
     marginTop: H * 0.02,
     marginBottom: H * 0.02,
     marginLeft: W * 0.03,
@@ -247,15 +248,19 @@ const styles = StyleSheet.create({
     marginLeft: W * 0.03,
     marginRight: W * 0.03,
   },
-  infotitle: {
+  infoBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: W * 0.05,
+    marginVertical: H * 0.015,
+  },
+  infoTitle: {
     fontFamily: 'BMDOHYEON',
     fontSize: W * 0.05,
-    margin: H * 0.019,
   },
-  infoText: {
+  infoValue: {
     fontFamily: 'BMHANNAAir',
     fontSize: W * 0.05,
-    margin: H * 0.02,
   },
   gohomeBtn: {
     backgroundColor: 'transparent',

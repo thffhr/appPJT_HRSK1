@@ -97,8 +97,8 @@ class Home extends Component {
           },
         })
           .then((response) => response.json())
-          .then((response) => {
-            console.log(response);
+          .then(() => {
+            // console.log(response);
           })
           .catch((error) => console.log(error));
       }
@@ -114,7 +114,7 @@ class Home extends Component {
     this.props.navigation.push('Record');
   };
   onWorldCup = () => {
-    alert('서비스 중입니다..\n조금만 기다려주세요');
+    alert('서비스 준비중입니다..\n조금만 기다려주세요');
   };
   render() {
     return (
