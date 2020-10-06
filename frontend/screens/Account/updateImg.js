@@ -8,11 +8,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   AsyncStorage,
+  Dimensions
 } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import {CommonActions} from '@react-navigation/native';
 
 const serverUrl = 'http://10.0.2.2:8080/';
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 
 export default class UpdateImg extends React.Component {
   state = {
@@ -127,9 +130,9 @@ export default class UpdateImg extends React.Component {
   render() {
     const {photo} = this.state;
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+      <View style={styles.container}>
         <TouchableOpacity style={styles.next} onPress={this.onNext}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', color: 'orange'}}>
+          <Text style={styles.updateText}>
             수정
           </Text>
         </TouchableOpacity>
@@ -154,12 +157,14 @@ export default class UpdateImg extends React.Component {
           />
         )}
         <View style={{margin: 30}}>
-          <Button
-            title="Choose Photo"
-            onPress={this.handleChoosePhoto}></Button>
+          <TouchableOpacity onPress={this.handleChoosePhoto} style={styles.chooseBtn}>
+            <Text style={styles.chooseBtnText}>사진 선택</Text>
+          </TouchableOpacity>
         </View>
         <View>
-          <Button title="초기화" onPress={this.deleteProfileImage}></Button>
+          <TouchableOpacity title="초기화" onPress={this.deleteProfileImage} style={styles.chooseBtn}>
+          <Text style={styles.chooseBtnText}>초기화</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -167,10 +172,31 @@ export default class UpdateImg extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: '#FFFBE6',
+    alignItems: 'center',
+  },
+  updateText: {
+    fontSize:  W * 0.05,
+    color: '#fca652',
+    fontWeight: 'bold'
+  },
   next: {
     position: 'absolute',
     right: 15,
     top: 15,
     zIndex: 1,
   },
+  chooseBtn: {
+    backgroundColor: '#fca652',
+    padding: 10,
+    borderRadius: 10
+  },
+  chooseBtnText: {
+    color: "white",
+    fontFamily: "BMDOHYEON",
+    fontSize: 20
+  }
 });

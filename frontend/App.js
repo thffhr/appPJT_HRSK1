@@ -14,6 +14,7 @@ import SplashScreen from 'react-native-splash-screen';
 import Login from './screens/Account/login';
 import Signup from './screens/Account/signup';
 import Profile from './screens/Account/profile';
+import Update from './screens/Account/update';
 import UpdateImg from './screens/Account/updateImg';
 import Startsex from './screens/Account/start_sex';
 import Startinfo from './screens/Account/start_info';
@@ -27,6 +28,7 @@ import CreateArticle from './screens/Community/create_article';
 import Home from './screens/home';
 
 const Stack = createStackNavigator();
+const serverUrl = 'http://10.0.2.2:8080/';
 
 class App extends Component {
   constructor(props) {
@@ -104,6 +106,11 @@ class App extends Component {
             name="UpdateImg"
             component={UpdateImg}
             options={{title: '프로필이미지변경'}}
+          />
+          <Stack.Screen
+            name="Update"
+            component={Update}
+            options={{title: '프로필변경'}}
           />
           <Stack.Screen
             name="Startsex"
