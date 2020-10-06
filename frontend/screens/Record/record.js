@@ -109,6 +109,7 @@ export default class Record extends Component {
       // btn1
       pictures: [],
       selected: {id: null, image: null},
+      pictureTime: {},
       // btn2
       dateTime: {
         year: year,
@@ -523,13 +524,24 @@ export default class Record extends Component {
                     style={[styles.imgBtn, {borderColor: borderColor}]}
                     key={picture.id}
                     onPress={() => {
+                      const time = picture['created_at'];
+                      const year = time.substring(0, 4);
+                      const month = time.substring(5, 7);
+                      const date = time.substring(8, 10);
+                      const pictureDate = {
+                        year: year,
+                        month: month,
+                        date: date,
+                      };
+
                       this.setState({
                         selected: {id: picture.id, image: picture.image},
                       });
                       this.props.navigation.push('DetailImage', {
                         imageId: picture.id,
                         image: picture.image,
-                        // dateTime: this.state.dateTime,
+                        picture: picture,
+                        pictureDate: pictureDate,
                       });
                     }}>
                     <Image
@@ -643,7 +655,6 @@ export default class Record extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     width: '100%',
     flex: 1,
     backgroundColor: '#FFFBE6',

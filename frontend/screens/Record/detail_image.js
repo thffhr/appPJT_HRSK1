@@ -19,7 +19,8 @@ export default class DetatilImage extends Component {
     this.state = {
       imageId: this.props.route.params.imageId,
       image: this.props.route.params.image,
-      dateTime: this.props.route.params.dateTime,
+      picture: this.props.route.params.picture,
+      dateTime: this.props.route.params.pictureDate,
     };
   }
   onBack = () => {
@@ -27,35 +28,39 @@ export default class DetatilImage extends Component {
   };
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
         <View style={styles.detailArea}>
           <View style={styles.detailHeader}>
-            <Icon
+            {/* <Icon
               name="arrow-back"
               onPress={this.onBack}
-              style={styles.backBtn}></Icon>
-            <Text> 년 월 일</Text>
+              style={styles.backBtn}></Icon> */}
+            <View style={styles.chartDaybox}>
+              <Text style={styles.chartDaytxt}>
+                {this.state.dateTime.year}년 {this.state.dateTime.month}월{' '}
+                {this.state.dateTime.date}일
+              </Text>
+            </View>
           </View>
-          <View style={styles.imageBody}>
+          <ScrollView style={styles.imageBody}>
             <Image
               style={styles.image}
               source={{
                 uri: `${serverUrl}gallery` + this.state.image,
               }}
             />
-          </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     width: '100%',
     flex: 1,
     backgroundColor: '#FFFBE6',
@@ -66,17 +71,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    borderBottomWidth: 1,
+    backgroundColor: '#fca652',
   },
   haru: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontFamily: 'BMJUA',
+    color: '#fff',
   },
   detailArea: {
     margin: 1,
   },
   detailHeader: {
-    flexDirection: 'row',
+    // flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: height * 0.015,
   },
   backBtn: {
     fontSize: 30,
@@ -84,5 +93,21 @@ const styles = StyleSheet.create({
   imageBody: {},
   image: {
     height: width,
+  },
+  // date
+  chartDayicon: {
+    fontSize: 50,
+  },
+  chartDaybox: {
+    // width: '50%',
+    borderWidth: 1,
+    borderRadius: 100,
+    // textAlign: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
+  },
+  chartDaytxt: {
+    fontSize: 20,
+    margin: 10,
   },
 });
