@@ -121,11 +121,12 @@ export default class Record extends Component {
       // btn3
       selectedDate: {
         date: null,
-        breakfast: 0,
-        lunch: 0,
-        dinner: 0,
-        snack: 0,
-        total: 0,
+        아침: 0,
+        점심: 0,
+        저녁: 0,
+        간식: 0,
+        야식: 0,
+        총합: 0,
       },
       nextDays: {},
     };
@@ -191,6 +192,7 @@ export default class Record extends Component {
         this.setState({
           nextDays: response,
         });
+        console.log(response);
         var tempObject = {};
         for (var key of Object.keys(this.state.nextDays)) {
           tempObject = {
@@ -214,11 +216,12 @@ export default class Record extends Component {
         selectedDate: {
           ...this.state.selectedDate,
           date: day.dateString,
-          breakfast: this.state.nextDays[day.dateString][0],
-          lunch: this.state.nextDays[day.dateString][1],
-          dinner: this.state.nextDays[day.dateString][2],
-          snack: this.state.nextDays[day.dateString][3],
-          total: this.state.nextDays[day.dateString][4],
+          아침: this.state.nextDays[day.dateString][0],
+          점심: this.state.nextDays[day.dateString][1],
+          저녁: this.state.nextDays[day.dateString][2],
+          간식: this.state.nextDays[day.dateString][3],
+          야식: this.state.nextDays[day.dateString][4],
+          총합: this.state.nextDays[day.dateString][5],
         },
       });
     } else {
@@ -602,9 +605,6 @@ export default class Record extends Component {
                 // renderHeader={(date) => {/*Return JSX*/}}
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
-                // markedDates={{
-                // '2020-10-05': {marked: true},
-                // }}
                 theme={{
                   todayTextColor: '#FCA652',
                   backgroundColor: '#FFFBE6',
@@ -615,16 +615,19 @@ export default class Record extends Component {
                 this.state.selectedDate.date,
               ) && (
                 <View style={styles.dateBox}>
-                  <Text>{this.state.selectedDate.date}</Text>
+                  <Text style={{textAlign: 'center', fontSize: 25}}>
+                    {this.state.selectedDate.date}
+                  </Text>
                   {Object.entries(this.state.selectedDate)
                     .filter(([key, value]) => key !== 'date')
                     .map(([key, value], i) => {
                       return (
                         <View style={styles.macroBox} key={i}>
-                          <Text>
-                            {key} {value}
+                          <Text style={styles.macroTxt}>{key}</Text>
+                          <Text style={styles.macroTxt}>
+                            {value}
+                            {'   '}kcal
                           </Text>
-                          <Text>kcal</Text>
                         </View>
                       );
                     })}
@@ -759,14 +762,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 10,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
+    backgroundColor: '#fff',
+    elevation: 3,
+    paddingVertical: 10,
   },
   macroBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
+    marginHorizontal: 10,
+  },
+  macroTxt: {
+    fontSize: 20,
+    fontFamily: 'BMHANNAAir',
+    color: '#232323',
+    paddingTop: 20,
+    marginHorizontal: 15,
+    marginVertical: 10,
   },
   calendarArea: {
     width: '100%',
