@@ -200,11 +200,11 @@ def isfollow(request, username):
     if user.followers.filter(id=request.user.id).exists():
         result = {"follow": "True"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(True)
     else:
         result = {"follow": "False"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(False)
 
 
 @api_view(['POST'])
