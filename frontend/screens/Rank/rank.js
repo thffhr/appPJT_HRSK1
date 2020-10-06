@@ -31,22 +31,22 @@ class Rank extends Component {
           tags: ['태그1', '태그2', '태그3'],
         },
       ],
-      btn1_color: 'orange',
-      btn2_color: 'white',
+      btn1_color: '#fca652',
+      btn2_color: 'transparent',
       active: 'btn1',
     };
   }
   onBtn1 = () => {
     this.setState({
-      btn1_color: 'orange',
-      btn2_color: 'white',
+      btn1_color: '#fca652',
+      btn2_color: 'transparent',
       active: 'btn1',
     });
   };
   onBtn2 = () => {
     this.setState({
-      btn1_color: 'white',
-      btn2_color: 'orange',
+      btn1_color: 'transparent',
+      btn2_color: '#fca652',
       active: 'btn2',
     });
   };
@@ -79,6 +79,7 @@ class Rank extends Component {
                     fontWeight: 'bold',
                     marginLeft: '5%',
                     marginBottom: 10,
+                    color: 'gray'
                   }}>
                   Top 3
                 </Text>
@@ -115,11 +116,14 @@ class Rank extends Component {
                       <View style={styles.tags}>
                         {article.tags.map((tag) => {
                           return (
-                            <Text
-                              key={tag}
-                              style={{marginRight: 5, fontSize: 20}}>
-                              #{tag}
-                            </Text>
+                            <View style={styles.tag}>
+                              <Text
+                                key={tag}
+                                style={{fontSize: 15, color: 'white'}}
+                                >
+                                #{tag}
+                              </Text>
+                            </View>
                           );
                         })}
                       </View>
@@ -189,7 +193,7 @@ class Rank extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: '#FFFBE6',
     width: '100%',
     flex: 1,
   },
@@ -198,19 +202,19 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    backgroundColor: '#fca652',
   },
   haru: {
     fontSize: 30,
-    fontWeight: 'bold',
+    fontFamily: 'BMJUA',
+    color: '#fff',
   },
   btnList: {
     width: '100%',
     height: 60,
     flexDirection: 'row',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 2,
+    borderBottomColor: 'lightgray',
+    borderBottomWidth: 1,
     marginBottom: 20,
   },
   btn1: {
@@ -231,19 +235,23 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontFamily: 'BMJUA',
   },
   rankArea: {
     width: '100%',
-    marginBottom: 30,
+    marginBottom: 20,
   },
   rankBox: {
-    width: '90%',
-    height: 200,
-    borderWidth: 2,
-    borderColor: 'gray',
-    borderRadius: 10,
     alignSelf: 'center',
+    height: 200,
+    width:"90%",
+    backgroundColor:"transparent",
+    borderRadius:10,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10, 
   },
   articles: {
     width: '100%',
@@ -269,6 +277,14 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     width: '100%',
     flexDirection: 'row',
+  },
+  tag: {
+    borderWidth: 1,
+    borderRadius: 15,
+    borderColor: '#FFFBE6',
+    backgroundColor: '#fca652',
+    padding: 7.5,
+    marginRight: 10
   },
   articleBtns: {
     width: '100%',
