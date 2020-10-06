@@ -90,24 +90,29 @@ def need_info(request):
 @permission_classes([IsAuthenticated])
 def update_info(request):
     user = get_object_or_404(User, id=request.user.id)
-    save_data = request.data
-    if save_data['sex'] == 'male':
+    save_data = {}
+    save_data['age'] = int(request.data['age'])
+    save_data['weight'] = int(request.data['weight'])
+    save_data['height'] = int(request.data['height'])
+    if request.data['sex'] == 'male':
+        print(1)
         basal_metabolism = 66.47 + \
             (13.75 * save_data['weight']) + (5 *
                                              save_data['height']) - (6.76 * save_data['age'])
-    elif save_data['sex'] == 'female':
+    elif request.data['sex'] == 'female':
         basal_metabolism = 655.1 + \
             (9.56 * save_data['weight']) + (1.85 *
                                             save_data['height']) - (4.68 * save_data['age'])
 
-    if save_data['active'] == 'high':
+    if request.data['active'] == 'high':
         basal_metabolism *= 1.1
-    elif save_data['active'] == 'normal':
+    elif request.data['active'] == 'normal':
         pass
-    elif save_data['active'] == 'low':
+    elif request.data['active'] == 'low':
         basal_metabolism *= 0.9
 
-    save_data['basal_metabolism'] = int(basal_metabolism)
+    request.data['basal_metabolism'] = int(basal_metabolism)
+    print(basal_metabolism)
     serializer = UserSerializer(user, data=save_data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
