@@ -191,3 +191,8 @@ def isfollow(request, username):
         result = {"follow": "False"}
         result = json.dumps(result)
         return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_basal(request):
+    return Response(int(request.user.basal_metabolism))

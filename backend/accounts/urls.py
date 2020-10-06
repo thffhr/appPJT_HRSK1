@@ -15,6 +15,7 @@ urlpatterns = [
     # path('config/', views.config, name='config'),
     path('delete/<str:username>', views.userdelete, name='userdelete'),
     path('pimg/update/', views.update_profileImage, name='profileImage'),
-    path('pimg/delete/', views.del_profile, name='delProfile')
+    path('pimg/delete/', views.del_profile, name='delProfile'),
     # path('recommend/<str:username>/', views.recommend, name='recommend'),
+    path('getbasal/', views.get_basal, name='getbasal'),
 ]
