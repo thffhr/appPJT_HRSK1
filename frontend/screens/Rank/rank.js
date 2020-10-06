@@ -7,7 +7,12 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ScrollView,
+  Dimensions
 } from 'react-native';
+
+
+const H = Dimensions.get('window').height;
+const W = Dimensions.get('window').width;
 import {CommonActions} from '@react-navigation/native';
 
 class Rank extends Component {
@@ -29,6 +34,33 @@ class Rank extends Component {
           content: '내용2',
           id: 2,
           tags: ['태그1', '태그2', '태그3'],
+        },
+      ],
+      users: [
+        {
+          id: 1,
+          username: '김태희',
+          follower: 567
+        },
+        {
+          id: 2,
+          username: '트와이스',
+          follower: 456
+        },
+        {
+          id: 3,
+          username: '레드벨벳',
+          follower: 345
+        },
+        {
+          id: 4,
+          username: '방탄소년단',
+          follower: 234
+        },
+        {
+          id: 5,
+          username: 'exo',
+          follower: 123
         },
       ],
       btn1_color: '#fca652',
@@ -74,25 +106,16 @@ class Rank extends Component {
             <View style={{width: '100%'}}>
               <View style={styles.rankArea}>
                 <Text
-                  style={{
-                    fontSize: 25,
-                    fontWeight: 'bold',
-                    marginLeft: '5%',
-                    marginBottom: 10,
-                    color: 'gray'
-                  }}>
+                  style={styles.title}>
                   Top 3
                 </Text>
                 <View style={styles.rankBox}></View>
               </View>
               <View style={styles.articles}>
-                <Text
-                  style={{
-                    fontSize: 30,
-                    fontWeight: 'bold',
-                    marginLeft: '5%',
-                    marginBottom: 10,
-                  }}></Text>
+                  <Text
+                      style={styles.title}>
+                      인기식단
+                    </Text>
                 {this.state.articles.map((article) => {
                   return (
                     <View style={styles.article} key={article.id}>
@@ -182,7 +205,29 @@ class Rank extends Component {
           )}
           {this.state.active == 'btn2' && (
             <View>
-              <Text>팔로워</Text>
+              {this.state.users.map((user) => {
+                return (
+                  <View style={styles.follow} key={user.follower}>
+                    <Text style={styles.ranking}>
+                      {user.id}
+                    </Text>
+                    <View
+                          style={{
+                            borderRadius: W*0.15,
+                            width: W*0.15,
+                            height: W*0.15,
+                            marginRight: '5%',
+                            backgroundColor: 'green',
+                          }}></View>
+                    <Text style={styles.followUser}>
+                      {user.username}
+                    </Text>
+                    <Text style={styles.followCnt}>
+                      {user.follower}
+                    </Text>
+                  </View>
+                )
+              })}
             </View>
           )}
         </View>
@@ -235,23 +280,28 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontSize: 20,
+    color: '#696969',
     fontFamily: 'BMJUA',
   },
   rankArea: {
     width: '100%',
-    marginBottom: 20,
+    marginBottom: 50,
   },
   rankBox: {
     alignSelf: 'center',
     height: 200,
     width:"90%",
+    borderWidth: 1,
+    borderColor: 'gray',
     backgroundColor:"transparent",
     borderRadius:10,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10, 
+  },
+  title: {
+    fontSize: 25,
+    marginLeft: '5%',
+    marginBottom: 10,
+    color: '#696969',
+    fontFamily: 'BMDOHYEON'
   },
   articles: {
     width: '100%',
@@ -291,6 +341,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 10,
   },
+  follow: {
+    flexDirection: 'row',
+    marginTop: '10%',
+    marginLeft: '10%'
+  },
+  ranking: {
+    marginRight: '5%',
+    fontSize: W*0.07,
+    fontFamily: 'BMHANNA',
+    width: W*0.05
+  },
+  followUser: {
+    marginRight: '5%',
+    fontSize: W*0.07,
+    fontFamily: 'BMHANNA',
+    width: W*0.35
+  },
+  followCnt: {
+    marginRight: '5%',
+    fontSize: W*0.07,
+    fontFamily: 'BMHANNA',
+    width: W*0.25
+  }
 });
 
 export default Rank;

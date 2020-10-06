@@ -180,18 +180,18 @@ class Update extends Component {
               this.setState({
                 age: age
               })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.015}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.015, width: '70%'}}></TextInput>
             <Text style={styles.infoText}>{gender}</Text>
             <TextInput value={this.state.height} onChangeText={(height) => {
               this.setState({
                 height: height
               })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.017}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.017, width: '70%'}}></TextInput>
             <TextInput value={this.state.weight} onChangeText={(weight) => {
               this.setState({
                 weight: weight
               })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.019}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.019, width: '70%'}}></TextInput>
             <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
@@ -268,6 +268,7 @@ const styles = StyleSheet.create({
     fontFamily: 'BMHANNAAir',
     fontSize: W*0.05,
     margin: H*0.02,
+    alignItems: 'center',
   },
   gohomeBtn: {
     backgroundColor: 'transparent',

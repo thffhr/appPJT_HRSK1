@@ -242,10 +242,12 @@ const styles = StyleSheet.create({
   userBtn: {
     width: W * 0.1,
     height: W * 0.1,
+    borderRadius:  W * 0.1
   },
   profileImg: {
     width: W * 0.1,
     height: W * 0.1,
+    borderRadius:  W * 0.1
   },
   body1: {
     flex: 4,
