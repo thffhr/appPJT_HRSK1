@@ -430,7 +430,9 @@ export default class Community extends Component {
                   </View>
                   <View style={styles.cntBox}>
                     <Text style={styles.cntContent}>게시글</Text>
-                    <Text style={styles.cntContent}>0</Text>
+                    <Text style={styles.cntContent}>
+                      {this.state.myArticles.length}
+                    </Text>
                   </View>
                   <View style={styles.cntBox}>
                     <Text style={styles.cntContent}>팔로워</Text>
