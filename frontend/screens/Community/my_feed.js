@@ -87,6 +87,7 @@ export default class MyFeed extends Component {
               onPress={this.onBack}
               style={styles.backBtn}></Icon>
           </View> */}
+
           <View style={styles.article}>
             <View style={styles.writer}>
               {this.state.article.user.profileImage && (
@@ -289,16 +290,18 @@ const styles = StyleSheet.create({
     fontFamily: 'BMJUA',
     marginLeft: 15,
   },
-  detailHeader: {
-    flexDirection: 'row',
-  },
-  backBtn: {
-    fontSize: 30,
-  },
+  // detailHeader: {
+  //   flexDirection: 'row',
+  // },
+  // backBtn: {
+  //   fontSize: 30,
+  // },
+
   article: {
     flexDirection: 'column',
     width: '100%',
     marginVertical: 20,
+    paddingVertical: 20,
   },
   writer: {
     marginLeft: '5%',
@@ -330,5 +333,33 @@ const styles = StyleSheet.create({
   articleContent: {
     fontSize: 20,
     fontFamily: 'BMEULJROTTF',
+  },
+
+  // modal
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });

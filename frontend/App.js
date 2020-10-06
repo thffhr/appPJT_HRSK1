@@ -26,6 +26,7 @@ import Comment from './screens/Community/comment';
 import CreateSelect from './screens/Community/create_select';
 import CreateArticle from './screens/Community/create_article';
 import MyFeed from './screens/Community/my_feed';
+import UserFeed from './screens/Community/user_feed';
 import Home from './screens/home';
 
 const Stack = createStackNavigator();
@@ -137,6 +138,11 @@ class App extends Component {
             name="MyFeed"
             component={MyFeed}
             options={{title: '내 피드'}}
+          />
+          <Stack.Screen
+            name="UserFeed"
+            component={UserFeed}
+            options={{title: '유저 피드'}}
           />
           <Stack.Screen
             name="Comment"
