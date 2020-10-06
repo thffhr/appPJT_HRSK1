@@ -31,11 +31,12 @@ export default class UserFeed extends Component {
       modalVisible: false,
     };
   }
-  async componentDidMount() {
-    const myName = await AsyncStorage.getItem('username');
-    this.getUserArticles(myName);
+  componentDidMount() {
+    this.getUserArticles();
   }
-  getUserArticles = (myName) => {
+  getUserArticles = async () => {
+    const myName = await AsyncStorage.getItem('username');
+    const Token = await AsyncStorage.getItem('auth-token');
     fetch(`${serverUrl}articles/read/${this.state.username}/`, {
       method: 'GET',
     })
@@ -61,6 +62,19 @@ export default class UserFeed extends Component {
       .catch((err) => {
         console.error(err);
       });
+    fetch(`${serverUrl}accounts/profile/${this.state.username}/isfollow/`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Token ${Token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          isFollow: response,
+        });
+      })
+      .catch((err) => console.error(err));
   };
   onFollow = async () => {
     const Token = await AsyncStorage.getItem('auth-token');
