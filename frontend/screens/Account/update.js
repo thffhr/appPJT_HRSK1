@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import {AsyncStorage, Image} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
-import { TextInput } from 'react-native-gesture-handler';
+import {TextInput} from 'react-native-gesture-handler';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 
@@ -66,9 +66,9 @@ class Update extends Component {
   };
   onProfile = async () => {
     const token = await AsyncStorage.getItem('auth-token');
-    
+
     if (this.state.height && this.state.weight && this.state.age) {
-        fetch(`${serverUrl}accounts/update/`, {
+      fetch(`${serverUrl}accounts/update/`, {
         method: 'PATCH',
         body: JSON.stringify(this.state),
         headers: {
@@ -82,15 +82,15 @@ class Update extends Component {
           console.log(err);
         });
     } else {
-        alert('모든 정보가 입력되지 않아 저장되지 않았습니다.');
+      alert('모든 정보가 입력되지 않아 저장되지 않았습니다.');
     }
     this.props.navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [{name: 'Home'}],
-        }),
-      );
-}
+      CommonActions.reset({
+        index: 1,
+        routes: [{name: 'Home'}],
+      }),
+    );
+  };
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     fetch(`${serverUrl}accounts/delete/${this.state.username}`, {
@@ -176,30 +176,59 @@ class Update extends Component {
           </View>
           <View style={styles.infoCon}>
             <Text style={styles.infoText}>{this.state.username}</Text>
-            <TextInput value={this.state.age} onChangeText={(age) => {
-              this.setState({
-                age: age
-              })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.015}}></TextInput>
+            <TextInput
+              value={this.state.age}
+              onChangeText={(age) => {
+                this.setState({
+                  age: age,
+                });
+              }}
+              style={
+                (styles.infoText,
+                {
+                  borderBottomWidth: 1,
+                  paddingBottom: 0,
+                  marginBottom: H * 0.015,
+                })
+              }></TextInput>
             <Text style={styles.infoText}>{gender}</Text>
-            <TextInput value={this.state.height} onChangeText={(height) => {
-              this.setState({
-                height: height
-              })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.017}}></TextInput>
-            <TextInput value={this.state.weight} onChangeText={(weight) => {
-              this.setState({
-                weight: weight
-              })
-            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.019}}></TextInput>
+            <TextInput
+              value={this.state.height}
+              onChangeText={(height) => {
+                this.setState({
+                  height: height,
+                });
+              }}
+              style={
+                (styles.infoText,
+                {
+                  borderBottomWidth: 1,
+                  paddingBottom: 0,
+                  marginBottom: H * 0.017,
+                })
+              }></TextInput>
+            <TextInput
+              value={this.state.weight}
+              onChangeText={(weight) => {
+                this.setState({
+                  weight: weight,
+                });
+              }}
+              style={
+                (styles.infoText,
+                {
+                  borderBottomWidth: 1,
+                  paddingBottom: 0,
+                  marginBottom: H * 0.019,
+                })
+              }></TextInput>
             <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
-          
+
         <TouchableOpacity onPress={this.onDelete} style={styles.deleteBtn}>
           <Text style={styles.delText}>회원탈퇴</Text>
         </TouchableOpacity>
-        
       </View>
     );
   }
@@ -213,61 +242,64 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImg: {
-    width: W*0.3,
-    height: W*0.3,
-    marginBottom: W*0.15,
+    marginTop: W * 0.1,
+    width: W * 0.3,
+    height: W * 0.3,
+    borderRadius: W * 0.3,
+    marginBottom: W * 0.15,
   },
   updateImgBtn: {
-    width: W*0.075,
-    height: W*0.075,
+    width: W * 0.075,
+    height: W * 0.075,
     backgroundColor: '#F1C40F',
-    borderRadius: W*0.075,
+    borderRadius: W * 0.075,
     position: 'absolute',
-    right: W*0.05,
-    bottom: W*0.125,
+    right: W * 0,
+    bottom: W * 0.13,
     zIndex: 2,
   },
   updateImg: {
-    width: W*0.05,
-    height: W*0.05,
-    margin: W*0.015,
+    width: W * 0.05,
+    height: W * 0.05,
+    margin: W * 0.015,
   },
   userInfo: {
-    borderRadius: 5,
+    borderRadius: 10,
     width: '70%',
     flexDirection: 'row',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
+    elevation: 5,
+    backgroundColor: '#fff',
+    // shadowColor: '#000',
+    // shadowOffset: {width: 0, height: 2},
+    // shadowOpacity: 0.5,
   },
   infoItem: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infoTitle: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infoCon: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infotitle: {
     fontFamily: 'BMDOHYEON',
-    fontSize: W*0.05,
-    margin: H*0.019,
+    fontSize: W * 0.05,
+    margin: H * 0.019,
   },
   infoText: {
     fontFamily: 'BMHANNAAir',
-    fontSize: W*0.05,
-    margin: H*0.02,
+    fontSize: W * 0.05,
+    margin: H * 0.02,
   },
   gohomeBtn: {
     backgroundColor: 'transparent',
@@ -279,17 +311,17 @@ const styles = StyleSheet.create({
     top: W * 0.03,
   },
   updateText: {
-    fontSize:  W * 0.05,
+    fontSize: W * 0.05,
     color: '#fca652',
     fontWeight: 'bold',
   },
   deleteBtn: {
-    marginTop: H*0.05
+    marginTop: H * 0.05,
   },
   delText: {
     color: '#fca652',
     fontFamily: 'BMHANNAAir',
-    fontSize: W*0.06
+    fontSize: W * 0.06,
   },
 });
 

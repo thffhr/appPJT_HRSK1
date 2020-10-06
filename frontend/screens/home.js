@@ -92,7 +92,6 @@ class Home extends Component {
           method: 'POST',
           body: data,
           headers: {
-            // Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
             Authorization: `Token ${this.state.authToken}`,
           },
@@ -122,33 +121,6 @@ class Home extends Component {
       <View style={styles.Container}>
         <View style={styles.Nav}>
           <Text style={styles.title}>하루세끼</Text>
-          {/* <TouchableOpacity
-            style={styles.user}
-            onPress={async () => {
-              const token = await AsyncStorage.getItem('auth-token');
-              console.log(token);
-              if (token !== null) {
-                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
-                  method: 'POST',
-                  header: {
-                    Authorization: `Token ${token}`,
-                  },
-                })
-                  .then(() => {
-                    console.log('로그아웃 성공');
-                    AsyncStorage.clear();
-                    this.props.navigation.dispatch(
-                      CommonActions.reset({
-                        index: 1,
-                        routes: [{name: 'Login'}],
-                      }),
-                    );
-                  })
-                  .catch((err) => console.error(err));
-              }
-            }}>
-            <Text style={styles.user}>로그아웃</Text>
-          </TouchableOpacity> */}
           <TouchableOpacity style={styles.userBtn} onPress={this.onProfile}>
             {this.state.profileImage && (
               <Image
@@ -240,12 +212,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   userBtn: {
-    width: W * 0.1,
-    height: W * 0.1,
+    width: W * 0.12,
+    height: W * 0.12,
   },
   profileImg: {
-    width: W * 0.1,
-    height: W * 0.1,
+    width: W * 0.12,
+    height: W * 0.12,
+    borderRadius: W * 0.12,
   },
   body1: {
     flex: 4,

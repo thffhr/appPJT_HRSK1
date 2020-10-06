@@ -64,18 +64,15 @@ class Profile extends Component {
   goHome = () => {
     this.props.navigation.push('Home');
   };
-  // onUpdateImg = () => {
-  //   this.props.navigation.push('UpdateImg');
-  // };
   onUpdate = async () => {
-    const username = await AsyncStorage.getItem('username')
+    const username = await AsyncStorage.getItem('username');
     this.props.navigation.push('Update', {
       sex: this.state.sex,
       bm: this.state.bm,
       profileImage: this.state.profileImage,
       username: username,
-      active: this.state.active
-    })
+      active: this.state.active,
+    });
   };
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
@@ -155,17 +152,6 @@ class Profile extends Component {
               }}
             />
           )}
-          {/* <TouchableOpacity
-            onPress={this.onUpdateImg}
-            style={styles.updateImgBtn}>
-            <Image
-              style={styles.updateImg}
-              source={{
-                uri:
-                  'https://cdn4.iconfinder.com/data/icons/pictype-free-vector-icons/16/write-256.png',
-              }}
-            />
-          </TouchableOpacity> */}
         </View>
         <View style={styles.userInfo}>
           <View style={styles.infoTitle}>
@@ -233,31 +219,15 @@ const styles = StyleSheet.create({
     marginTop: W * 0.1,
     width: W * 0.3,
     height: W * 0.3,
+    borderRadius: W * 0.3,
     marginBottom: W * 0.15,
   },
-  updateImgBtn: {
-    width: W * 0.075,
-    height: W * 0.075,
-    backgroundColor: '#F1C40F',
-    borderRadius: W * 0.075,
-    position: 'absolute',
-    right: W * 0.05,
-    bottom: W * 0.125,
-    zIndex: 2,
-  },
-  updateImg: {
-    width: W * 0.05,
-    height: W * 0.05,
-    margin: W * 0.015,
-  },
   userInfo: {
-    borderRadius: 5,
+    borderRadius: 10,
     width: '70%',
     flexDirection: 'row',
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.5,
+    elevation: 5,
+    backgroundColor: '#fff',
   },
   infoItem: {
     marginTop: H * 0.02,
