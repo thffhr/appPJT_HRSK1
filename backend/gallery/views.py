@@ -91,23 +91,17 @@ def getCalendar(request):
     MenusDict = {}
     for i in range(len(Menus)):
         print(Menus[i].mealTime)
-        # Foods = Menus[i].foods
-        # print(Foods)
-        # for food in Foods:
-        #     print(food.DESC_KOR)
         created_at = str(Menus[i].created_at)
         if created_at.split()[0] not in MenusDict.keys():
-            # 아침, 점심, 저녁, 간식, 야식, 총칼로리
-            MenusDict[created_at.split()[0]] = [0, 0, 0, 0, 0, 0]
+            MenusDict[created_at.split()[0]] = [0, 0, 0, 0, 0, 0] # 아침, 점심, 저녁, 간식, 야식, 총칼로리
         if Menus[i].mealTime == '아침':
-            MenusDict[created_at.split()[0]][0] += Menus[i].totalCal
+            MenusDict[created_at.split()[0]][0] += float(Menus[i].totalCal)
         elif Menus[i].mealTime == '점심':
-            MenusDict[created_at.split()[0]][1] += Menus[i].totalCal
+            MenusDict[created_at.split()[0]][1] += float(Menus[i].totalCal)
         elif Menus[i].mealTime == '저녁':
-            MenusDict[created_at.split()[0]][2] += Menus[i].totalCal
+            MenusDict[created_at.split()[0]][2] += float(Menus[i].totalCal)
         elif Menus[i].mealTime == '간식':
-            MenusDict[created_at.split()[0]][3] += Menus[i].totalCal
+            MenusDict[created_at.split()[0]][3] += float(Menus[i].totalCal)
         else:
-            MenusDict[created_at.split()[0]][4] += Menus[i].totalCal
-        # print(MenusDict)
+            MenusDict[created_at.split()[0]][4] += float(Menus[i].totalCal)
     return Response(MenusDict)
