@@ -123,6 +123,13 @@ class Update extends Component {
     let gender;
     let height;
     let weight;
+    if (genderCheck == 'male') {
+      gender = '남성';
+    } else if (genderCheck == 'female') {
+      gender = '여성';
+    } else {
+      gender = '정보 없음';
+    }
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={this.onProfile} style={styles.updateBtn}>
@@ -173,18 +180,18 @@ class Update extends Component {
               this.setState({
                 age: age
               })
-            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.015}}></TextInput>
             <Text style={styles.infoText}>{gender}</Text>
             <TextInput value={this.state.height} onChangeText={(height) => {
               this.setState({
                 height: height
               })
-            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.017}}></TextInput>
             <TextInput value={this.state.weight} onChangeText={(weight) => {
               this.setState({
                 weight: weight
               })
-            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
+            }} style={styles.infoText, {borderBottomWidth: 1, paddingBottom: 0, marginBottom: H*0.019}}></TextInput>
             <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
@@ -261,7 +268,6 @@ const styles = StyleSheet.create({
     fontFamily: 'BMHANNAAir',
     fontSize: W*0.05,
     margin: H*0.02,
-    
   },
   gohomeBtn: {
     backgroundColor: 'transparent',

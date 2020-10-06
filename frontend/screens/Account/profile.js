@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   logoutBtn: {
-    
+    marginTop: H*0.05
   },
   logoutText: {
     color: '#fca652',
