@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import {AsyncStorage, Image} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
+import { TextInput } from 'react-native-gesture-handler';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 
@@ -15,7 +16,7 @@ const {width, height} = Dimensions.get('screen');
 const H = Dimensions.get('window').height;
 const W = Dimensions.get('window').width;
 
-class Profile extends Component {
+class Update extends Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +29,6 @@ class Profile extends Component {
       bm: '',
     };
   }
-
   async componentDidMount() {
     // you might want to do the I18N setup here
     this.setState({
@@ -59,15 +59,36 @@ class Profile extends Component {
         console.log(err);
       });
   };
-  goHome = () => {
-    this.props.navigation.push('Home');
-  };
   onUpdateImg = () => {
     this.props.navigation.push('UpdateImg');
   };
-  onUpdate = () => {
-    this.props.navigation.push('Update')
-  };
+  onProfile = async () => {
+    const token = await AsyncStorage.getItem('auth-token');
+    if (this.state.height && this.state.weight && this.state.age) {
+        fetch(`${serverUrl}accounts/update/`, {
+        method: 'PATCH',
+        body: JSON.stringify(this.state),
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Token ${token}`,
+        },
+      })
+        // .then((response) => response.json())
+        // .then((response) => )
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+        alert('모든 정보가 입력되지 않아 저장되지 않았습니다.');
+    }
+    this.props.navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [{name: 'Home'}],
+        }),
+      );
+}
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
     fetch(`${serverUrl}accounts/delete/${this.state.username}`, {
@@ -100,32 +121,9 @@ class Profile extends Component {
     let gender;
     let height;
     let weight;
-
-    if (ageCheck) {
-      age = `${ageCheck}세`;
-    } else {
-      age = '정보 없음';
-    }
-    if (genderCheck == 'male') {
-      gender = '남성';
-    } else if (genderCheck == 'female') {
-      gender = '여성';
-    } else {
-      gender = '정보 없음';
-    }
-    if (heightCheck) {
-      height = `${heightCheck}cm`;
-    } else {
-      height = '정보 없음';
-    }
-    if (weightCheck) {
-      weight = `${weightCheck}kg`;
-    } else {
-      weight = '정보 없음';
-    }
     return (
       <View style={styles.container}>
-        <TouchableOpacity onPress={this.onUpdate} style={styles.updateBtn}>
+        <TouchableOpacity onPress={this.onProfile} style={styles.updateBtn}>
           <Text style={styles.updateText}>수정</Text>
         </TouchableOpacity>
         <View>
@@ -169,45 +167,18 @@ class Profile extends Component {
           </View>
           <View style={styles.infoCon}>
             <Text style={styles.infoText}>{this.state.username}</Text>
-            <Text style={styles.infoText}>{age}</Text>
+            <TextInput style={styles.infoText}>{age}</TextInput>
             <Text style={styles.infoText}>{gender}</Text>
-            <Text style={styles.infoText}>{height}</Text>
-            <Text style={styles.infoText}>{weight}</Text>
-            <Text style={styles.infoText}>{this.state.bm}kcal</Text>
+            <TextInput style={styles.infoText}>{height}</TextInput>
+            <TextInput style={styles.infoText}>{weight}</TextInput>
+            <TextInput style={styles.infoText}>{this.state.bm}kcal</TextInput>
           </View>
         </View>
-        <TouchableOpacity
-            style={styles.logoutBtn}
-            onPress={async () => {
-              const token = await AsyncStorage.getItem('auth-token');
-              console.log(token);
-              if (token !== null) {
-                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
-                  method: 'POST',
-                  header: {
-                    Authorization: `Token ${token}`,
-                  },
-                })
-                  .then(() => {
-                    console.log('로그아웃 성공');
-                    AsyncStorage.clear();
-                    this.props.navigation.dispatch(
-                      CommonActions.reset({
-                        index: 1,
-                        routes: [{name: 'Login'}],
-                      }),
-                    );
-                  })
-                  .catch((err) => console.error(err));
-              }
-            }}>
-            <Text style={styles.logoutText}>로그아웃</Text>
-          </TouchableOpacity>
-         {/*  
+          
         <TouchableOpacity onPress={this.onDelete} style={styles.deleteBtn}>
           <Text style={styles.delText}>회원탈퇴</Text>
         </TouchableOpacity>
-         */}
+        
       </View>
     );
   }
@@ -277,6 +248,7 @@ const styles = StyleSheet.create({
     fontFamily: 'BMHANNAAir',
     fontSize: W*0.05,
     margin: H*0.02,
+    borderBottomWidth: 1
   },
   gohomeBtn: {
     backgroundColor: 'transparent',
@@ -290,28 +262,20 @@ const styles = StyleSheet.create({
   updateText: {
     fontSize:  W * 0.05,
     color: '#fca652',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
-  logoutBtn: {
-    marginTop: H*0.05
+  deleteBtn: {
+    marginTop: 50,
+    backgroundColor: 'transparent',
+    position: 'absolute',
+    bottom: 20,
+    alignItems: 'center',
   },
-  logoutText: {
-    color: '#fca652',
-    fontFamily: 'BMHANNAAir',
-    fontSize: W*0.06
+  delText: {
+    color: 'blue',
+    borderBottomColor: 'blue',
+    borderBottomWidth: 1,
   },
-  // deleteBtn: {
-  //   marginTop: 50,
-  //   backgroundColor: 'transparent',
-  //   position: 'absolute',
-  //   bottom: 20,
-  //   alignItems: 'center',
-  // },
-  // delText: {
-  //   color: 'blue',
-  //   borderBottomColor: 'blue',
-  //   borderBottomWidth: 1,
-  // },
 });
 
-export default Profile;
+export default Update;
