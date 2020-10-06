@@ -164,15 +164,24 @@ def follow(request, username):
     if user != request.user:
         if user.followers.filter(id=request.user.id).exists():
             user.followers.remove(request.user)
-            request.user.followings.remove(user)
+            user.num_of_followers -= 1
+            user.save()
 
-            result = {"result": "팔로우 실패"}
+            request.user.followings.remove(user)
+            request.user.num_of_followings -= 1
+            request.user.save()
+
+            result = {"result": "팔로우 취소"}
             result = json.dumps(result)
             return HttpResponse(result, content_type=u"application/json; charset=utf-8")
 
         else:
             user.followers.add(request.user)
+            user.num_of_followers += 1
+            user.save()
             request.user.followings.add(user)
+            request.user.num_of_followings += 1
+            request.user.save()
 
             result = {"result": "팔로우 성공"}
             result = json.dumps(result)
@@ -191,3 +200,13 @@ def isfollow(request, username):
         result = {"follow": "False"}
         result = json.dumps(result)
         return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+
+
+@api_view(['POST'])
+def getBestUsers(request):
+    BestUsers = User.objects.order_by('-num_of_followers')[:5]
+    lst = []
+    for BestUser in BestUsers:
+        serializer = UserSerializer(BestUser)
+        lst.append(serializer.data)
+    return Response(lst)
