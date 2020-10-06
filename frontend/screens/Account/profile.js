@@ -26,6 +26,7 @@ class Profile extends Component {
       height: '',
       weight: '',
       bm: '',
+      active: '',
     };
   }
 
@@ -53,6 +54,7 @@ class Profile extends Component {
           weight: response.weight,
           bm: response.basal_metabolism,
           profileImage: response.profileImage,
+          active: response.active,
         });
       })
       .catch((err) => {
@@ -62,11 +64,18 @@ class Profile extends Component {
   goHome = () => {
     this.props.navigation.push('Home');
   };
-  onUpdateImg = () => {
-    this.props.navigation.push('UpdateImg');
-  };
-  onUpdate = () => {
-    this.props.navigation.push('Update');
+  // onUpdateImg = () => {
+  //   this.props.navigation.push('UpdateImg');
+  // };
+  onUpdate = async () => {
+    const username = await AsyncStorage.getItem('username')
+    this.props.navigation.push('Update', {
+      sex: this.state.sex,
+      bm: this.state.bm,
+      profileImage: this.state.profileImage,
+      username: username,
+      active: this.state.active
+    })
   };
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
@@ -146,7 +155,7 @@ class Profile extends Component {
               }}
             />
           )}
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={this.onUpdateImg}
             style={styles.updateImgBtn}>
             <Image
@@ -156,7 +165,7 @@ class Profile extends Component {
                   'https://cdn4.iconfinder.com/data/icons/pictype-free-vector-icons/16/write-256.png',
               }}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
         <View style={styles.userInfo}>
           <View style={styles.infoTitle}>
