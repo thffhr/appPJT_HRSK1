@@ -10,6 +10,7 @@ import {
   Image,
   Dimensions,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const serverUrl = 'http://10.0.2.2:8080/';
 
@@ -38,6 +39,7 @@ class Rank extends Component {
           tags: ['태그1', '태그2', '태그3'],
         },
       ],
+      BestArticle: [],
       BestUser: '',
       btn1_color: '#fca652',
       btn2_color: 'transparent',
@@ -58,8 +60,8 @@ class Rank extends Component {
       active: 'btn2',
     });
   };
-  getDatas = () => {
-    fetch(`${serverUrl}accounts/bestusers/`, {
+  getArticles = () => {
+    fetch(`${serverUrl}articles/getbest/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -69,6 +71,24 @@ class Rank extends Component {
       .then((response) => {
         console.log(response);
         this.setState({
+          BestArticle: response,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  getDatas = () => {
+    fetch(`${serverUrl}accounts/bestusers/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        // console.log(response);
+        this.setState({
           BestUser: response,
         });
       })
@@ -77,6 +97,7 @@ class Rank extends Component {
       });
   };
   componentDidMount() {
+    this.getArticles();
     this.getDatas();
   }
   render() {
@@ -102,89 +123,237 @@ class Rank extends Component {
             <View style={{width: '100%'}}>
               <View style={styles.rankArea}>
                 <Text style={styles.title}>Top 3</Text>
-                <View style={styles.rankBox}></View>
+                <View style={styles.rankBox}>
+                  {this.state.BestArticle.map((article) => {
+                    return (
+                      <View style={styles.topThree} key={article.id}>
+                        <Image
+                          style={{width: '100%', height: '50%'}}
+                          source={{
+                            uri: `${serverUrl}gallery` + article.image,
+                          }}
+                        />
+                        <View style={{flexDirection: 'row', marginLeft: '5%'}}>
+                          <Icon
+                            name="heart"
+                            style={{fontSize: 20, color: 'red'}}
+                          />
+                          <Text
+                            style={{
+                              fontSize: 15,
+                              fontFamily: 'BMDOHYEON',
+                              marginVertical: '3%',
+                            }}>
+                            {' '}
+                            {article.num_of_like} likes
+                          </Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 15,
+                            fontFamily: 'BMDOHYEON',
+                            marginLeft: '5%',
+                          }}>
+                          {article.user.username}
+                        </Text>
+                      </View>
+                    );
+                  })}
+                </View>
               </View>
               <View style={styles.articles}>
                 <Text style={styles.title}>인기식단</Text>
-                {this.state.articles.map((article) => {
+                {this.state.BestArticle.map((article) => {
                   return (
                     <View style={styles.article} key={article.id}>
                       <View style={styles.writer}>
-                        <View
-                          style={{
-                            borderRadius: 50,
-                            width: 50,
-                            height: 50,
-                            backgroundColor: 'green',
-                          }}></View>
+                        {article.user.profileImage && (
+                          <Image
+                            style={styles.writerImg}
+                            source={{
+                              uri: `${serverUrl}gallery${article.user.profileImage}`,
+                            }}
+                          />
+                        )}
+                        {!article.user.profileImage && (
+                          <Image
+                            style={styles.writerImg}
+                            source={{
+                              uri:
+                                'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                            }}
+                          />
+                        )}
                         <Text
                           style={{
                             marginLeft: 10,
                             fontSize: 20,
                             fontWeight: 'bold',
                           }}>
-                          {article.user}
+                          {article.user.username}
                         </Text>
                       </View>
-                      <View style={styles.tags}>
-                        {article.tags.map((tag) => {
-                          return (
-                            <View style={styles.tag}>
-                              <Text
-                                key={tag}
-                                style={{fontSize: 15, color: 'white'}}>
-                                #{tag}
-                              </Text>
-                            </View>
-                          );
-                        })}
-                      </View>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: 400,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          backgroundColor: 'orange',
-                          marginBottom: 10,
-                        }}>
-                        <Text>이미지자리</Text>
-                      </View>
+                      <Image
+                        style={styles.articleImg}
+                        source={{
+                          uri: `${serverUrl}gallery` + article.image,
+                        }}
+                      />
                       <View style={styles.articleBelow}>
                         <View style={styles.articleBtns}>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
-                          <View
-                            style={{
-                              borderRadius: 40,
-                              width: 40,
-                              height: 40,
-                              backgroundColor: 'green',
-                              marginRight: 10,
-                            }}></View>
+                          <TouchableOpacity
+                            style={{marginRight: 10}}
+                            onPress={async () => {
+                              const token = await AsyncStorage.getItem(
+                                'auth-token',
+                              );
+                              fetch(`${serverUrl}articles/articleLikeBtn/`, {
+                                method: 'POST',
+                                body: JSON.stringify({articleId: article.id}),
+                                headers: {
+                                  Authorization: `Token ${token}`,
+                                  'Content-Type': 'application/json',
+                                },
+                              })
+                                .then((response) => response.json())
+                                .then((response) => {
+                                  console.log(response);
+                                  const isliked = article.isliked;
+                                  const num_of_like = article.num_of_like;
+                                  if (response === 'like') {
+                                    this.setState({
+                                      articles: this.state.articles.map((art) =>
+                                        article.id === art.id
+                                          ? {
+                                              ...art,
+                                              isliked: !isliked,
+                                              num_of_like: num_of_like + 1,
+                                            }
+                                          : art,
+                                      ),
+                                    });
+                                  } else if (response === 'dislike') {
+                                    this.setState({
+                                      articles: this.state.articles.map((art) =>
+                                        article.id === art.id
+                                          ? {
+                                              ...art,
+                                              isliked: !isliked,
+                                              num_of_like: num_of_like - 1,
+                                            }
+                                          : art,
+                                      ),
+                                    });
+                                  }
+                                })
+                                .catch((err) => {
+                                  console.log(err);
+                                });
+                            }}>
+                            {article.isliked && (
+                              <Icon
+                                name="heart"
+                                style={{fontSize: 40, color: 'red'}}
+                              />
+                            )}
+                            {!article.isliked && (
+                              <Icon
+                                name="heart-outline"
+                                style={{fontSize: 40}}
+                              />
+                            )}
+                          </TouchableOpacity>
+                          {article.canComment && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                this.props.navigation.push('Comment', {
+                                  articleId: article.id,
+                                });
+                              }}>
+                              <Icon
+                                name="chatbubble-ellipses-outline"
+                                style={{fontSize: 40}}
+                              />
+                            </TouchableOpacity>
+                          )}
+                          {article.recipe !== '' && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                this.setModalVisible(true, article.recipe);
+                              }}>
+                              <Icon name="list-circle" style={{fontSize: 40}} />
+                            </TouchableOpacity>
+                          )}
+                          {!article.recipe && (
+                            <TouchableOpacity
+                              style={{marginRight: 10}}
+                              onPress={() => {
+                                alert('레시피가 없습니다');
+                              }}>
+                              <Icon
+                                name="list-circle-outline"
+                                style={{fontSize: 40}}
+                              />
+                            </TouchableOpacity>
+                          )}
                         </View>
-                        <Text
-                          style={{
-                            marginBottom: 10,
-                            fontSize: 20,
-                          }}>
-                          (하트) abcdefg님 외 1명이 좋아합니다.
+                        <View
+                          style={{flexDirection: 'row', alignItems: 'center'}}>
+                          {article.num_of_like > 0 && (
+                            <Icon
+                              name="heart"
+                              style={{
+                                fontSize: 20,
+                                color: 'red',
+                                marginRight: 5,
+                              }}
+                            />
+                          )}
+                          {article.num_of_like === 0 && (
+                            <Icon
+                              name="heart-outline"
+                              style={{fontSize: 20, marginRight: 5}}
+                            />
+                          )}
+                          {article.num_of_like > 2 && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}외{' '}
+                              {article.num_of_like - 1}
+                              명이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 2 && article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님과 회원님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 2 && !article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님과{' '}
+                              {article.user_2.username}님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 1 && article.isliked && (
+                            <Text style={styles.likeText}>
+                              회원님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 1 && !article.isliked && (
+                            <Text style={styles.likeText}>
+                              {article.user_1.username}님이 좋아합니다.
+                            </Text>
+                          )}
+                          {article.num_of_like === 0 && (
+                            <Text style={styles.likeText}>
+                              이 게시물에 첫 좋아요를 눌러주세요!
+                            </Text>
+                          )}
+                        </View>
+                        <Text style={styles.articleContent}>
+                          {article.content}
                         </Text>
-                        <Text>{article.content}</Text>
                       </View>
                     </View>
                   );
@@ -193,7 +362,7 @@ class Rank extends Component {
             </View>
           )}
           {this.state.active == 'btn2' && (
-            <View>
+            <View style={styles.Box}>
               {this.state.BestUser.map((user, i) => {
                 return (
                   <View style={styles.follow} key={user.id}>
@@ -283,11 +452,19 @@ const styles = StyleSheet.create({
   },
   rankBox: {
     alignSelf: 'center',
-    height: 200,
+    height: W * 0.5,
     width: '90%',
     borderRadius: 10,
     elevation: 5,
     backgroundColor: '#fff',
+    flexDirection: 'row',
+  },
+  topThree: {
+    width: '30%',
+    marginLeft: '2.5%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
   title: {
     fontSize: 25,
@@ -338,10 +515,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: '10%',
     marginLeft: '10%',
+    alignItems: 'center',
   },
   ranking: {
     marginRight: '5%',
-    fontSize: W * 0.08,
+    fontSize: W * 0.1,
     fontFamily: 'BMHANNA',
     width: W * 0.05,
   },
@@ -362,6 +540,55 @@ const styles = StyleSheet.create({
     width: W * 0.15,
     height: W * 0.15,
     marginRight: '5%',
+  },
+  Box: {
+    alignSelf: 'center',
+    width: '90%',
+    borderRadius: 10,
+    elevation: 5,
+    backgroundColor: '#fff',
+    paddingBottom: W * 0.1,
+  },
+  article: {
+    flexDirection: 'column',
+    width: '100%',
+    marginVertical: 20,
+  },
+  writer: {
+    marginLeft: '5%',
+    marginBottom: 10,
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  writerImg: {
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+  },
+  articleImg: {
+    width: '100%',
+    height: 400,
+    marginBottom: 10,
+  },
+  articleBelow: {
+    marginLeft: '5%',
+  },
+  likeText: {
+    marginBottom: 10,
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  tags: {
+    marginBottom: 10,
+    marginLeft: '5%',
+    width: '100%',
+    flexDirection: 'row',
+  },
+  articleBtns: {
+    width: '100%',
+    flexDirection: 'row',
+    marginBottom: 10,
   },
 });
 
