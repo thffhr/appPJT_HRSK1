@@ -275,6 +275,16 @@ function secondScreenStack({navigation}) {
         component={Login}
         options={{
           title: '로그인',
+          // headerLeft: () => (
+          //   <NavigationDrawerStructure navigationProps={navigation} />
+          // ),
+          // headerStyle: {
+          //   backgroundColor: '#f4511e', //Set Header color
+          // },
+          // headerTintColor: '#fff', //Set Header text color
+          // headerTitleStyle: {
+          //   fontWeight: 'bold', //Set Header text style
+          // },
         }}
       />
       <Stack.Screen

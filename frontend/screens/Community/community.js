@@ -40,13 +40,16 @@ class Community extends Component {
     };
   }
 
-  // async componentDidMount() {
-  //   // you might want to do the I18N setup here
-  //   this.setState({
-  //     username: await AsyncStorage.getItem('username'),
-  //     authToken: await AsyncStorage.getItem('auth-token'),
-  //   });
-  // }
+  async componentDidMount() {
+    // you might want to do the I18N setup here
+    this.setState({
+      username: await AsyncStorage.getItem('username'),
+      authToken: await AsyncStorage.getItem('auth-token'),
+    });
+    if (this.state.username === '') {
+      this.props.navigation.push('Login');
+    }
+  }
 
   onCreateSelect = () => {
     this.props.navigation.push('CreateSelect');
