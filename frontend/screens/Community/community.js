@@ -210,14 +210,21 @@ export default class Community extends Component {
                             }}
                           />
                         )}
-                        <Text
-                          style={{
-                            marginLeft: 10,
-                            fontSize: 20,
-                            fontWeight: 'bold',
+                        <TouchableHighlight
+                          onPress={() => {
+                            this.props.navigation.push('UserFeed', {
+                              username: article.user.username,
+                            });
                           }}>
-                          {article.user.username}
-                        </Text>
+                          <Text
+                            style={{
+                              marginLeft: 10,
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>
+                            {article.user.username}
+                          </Text>
+                        </TouchableHighlight>
                       </View>
                       {/* <View style={styles.tags}>
                           {article.tags.map((tag) => {
