@@ -21,12 +21,13 @@ class Update extends Component {
     super(props);
 
     this.state = {
-      username: '',
+      username: this.props.route.username,
+      active: this.props.route.active,
       age: '',
-      sex: '',
+      sex: this.props.route.sex,
       height: '',
       weight: '',
-      bm: '',
+      bm: this.props.route.bm,
     };
   }
   async componentDidMount() {
@@ -53,6 +54,7 @@ class Update extends Component {
           weight: response.weight,
           bm: response.basal_metabolism,
           profileImage: response.profileImage,
+          active: response.active,
         });
       })
       .catch((err) => {
@@ -64,6 +66,7 @@ class Update extends Component {
   };
   onProfile = async () => {
     const token = await AsyncStorage.getItem('auth-token');
+    
     if (this.state.height && this.state.weight && this.state.age) {
         fetch(`${serverUrl}accounts/update/`, {
         method: 'PATCH',
@@ -73,8 +76,7 @@ class Update extends Component {
           Authorization: `Token ${token}`,
         },
       })
-        // .then((response) => response.json())
-        // .then((response) => )
+        .then((response) => response.json())
         .then(() => {})
         .catch((err) => {
           console.log(err);
@@ -167,11 +169,23 @@ class Update extends Component {
           </View>
           <View style={styles.infoCon}>
             <Text style={styles.infoText}>{this.state.username}</Text>
-            <TextInput style={styles.infoText}>{age}</TextInput>
+            <TextInput value={this.state.age} onChangeText={(age) => {
+              this.setState({
+                age: age
+              })
+            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
             <Text style={styles.infoText}>{gender}</Text>
-            <TextInput style={styles.infoText}>{height}</TextInput>
-            <TextInput style={styles.infoText}>{weight}</TextInput>
-            <TextInput style={styles.infoText}>{this.state.bm}kcal</TextInput>
+            <TextInput value={this.state.height} onChangeText={(height) => {
+              this.setState({
+                height: height
+              })
+            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
+            <TextInput value={this.state.weight} onChangeText={(weight) => {
+              this.setState({
+                weight: weight
+              })
+            }} style={styles.infoText, {borderBottomWidth: 1}}></TextInput>
+            <Text style={styles.infoText}>{this.state.bm}kcal</Text>
           </View>
         </View>
           
@@ -192,7 +206,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImg: {
-    marginTop: W*0.1,
     width: W*0.3,
     height: W*0.3,
     marginBottom: W*0.15,
@@ -248,7 +261,7 @@ const styles = StyleSheet.create({
     fontFamily: 'BMHANNAAir',
     fontSize: W*0.05,
     margin: H*0.02,
-    borderBottomWidth: 1
+    
   },
   gohomeBtn: {
     backgroundColor: 'transparent',
@@ -265,16 +278,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   deleteBtn: {
-    marginTop: 50,
-    backgroundColor: 'transparent',
-    position: 'absolute',
-    bottom: 20,
-    alignItems: 'center',
+    marginTop: H*0.05
   },
   delText: {
-    color: 'blue',
-    borderBottomColor: 'blue',
-    borderBottomWidth: 1,
+    color: '#fca652',
+    fontFamily: 'BMHANNAAir',
+    fontSize: W*0.06
   },
 });
 
