@@ -31,6 +31,7 @@ export default class Community extends Component {
       selected: {id: null, image: null},
       modalData: '',
       modalVisible: false,
+      userData: {},
     };
   }
   componentDidMount() {
@@ -55,7 +56,6 @@ export default class Community extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log('All Articles: ', response);
         this.setState({
           articles: response,
         });
@@ -73,9 +73,21 @@ export default class Community extends Component {
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log('My Articles: ', response);
         this.setState({
           myArticles: response,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    fetch(`${serverUrl}accounts/profile/${username}/`, {
+      method: 'GET',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          userData: response,
         });
       })
       .catch((err) => {
@@ -386,33 +398,77 @@ export default class Community extends Component {
               </View>
             )}
             {!this.state.selectedHome && ( // My articles
-              <View style={styles.pictureBox}>
-                {this.state.myArticles.map((article) => {
-                  const borderColor =
-                    article.id === this.state.selected.id
-                      ? '#FCA652'
-                      : 'transparent';
-                  return (
-                    <TouchableOpacity
-                      style={[styles.imgBtn, {borderColor: borderColor}]}
-                      key={article.id}
-                      onPress={() => {
-                        this.setState({
-                          selected: {id: article.id, image: article.image},
-                        });
-                        this.props.navigation.push('MyFeed', {
-                          article: article,
-                        });
-                      }}>
+              <View>
+                <View style={styles.profileBox}>
+                  <View style={styles.imgBox}>
+                    {this.state.userData.profileImage && (
                       <Image
-                        style={styles.picture}
+                        style={styles.profileImg}
                         source={{
-                          uri: `${serverUrl}gallery` + article.image,
+                          uri:
+                            `${serverUrl}gallery` +
+                            this.state.userData.profileImage,
                         }}
                       />
-                    </TouchableOpacity>
-                  );
-                })}
+                    )}
+                    {!this.state.userData.profileImage && (
+                      <Image
+                        style={styles.profileImg}
+                        source={{
+                          uri:
+                            'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
+                        }}
+                      />
+                    )}
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        marginLeft: 5,
+                      }}>
+                      {this.state.userData.username}
+                    </Text>
+                  </View>
+                  <View style={styles.cntBox}>
+                    <Text style={styles.cntContent}>게시글</Text>
+                    <Text style={styles.cntContent}>0</Text>
+                  </View>
+                  <View style={styles.cntBox}>
+                    <Text style={styles.cntContent}>팔로워</Text>
+                    <Text style={styles.cntContent}>0</Text>
+                  </View>
+                  <View style={styles.cntBox}>
+                    <Text style={styles.cntContent}>팔로잉</Text>
+                    <Text style={styles.cntContent}>0</Text>
+                  </View>
+                </View>
+                <View style={styles.pictureBox}>
+                  {this.state.myArticles.map((article) => {
+                    const borderColor =
+                      article.id === this.state.selected.id
+                        ? '#FCA652'
+                        : 'transparent';
+                    return (
+                      <TouchableOpacity
+                        style={[styles.imgBtn, {borderColor: borderColor}]}
+                        key={article.id}
+                        onPress={() => {
+                          this.setState({
+                            selected: {id: article.id, image: article.image},
+                          });
+                          this.props.navigation.push('MyFeed', {
+                            article: article,
+                          });
+                        }}>
+                        <Image
+                          style={styles.picture}
+                          source={{
+                            uri: `${serverUrl}gallery` + article.image,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
               </View>
             )}
           </View>
@@ -532,6 +588,10 @@ const styles = StyleSheet.create({
     // width: '100%',
     flexDirection: 'row',
     flexWrap: 'wrap',
+    borderTopWidth: 1,
+    borderTopColor: '#232323',
+    marginVertical: 20,
+    paddingVertical: 20,
   },
   imgBtn: {
     width: '25%',
@@ -578,5 +638,24 @@ const styles = StyleSheet.create({
   articleContent: {
     fontSize: 20,
     fontFamily: 'BMEULJROTTF',
+  },
+
+  // profileBox
+  profileBox: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: 20,
+  },
+  imgBox: {},
+  profileImg: {
+    borderRadius: 50,
+    width: 50,
+    height: 50,
+  },
+  cntBox: {},
+  cntContent: {
+    textAlign: 'center',
+    fontSize: 20,
   },
 });

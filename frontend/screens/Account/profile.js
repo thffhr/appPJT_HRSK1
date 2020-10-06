@@ -37,7 +37,7 @@ class Profile extends Component {
     this.getInfo();
   }
   getInfo = () => {
-    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ class Profile extends Component {
     this.props.navigation.push('UpdateImg');
   };
   onUpdate = () => {
-    this.props.navigation.push('Update')
+    this.props.navigation.push('Update');
   };
   onDelete = async () => {
     const token = await AsyncStorage.getItem('auth-token');
@@ -177,33 +177,33 @@ class Profile extends Component {
           </View>
         </View>
         <TouchableOpacity
-            style={styles.logoutBtn}
-            onPress={async () => {
-              const token = await AsyncStorage.getItem('auth-token');
-              console.log(token);
-              if (token !== null) {
-                fetch('http://10.0.2.2:8080/rest-auth/logout/', {
-                  method: 'POST',
-                  header: {
-                    Authorization: `Token ${token}`,
-                  },
+          style={styles.logoutBtn}
+          onPress={async () => {
+            const token = await AsyncStorage.getItem('auth-token');
+            console.log(token);
+            if (token !== null) {
+              fetch('http://10.0.2.2:8080/rest-auth/logout/', {
+                method: 'POST',
+                header: {
+                  Authorization: `Token ${token}`,
+                },
+              })
+                .then(() => {
+                  console.log('로그아웃 성공');
+                  AsyncStorage.clear();
+                  this.props.navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [{name: 'Login'}],
+                    }),
+                  );
                 })
-                  .then(() => {
-                    console.log('로그아웃 성공');
-                    AsyncStorage.clear();
-                    this.props.navigation.dispatch(
-                      CommonActions.reset({
-                        index: 1,
-                        routes: [{name: 'Login'}],
-                      }),
-                    );
-                  })
-                  .catch((err) => console.error(err));
-              }
-            }}>
-            <Text style={styles.logoutText}>로그아웃</Text>
-          </TouchableOpacity>
-         {/*  
+                .catch((err) => console.error(err));
+            }
+          }}>
+          <Text style={styles.logoutText}>로그아웃</Text>
+        </TouchableOpacity>
+        {/*  
         <TouchableOpacity onPress={this.onDelete} style={styles.deleteBtn}>
           <Text style={styles.delText}>회원탈퇴</Text>
         </TouchableOpacity>
@@ -221,25 +221,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   profileImg: {
-    marginTop: W*0.1,
-    width: W*0.3,
-    height: W*0.3,
-    marginBottom: W*0.15,
+    marginTop: W * 0.1,
+    width: W * 0.3,
+    height: W * 0.3,
+    marginBottom: W * 0.15,
   },
   updateImgBtn: {
-    width: W*0.075,
-    height: W*0.075,
+    width: W * 0.075,
+    height: W * 0.075,
     backgroundColor: '#F1C40F',
-    borderRadius: W*0.075,
+    borderRadius: W * 0.075,
     position: 'absolute',
-    right: W*0.05,
-    bottom: W*0.125,
+    right: W * 0.05,
+    bottom: W * 0.125,
     zIndex: 2,
   },
   updateImg: {
-    width: W*0.05,
-    height: W*0.05,
-    margin: W*0.015,
+    width: W * 0.05,
+    height: W * 0.05,
+    margin: W * 0.015,
   },
   userInfo: {
     borderRadius: 5,
@@ -247,36 +247,36 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     elevation: 1,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.5,
   },
   infoItem: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infoTitle: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infoCon: {
-    marginTop: H*0.02,
-    marginBottom: H*0.02,
-    marginLeft: W*0.03,
-    marginRight: W*0.03,
+    marginTop: H * 0.02,
+    marginBottom: H * 0.02,
+    marginLeft: W * 0.03,
+    marginRight: W * 0.03,
   },
   infotitle: {
     fontFamily: 'BMDOHYEON',
-    fontSize: W*0.05,
-    margin: H*0.019,
+    fontSize: W * 0.05,
+    margin: H * 0.019,
   },
   infoText: {
     fontFamily: 'BMHANNAAir',
-    fontSize: W*0.05,
-    margin: H*0.02,
+    fontSize: W * 0.05,
+    margin: H * 0.02,
   },
   gohomeBtn: {
     backgroundColor: 'transparent',
@@ -288,17 +288,17 @@ const styles = StyleSheet.create({
     top: W * 0.03,
   },
   updateText: {
-    fontSize:  W * 0.05,
+    fontSize: W * 0.05,
     color: '#fca652',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   logoutBtn: {
-    marginTop: H*0.05
+    marginTop: H * 0.05,
   },
   logoutText: {
     color: '#fca652',
     fontFamily: 'BMHANNAAir',
-    fontSize: W*0.06
+    fontSize: W * 0.06,
   },
   // deleteBtn: {
   //   marginTop: 50,

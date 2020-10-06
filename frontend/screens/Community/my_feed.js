@@ -87,48 +87,6 @@ export default class MyFeed extends Component {
               onPress={this.onBack}
               style={styles.backBtn}></Icon>
           </View> */}
-          <View style={styles.profileBox}>
-            <View style={styles.imgBox}>
-              {this.state.article.user.profileImage && (
-                <Image
-                  style={styles.profileImg}
-                  source={{
-                    uri:
-                      `${serverUrl}gallery` +
-                      this.state.article.user.profileImage,
-                  }}
-                />
-              )}
-              {!this.state.article.user.profileImage && (
-                <Image
-                  style={styles.profileImg}
-                  source={{
-                    uri:
-                      'https://cdn2.iconfinder.com/data/icons/circle-icons-1/64/profle-256.png',
-                  }}
-                />
-              )}
-              <Text
-                style={{
-                  fontSize: 20,
-                  marginLeft: 5,
-                }}>
-                {this.state.article.user.username}
-              </Text>
-            </View>
-            <View style={styles.cntBox}>
-              <Text style={styles.cntContent}>게시글</Text>
-              <Text style={styles.cntContent}>0</Text>
-            </View>
-            <View style={styles.cntBox}>
-              <Text style={styles.cntContent}>팔로워</Text>
-              <Text style={styles.cntContent}>0</Text>
-            </View>
-            <View style={styles.cntBox}>
-              <Text style={styles.cntContent}>팔로잉</Text>
-              <Text style={styles.cntContent}>0</Text>
-            </View>
-          </View>
 
           <View style={styles.article}>
             <View style={styles.writer}>
@@ -339,32 +297,11 @@ const styles = StyleSheet.create({
   //   fontSize: 30,
   // },
 
-  // profileBox
-  profileBox: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    margin: 20,
-  },
-  imgBox: {},
-  profileImg: {
-    borderRadius: 50,
-    width: 50,
-    height: 50,
-  },
-  cntBox: {},
-  cntContent: {
-    textAlign: 'center',
-    fontSize: 20,
-  },
-
   article: {
     flexDirection: 'column',
     width: '100%',
     marginVertical: 20,
     paddingVertical: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#232323',
   },
   writer: {
     marginLeft: '5%',
