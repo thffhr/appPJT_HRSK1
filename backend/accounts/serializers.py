@@ -9,4 +9,4 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['id', 'username', 'email', 'password', 'height', 'weight',
-                  'age', 'sex', 'active', 'basal_metabolism', 'profileImage']
+                  'age', 'sex', 'active', 'basal_metabolism', 'profileImage', 'num_of_followings', 'num_of_followers']

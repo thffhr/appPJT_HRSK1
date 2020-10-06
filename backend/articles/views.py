@@ -266,3 +266,13 @@ def del_reply(request, reply_id):
     if reply.user == request.user or request.user.is_superuser:
         reply.delete()
         return Response("답글이 삭제되었습니다.")
+
+
+@api_view(['POST'])
+def getBestArticles(request):
+    bestarticles = models.Article.objects.order_by('-num_of_like')[:10]
+    lst = []
+    for article in bestarticles:
+        serializer = serializers.Article(article)
+        lst.append(serializer.data)
+    return Response(lst)

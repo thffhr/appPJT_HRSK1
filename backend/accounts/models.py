@@ -21,3 +21,6 @@ class User(AbstractUser):
         settings.AUTH_USER_MODEL,
         related_name='following'
     )
+
+    num_of_followings = models.IntegerField(default=0)
+    num_of_followers = models.IntegerField(default=0)
