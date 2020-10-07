@@ -9,7 +9,8 @@ import {
 import {AsyncStorage, Image} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
-const serverUrl = 'http://10.0.2.2:8080/';
+// const serverUrl = 'http://10.0.2.2:8080/';
+const serverUrl = 'http://j3a410.p.ssafy.io/api/';
 
 const {width, height} = Dimensions.get('screen');
 const H = Dimensions.get('window').height;
@@ -185,7 +186,7 @@ class Profile extends Component {
             const token = await AsyncStorage.getItem('auth-token');
             console.log(token);
             if (token !== null) {
-              fetch('http://10.0.2.2:8080/rest-auth/logout/', {
+              fetch(`${serverUrl}rest-auth/logout/`, {
                 method: 'POST',
                 header: {
                   Authorization: `Token ${token}`,
