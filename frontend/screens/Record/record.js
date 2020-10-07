@@ -1,12 +1,17 @@
-import React, {Component, useRef, useState, useEffect} from 'react';
+import React, {
+  Component,
+  //  useRef, useState, useEffect
+} from 'react';
 import {
   View,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
+  Modal,
+  TouchableHighlight,
   // ProgressBarAndroid,
-  Animated,
+  // Animated,
   Dimensions,
   Image,
   AsyncStorage,
@@ -120,6 +125,7 @@ export default class Record extends Component {
       whatInfo: false,
       dayMenus: {},
       TotalCal: 0,
+      modalVisible: false,
       // btn3
       selectedDate: {
         date: null,
@@ -172,6 +178,7 @@ export default class Record extends Component {
       token: authToken,
       whatInfo: false,
       TotalCal: 0,
+      modalVisible: false,
     });
     this.onFetch(year, month, date, day);
     this.getbasal();
@@ -366,27 +373,32 @@ export default class Record extends Component {
     });
   };
 
-  minusCnt = (year, month, date, day, mealtime) => {
-    var newYear = this.pad(`${year}`, 4);
-    var newMonth = this.pad(`${month}`, 2);
-    var newDate = this.pad(`${date}`, 2);
-    var SendDate = `${newYear}-${newMonth}-${newDate}`;
-    var form = new FormData();
-    form.append('date', SendDate);
-    form.append('mealtime', mealtime);
-    fetch(`${serverUrl}gallery/minusCnt/`, {
-      method: 'POST',
-      body: form,
-      headers: {
-        Authorization: `Token ${this.state.token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        this.onFetch(year, month, date, day);
+  minusCnt = (year, month, date, day, mealtime, cnt) => {
+    if (cnt <= 1) {
+      this.setModalVisible(true, year, month, date, mealtime);
+    } else {
+      var newYear = this.pad(`${year}`, 4);
+      var newMonth = this.pad(`${month}`, 2);
+      var newDate = this.pad(`${date}`, 2);
+      var SendDate = `${newYear}-${newMonth}-${newDate}`;
+      var form = new FormData();
+      form.append('date', SendDate);
+      form.append('mealtime', mealtime);
+      fetch(`${serverUrl}gallery/minusCnt/`, {
+        method: 'POST',
+        body: form,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Token ${this.state.token}`,
+        },
       })
-      .catch((err) => console.error(err));
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          this.onFetch(year, month, date, day);
+        })
+        .catch((err) => console.error(err));
+    }
   };
 
   plusCnt = (year, month, date, day, mealtime) => {
@@ -408,6 +420,41 @@ export default class Record extends Component {
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
+        this.onFetch(year, month, date, day);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  setModalVisible = (visible, year, month, date, mealtime) => {
+    this.setState({
+      modalVisible: visible,
+      modal_year: year,
+      modal_month: month,
+      modal_date: date,
+      modal_mealtime: mealtime,
+    });
+  };
+
+  delMenu = () => {
+    var newYear = this.pad(`${this.state.modal_year}`, 4);
+    var newMonth = this.pad(`${this.state.modal_month}`, 2);
+    var newDate = this.pad(`${this.state.modal_date}`, 2);
+    var SendDate = `${newYear}-${newMonth}-${newDate}`;
+    var form = new FormData();
+    form.append('date', SendDate);
+    form.append('mealtime', this.state.modal_mealtime);
+    fetch(`${serverUrl}gallery/deleteMenu/`, {
+      method: 'POST',
+      body: form,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Token ${this.state.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setModalVisible(!this.state.modalVisible);
         this.onFetch(year, month, date, day);
       })
       .catch((err) => console.error(err));
@@ -438,6 +485,45 @@ export default class Record extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}>
+          <View
+            style={{
+              width: '100%',
+              height: height,
+              backgroundColor: 'black',
+              opacity: 0.5,
+            }}></View>
+        </Modal>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert('Modal has been closed.');
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={{marginBottom: 10}}>식단을 삭제하시겠습니까?</Text>
+              <TouchableHighlight
+                style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}>
+                <Text style={styles.textStyle}>아니오</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={{...styles.openButton, backgroundColor: '#2196F3'}}
+                onPress={() => {
+                  this.delMenu();
+                }}>
+                <Text style={styles.textStyle}>네</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
@@ -610,6 +696,8 @@ export default class Record extends Component {
                                         style={{
                                           fontSize: 20,
                                           marginTop: 2,
+                                          marginLeft: 20,
+                                          marginRight: 10,
                                         }}
                                         onPress={() =>
                                           this.minusCnt(
@@ -618,6 +706,7 @@ export default class Record extends Component {
                                             this.state.dateTime.date,
                                             this.state.dateTime.day,
                                             k,
+                                            v['cnt'],
                                           )
                                         }></Icon>
                                       <Text style={{fontSize: 18}}>
@@ -628,6 +717,7 @@ export default class Record extends Component {
                                         style={{
                                           fontSize: 20,
                                           marginTop: 2,
+                                          marginHorizontal: 10,
                                         }}
                                         onPress={() =>
                                           this.plusCnt(
@@ -645,18 +735,22 @@ export default class Record extends Component {
                             </>
                           )}
                           {v.flag && (
-                            <View style={{margin: 20, alignContent: 'center'}}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                alignContent: 'center',
+                              }}>
                               <TouchableOpacity
                                 style={{
                                   position: 'relative',
-                                  bottom: 45,
-                                  left: 267,
+                                  bottom: 25,
+                                  left: 287,
                                 }}
                                 onPress={() => this.touchCalbox(k, false)}>
                                 <Text>수량 보기</Text>
                               </TouchableOpacity>
                               <Pie
-                                radius={80}
+                                radius={65}
                                 sections={[
                                   {
                                     percentage: v['nutrient'][0], //탄수화물
@@ -673,6 +767,26 @@ export default class Record extends Component {
                                 ]}
                                 strokeCap={'butt'}
                               />
+                              <View style={{marginTop: 20, marginLeft: 20}}>
+                                <Text>
+                                  <Icon
+                                    name="ellipse"
+                                    style={{color: '#FBC02D'}}></Icon>
+                                  탄수화물 {v['nutrient'][0].toFixed(1)}%
+                                </Text>
+                                <Text>
+                                  <Icon
+                                    name="ellipse"
+                                    style={{color: '#FFEB3B'}}></Icon>
+                                  단백질 {v['nutrient'][1].toFixed(1)}%
+                                </Text>
+                                <Text>
+                                  <Icon
+                                    name="ellipse"
+                                    style={{color: '#FFF59D'}}></Icon>
+                                  지방 {v['nutrient'][2].toFixed(1)}%
+                                </Text>
+                              </View>
                             </View>
                           )}
                         </View>
@@ -964,6 +1078,33 @@ const styles = StyleSheet.create({
   picture: {
     width: '100%',
     height: '100%',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    backgroundColor: '#F194FF',
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
   },
   // btn3
   dateBox: {
