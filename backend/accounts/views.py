@@ -200,12 +200,16 @@ def isfollow(request, username):
     if user.followers.filter(id=request.user.id).exists():
         result = {"follow": "True"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(True)
     else:
         result = {"follow": "False"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(False)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_basal(request):
+    return Response(int(request.user.basal_metabolism))
 
 @api_view(['POST'])
 def getBestUsers(request):

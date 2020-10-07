@@ -62,26 +62,55 @@ def getImage(request, uri):
 @permission_classes([IsAuthenticated])
 def getChart(request, date):
     Menus = Menu.objects.filter(user=request.user, created_at__contains=date)
-    Send = {}
+    Send = {'TotalCal' : 0, 'Menus': {'아침':{}, '점심':{}, '저녁':{}, '간식':{}, '야식':{},}}
+    # Send = {'TotalCal' : 0, }
     for i in range(len(Menus)):
         time = ['아침', '점심', '저녁', '간식', '야식']
+        cnt = Menus[i].count
         for t in range(len(time)):
             if Menus[i].mealTime == time[t]:
                 print(t, Menus[i].mealTime)
-                Foods = Menus[i].foods.all()
+                food = Menus[i].food
+                print(food)
+                print(food.DESC_KOR)
                 T, D, G = 0, 0, 0
-                Send[time[t]] = {}
-                Send[time[t]]['meal'] = []
-                for food in Foods:
-                    Send[time[t]]['meal'].append([food.DESC_KOR, food.NUTR_CONT1])
-                    T += int(food.NUTR_CONT2)
-                    D += int(food.NUTR_CONT3)
-                    G += int(food.NUTR_CONT4)
+                Send['Menus'][time[t]] = {}
+                Send['Menus'][time[t]]['meal'] = []
+                # for food in Foods:
+                Send['Menus'][time[t]]['meal'].append([food.DESC_KOR, int(food.NUTR_CONT1)*cnt])
+                T += int(food.NUTR_CONT2)*cnt
+                D += int(food.NUTR_CONT3)*cnt
+                G += int(food.NUTR_CONT4)*cnt
                 print(T, D, G)
                 total = T+D+G
-                Send[time[t]]['nutrient'] = [(T/total)*100, (D/total)*100, (G/total)*100]
+                Send['Menus'][time[t]]['nutrient'] = [(T/total)*100, (D/total)*100, (G/total)*100]
+                Send['Menus'][time[t]]['cnt'] = cnt
+        Send['TotalCal'] += int(Menus[i].totalCal)*cnt
     print(Send)
     return Response(Send)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def plusCnt(request):
+    print(request.data)
+    d = request.data['date']
+    mt = request.data['mealtime']
+    selectedMenu = get_object_or_404(Menu, user=request.user, created_at__contains=d, mealTime=mt)
+    selectedMenu.count += 1
+    selectedMenu.save()
+    print(selectedMenu.count)
+    return Response('늘렸다')
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def minusCnt(request):
+    d2 = request.data['date']
+    mt2 = request.data['mealtime']
+    selectedMenu2 = get_object_or_404(Menu, user=request.user, created_at__contains=d2, mealTime=mt2)
+    selectedMenu2.count -= 1
+    selectedMenu2.save()
+    print(selectedMenu2.count)
+    return Response('줄었다')
 
 
 @api_view(['GET'])
@@ -102,6 +131,8 @@ def getCalendar(request):
             MenusDict[created_at.split()[0]][2] += float(Menus[i].totalCal)
         elif Menus[i].mealTime == '간식':
             MenusDict[created_at.split()[0]][3] += float(Menus[i].totalCal)
-        else:
+        elif Menus[i].mealTime == '야식':
             MenusDict[created_at.split()[0]][4] += float(Menus[i].totalCal)
+        else:
+            MenusDict[created_at.split()[0]][5] += float(Menus[i].totalCal)
     return Response(MenusDict)
