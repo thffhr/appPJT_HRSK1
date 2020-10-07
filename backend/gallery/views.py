@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Menu
+from .models import Menu2food
+from .models import Food
+
 from .serializers import MenuSerializer
 from accounts.serializers import UserSerializer
 from rest_framework.response import Response
@@ -14,56 +17,104 @@ import base64
 # Create your views here.
 from keras.models import load_model
 from keras.preprocessing import image
+import cv2
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def saveMenu(request):
     def predict_img(uri):
-        def preprocess_input(x):
-            x_copy = np.copy(x)
-            x_copy = x_copy.astype('float32')
-            x_copy = x_copy*1./255
-            return x_copy
-
-        model = load_model('inceptionv3_multiclass_best.h5')
+        net = cv2.dnn.readNet("yolov2-food100.weights", "yolo-food100.cfg")
+        classes = []
+        with open("food100.names", "r") as f:
+            classes = [line.strip() for line in f.readlines()]
+        layer_names = net.getLayerNames()
+        output_layers = [layer_names[i[0] - 1] for i in net.getUnconnectedOutLayers()]
+        colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
         img_path = uri
-        img = image.load_img(img_path, target_size=(
-            299, 299))  # input 사이즈에 맞게 변환
+        img = cv2.imread(img_path)
+        height, width, channels = img.shape
 
-        x = image.img_to_array(img)
-        x = preprocess_input(x)
-        x = np.expand_dims(x, axis=0)
+        blob = cv2.dnn.blobFromImage(img, 0.00392, (416, 416), (0, 0, 0), True, crop=True)  # 네트워크에 넣기 위한 전처리
+        net.setInput(blob)  # 전처리된 blob 네트워크에 입력
+        outs = net.forward(output_layers)  # 결과 받아오기
 
-        r = open('label.txt', mode='rt', encoding='utf-8')
-        lines = r.readlines()
-        results = []
-        for line in lines:
-            results.append(line[12:])
-
-        res = model.predict(x)
-        top_label_ix = np.argmax(res)
-        print('최고점수:', res[0][top_label_ix])
-        print('적중음식:', results[top_label_ix])
-        ord = np.argsort(res)[0][::-1]
-
-        # for i in range(5):
-        #     print(results[ord[i]][:-2])
-        return results[ord[0]][:-2]
+        class_ids = []
+        confidences = []
+        boxes = []
+        for out in outs:
+            for detection in out:
+                scores = detection[5:]
+                class_id = np.argmax(scores)
+                confidence = scores[class_id]
+                if confidence > 0.3:
+                    # 탐지된 객체의 너비, 높이 및 중앙 좌표값 찾기
+                    center_x = int(detection[0] * width)
+                    center_y = int(detection[1] * height)
+                    # print(center_x,center_y)
+                    # w = abs(int(detection[2] * width))
+                    h = abs(int(detection[3] * height))
+                    # print(w,h)
+                    # 객체의 사각형 테두리 중 좌상단 좌표값 찾기
+                    x = abs(int(center_x - w / 2))
+                    y = abs(int(center_y - h / 2))
+                    boxes.append([x, y, w, h])
+                    confidences.append(float(confidence))
+                    class_ids.append(class_id)
+        indexes = cv2.dnn.NMSBoxes(boxes, confidences, 0.3,0.3)  # Non Maximum Suppression (겹쳐있는 박스 중 confidence 가 가장 높은 박스를 선택)
+        #최종적으로 indexes에 음식에 매치된 번호가 들어감 boxes에는 검출돤 하나의 음식에 대한 좌표
+        font = cv2.FONT_HERSHEY_PLAIN
+        det_foods = []
+        for i in range(len(boxes)): #검출된 음식 개수만큼 돔
+            if i in indexes:  # i에 검출된 음식 번호
+                x, y, w, h = boxes[i]
+                class_name = classes[class_ids[i]]
+                label = f"{class_name} {boxes[i]}"
+                det_foods.append(label)
+                #print(class_name) # 검출된 음식 이름 ex) pizza ..
+                #print(confidences[i]) #검출된 확률
+                color = colors[i]
+                # 사각형 테두리 그리기 및 텍스트 쓰기
+                cv2.rectangle(img, (x, y), (x + w, y + h), color, 2)
+                cv2.rectangle(img, (x - 1, y), (x + len(class_name) * 13, y - 12), color, -1)
+                cv2.putText(img, class_name, (x, y - 4), cv2.FONT_HERSHEY_COMPLEX_SMALL, 0.5, (0, 0, 0), 1, cv2.LINE_AA)
+        #리스트 형식으로 반환
+        # 사진은 반환 어케?
+        return det_foods,img # 여기서 img는 사용자에게 뿌릴 이미지
 
     new_menu = Menu()
     new_menu.user = request.user
     # type, fileName, data << 각각 프론트에서 보낼 수 있는 데이터
     decoded_data = base64.b64decode(request.data['data'])
     new_menu.image = ContentFile(
-        decoded_data, name=f"{request.data['fileName']}")
+        decoded_data, name=f"{request.data['fileName']}") # url
     print(type(new_menu.image))
     # predict_img(new_menu.image)
-    new_menu.save()
-    predict = predict_img('media/' + str(new_menu.image))
-    print(predict)
+    new_menu.save() #insert
+
+    foodlist , img = predict_img('media/' + str(new_menu.image))
+    print(foodlist)
+
+    #menu2food에 값넣기
+    for i in range(len(foodlist)):
+        idx = foodlist[i].find("[")
+        new_food = Menu2food()
+        new_food.image = ContentFile(
+            decoded_data, name=f"{request.data['fileName']}")  # url
+        kfoodName =  convert(foodlist[i][0:idx])
+        new_food.foodName = kfoodName# 여기에는 한글이름
+        foods = get_object_or_404(Food,DESC_KOR = kfoodName)
+        new_food.food = foods.NUM
+        #new_food.food 는 같은 이름 찾아서 넣어야댐
+        new_food.location = foodlist[i][idx:] #좌표값
+        new_food.save()
+
+
+
+    #predict = predict_img('media/' + str(new_menu.image)) #db 저장 위치
     return Response("파일을 저장했습니다.")
     # response = FileResponse(open(f"media/image/{request.data['fileName']}", 'rb'))
     # return response
