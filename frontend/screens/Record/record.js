@@ -109,6 +109,7 @@ export default class Record extends Component {
       // btn1
       pictures: [],
       selected: {id: null, image: null},
+      pictureTime: {},
       // btn2
       dateTime: {
         year: year,
@@ -118,14 +119,16 @@ export default class Record extends Component {
       },
       whatInfo: false,
       dayMenus: {},
+      TotalCal: 0,
       // btn3
       selectedDate: {
         date: null,
-        breakfast: 0,
-        lunch: 0,
-        dinner: 0,
-        snack: 0,
-        total: 0,
+        아침: 0,
+        점심: 0,
+        저녁: 0,
+        간식: 0,
+        야식: 0,
+        총합: 0,
       },
       nextDays: {},
     };
@@ -168,8 +171,10 @@ export default class Record extends Component {
       active: 'btn2',
       token: authToken,
       whatInfo: false,
+      TotalCal: 0,
     });
     this.onFetch(year, month, date, day);
+    this.getbasal();
   };
   onBtn3 = async () => {
     const authToken = await AsyncStorage.getItem('auth-token');
@@ -191,6 +196,7 @@ export default class Record extends Component {
         this.setState({
           nextDays: response,
         });
+        console.log(response);
         var tempObject = {};
         for (var key of Object.keys(this.state.nextDays)) {
           tempObject = {
@@ -214,11 +220,12 @@ export default class Record extends Component {
         selectedDate: {
           ...this.state.selectedDate,
           date: day.dateString,
-          breakfast: this.state.nextDays[day.dateString][0],
-          lunch: this.state.nextDays[day.dateString][1],
-          dinner: this.state.nextDays[day.dateString][2],
-          snack: this.state.nextDays[day.dateString][3],
-          total: this.state.nextDays[day.dateString][4],
+          아침: this.state.nextDays[day.dateString][0],
+          점심: this.state.nextDays[day.dateString][1],
+          저녁: this.state.nextDays[day.dateString][2],
+          간식: this.state.nextDays[day.dateString][3],
+          야식: this.state.nextDays[day.dateString][4],
+          총합: this.state.nextDays[day.dateString][5],
         },
       });
     } else {
@@ -297,6 +304,24 @@ export default class Record extends Component {
       day = 0;
     }
     this.onFetch(year, month, date, day);
+    this.getbasal();
+  };
+
+  getbasal = () => {
+    fetch(`${serverUrl}accounts/getbasal/`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Token ${this.state.token}`,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        this.setState({
+          basal: response,
+        });
+      })
+      .catch((err) => console.error(err));
   };
 
   onFetch = (year, month, date, day) => {
@@ -325,18 +350,67 @@ export default class Record extends Component {
       .then((response) => response.json())
       .then((response) => {
         this.setState({
-          dayMenus: response,
+          dayMenus: response['Menus'],
+          TotalCal: response['TotalCal'],
         });
         // console.log(this.state.dayMenus);
       })
       .catch((err) => console.error(err));
   };
 
-  //댓글
-  touchCalbox = () => {
+  touchCalbox = (key, tf) => {
+    var calboxObj = this.state.dayMenus;
+    calboxObj[key]['flag'] = tf;
     this.setState({
-      whatInfo: !this.state.whatInfo,
+      dayMenus: calboxObj,
     });
+  };
+
+  minusCnt = (year, month, date, day, mealtime) => {
+    var newYear = this.pad(`${year}`, 4);
+    var newMonth = this.pad(`${month}`, 2);
+    var newDate = this.pad(`${date}`, 2);
+    var SendDate = `${newYear}-${newMonth}-${newDate}`;
+    var form = new FormData();
+    form.append('date', SendDate);
+    form.append('mealtime', mealtime);
+    fetch(`${serverUrl}gallery/minusCnt/`, {
+      method: 'POST',
+      body: form,
+      headers: {
+        Authorization: `Token ${this.state.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.onFetch(year, month, date, day);
+      })
+      .catch((err) => console.error(err));
+  };
+
+  plusCnt = (year, month, date, day, mealtime) => {
+    var newYear = this.pad(`${year}`, 4);
+    var newMonth = this.pad(`${month}`, 2);
+    var newDate = this.pad(`${date}`, 2);
+    var SendDate = `${newYear}-${newMonth}-${newDate}`;
+    var form = new FormData();
+    form.append('date', SendDate);
+    form.append('mealtime', mealtime);
+    fetch(`${serverUrl}gallery/plusCnt/`, {
+      method: 'POST',
+      body: form,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Token ${this.state.token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.onFetch(year, month, date, day);
+      })
+      .catch((err) => console.error(err));
   };
 
   pad = (n, width) => {
@@ -363,7 +437,7 @@ export default class Record extends Component {
   };
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.navbar}>
           <Text style={styles.haru}>하루세끼</Text>
         </View>
@@ -384,7 +458,7 @@ export default class Record extends Component {
             <Text style={styles.btnText}>달력</Text>
           </TouchableOpacity>
         </View>
-        <View style={{width: '100%'}}>
+        <ScrollView style={{width: '100%'}}>
           {this.state.active == 'btn2' && ( // chart
             <View style={styles.chartArea}>
               {/* 여기는 요일 */}
@@ -424,15 +498,59 @@ export default class Record extends Component {
                   }></Icon>
               </View>
               {/* 여기는 총 칼로리*/}
-              <Text style={styles.caltxt}>1000/1500</Text>
-              <View style={styles.progressBar}>
-                <Animated.View
-                  style={
-                    ([styles.progressBarFill],
-                    {backgroundColor: '#8BED4F', width: '66%'}) //, chartwidth
-                  }
-                />
-              </View>
+              <Text style={styles.caltxt}>
+                {this.state.TotalCal}/{this.state.basal}
+              </Text>
+              {this.state.TotalCal / this.state.basal < 1 && (
+                <View style={styles.progressBar}>
+                  {/* <Animated.View
+                    style={
+                      ([styles.progressBarFill],
+                      {
+                        backgroundColor: '#fca652',
+                        width: `${
+                          (this.state.TotalCal / this.state.basal) * 100
+                        }%`,
+                      }) //, chartwidth
+                    }
+                  /> */}
+                  <View
+                    style={
+                      ([styles.progressBarFill],
+                      {
+                        backgroundColor: '#fca652',
+                        width: `${
+                          (this.state.TotalCal / this.state.basal) * 100
+                        }%`,
+                      }) //, chartwidth
+                    }></View>
+                  <View style={styles.arrow}></View>
+                  <View style={styles.arrowbox}>
+                    <Text style={styles.arrowboxtxt}>
+                      {this.state.TotalCal}
+                    </Text>
+                  </View>
+                </View>
+              )}
+              {this.state.TotalCal / this.state.basal >= 1 && (
+                <View style={styles.progressBar}>
+                  <View
+                    style={
+                      ([styles.progressBarFill],
+                      {
+                        backgroundColor: 'red',
+                        width: `100%`,
+                      }) //, chartwidth
+                    }></View>
+                  <View style={styles.arrow}></View>
+                  <View style={styles.arrowbox}>
+                    <Text style={styles.arrowboxtxt}>
+                      {this.state.TotalCal}
+                    </Text>
+                  </View>
+                </View>
+              )}
+
               {/* 여기는 영양소 */}
               <View
                 style={{
@@ -441,69 +559,126 @@ export default class Record extends Component {
                   alignItems: 'center',
                 }}>
                 {Object.entries(this.state.dayMenus).map(([k, v], idx) => {
-                  return (
-                    <>
-                      {/* <Text key={idx}>{k}</Text> */}
-                      <View style={styles.calbox} key={idx}>
-                        <TouchableOpacity onPress={this.touchCalbox}>
-                          <Text>차트보기</Text>
-                        </TouchableOpacity>
-                        <View style={styles.calboxTitle}>
-                          <Icon
-                            name="restaurant-outline"
-                            style={{fontSize: 20, marginTop: 2}}></Icon>
-                          <Text style={{fontSize: 20, marginLeft: 5}}>{k}</Text>
-                        </View>
-                        {!this.state.whatInfo && (
-                          <>
-                            {v['meal'].map((m, i) => {
-                              return (
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-between',
-                                    borderBottomWidth: 1,
-                                    marginTop: 10,
-                                  }}
-                                  key={i}>
-                                  <Text style={{fontSize: 18, marginLeft: 10}}>
-                                    {m[0]}
-                                  </Text>
-                                  <Text style={{fontSize: 18}}>{m[1]}kcal</Text>
-                                  <Text style={{fontSize: 18}}>1그릇</Text>
-                                </View>
-                              );
-                            })}
-                          </>
-                        )}
-                        {this.state.whatInfo && (
-                          //  v['nutrient'][0] //탄수화물
-                          // v['nutrient'][1] //단백질
-                          // v['nutrient'][2] //지방
-                          <View style={{margin: 20, alignContent: 'center'}}>
-                            <Pie
-                              radius={80}
-                              sections={[
-                                {
-                                  percentage: v['nutrient'][0],
-                                  color: '#FBC02D',
-                                },
-                                {
-                                  percentage: v['nutrient'][1],
-                                  color: '#FFEB3B',
-                                },
-                                {
-                                  percentage: v['nutrient'][2],
-                                  color: '#FFF59D',
-                                },
-                              ]}
-                              strokeCap={'butt'}
-                            />
+                  console.log(k, v);
+                  if (Object.keys(v).length !== 0) {
+                    return (
+                      <>
+                        {/* <Text key={idx}>{k}</Text> */}
+                        <View style={styles.calbox} key={idx}>
+                          <View style={styles.calboxTitle}>
+                            <Icon
+                              name="restaurant-outline"
+                              style={{fontSize: 20, marginTop: 2}}></Icon>
+                            <Text style={{fontSize: 20, marginLeft: 5}}>
+                              {k}
+                            </Text>
                           </View>
-                        )}
-                      </View>
-                    </>
-                  );
+                          {!v.flag && (
+                            <>
+                              <TouchableOpacity
+                                style={{
+                                  position: 'relative',
+                                  bottom: 25,
+                                  left: 290,
+                                }}
+                                onPress={() => this.touchCalbox(k, true)}>
+                                <Text>차트보기</Text>
+                              </TouchableOpacity>
+                              {v['meal'].map((m, i) => {
+                                return (
+                                  <View
+                                    style={{
+                                      flexDirection: 'row',
+                                      justifyContent: 'space-between',
+                                      // borderBottomWidth: 1,
+                                      marginTop: 10,
+                                    }}
+                                    key={i}>
+                                    <Text
+                                      style={{fontSize: 18, marginLeft: 10}}>
+                                      {m[0]}
+                                    </Text>
+                                    <View
+                                      style={{
+                                        flexDirection: 'row',
+                                      }}>
+                                      <Text style={{fontSize: 18}}>
+                                        {m[1]}kcal
+                                      </Text>
+                                      <Icon
+                                        name="remove-circle-outline"
+                                        style={{
+                                          fontSize: 20,
+                                          marginTop: 2,
+                                        }}
+                                        onPress={() =>
+                                          this.minusCnt(
+                                            this.state.dateTime.year,
+                                            this.state.dateTime.month,
+                                            this.state.dateTime.date,
+                                            this.state.dateTime.day,
+                                            k,
+                                          )
+                                        }></Icon>
+                                      <Text style={{fontSize: 18}}>
+                                        {v['cnt']}
+                                      </Text>
+                                      <Icon
+                                        name="add-circle-outline"
+                                        style={{
+                                          fontSize: 20,
+                                          marginTop: 2,
+                                        }}
+                                        onPress={() =>
+                                          this.plusCnt(
+                                            this.state.dateTime.year,
+                                            this.state.dateTime.month,
+                                            this.state.dateTime.date,
+                                            this.state.dateTime.day,
+                                            k,
+                                          )
+                                        }></Icon>
+                                    </View>
+                                  </View>
+                                );
+                              })}
+                            </>
+                          )}
+                          {v.flag && (
+                            <View style={{margin: 20, alignContent: 'center'}}>
+                              <TouchableOpacity
+                                style={{
+                                  position: 'relative',
+                                  bottom: 45,
+                                  left: 267,
+                                }}
+                                onPress={() => this.touchCalbox(k, false)}>
+                                <Text>수량 보기</Text>
+                              </TouchableOpacity>
+                              <Pie
+                                radius={80}
+                                sections={[
+                                  {
+                                    percentage: v['nutrient'][0], //탄수화물
+                                    color: '#FBC02D',
+                                  },
+                                  {
+                                    percentage: v['nutrient'][1], //단백질
+                                    color: '#FFEB3B',
+                                  },
+                                  {
+                                    percentage: v['nutrient'][2], //지방
+                                    color: '#FFF59D',
+                                  },
+                                ]}
+                                strokeCap={'butt'}
+                              />
+                            </View>
+                          )}
+                        </View>
+                      </>
+                    );
+                  }
                 })}
               </View>
             </View>
@@ -520,13 +695,24 @@ export default class Record extends Component {
                     style={[styles.imgBtn, {borderColor: borderColor}]}
                     key={picture.id}
                     onPress={() => {
+                      const time = picture['created_at'];
+                      const year = time.substring(0, 4);
+                      const month = time.substring(5, 7);
+                      const date = time.substring(8, 10);
+                      const pictureDate = {
+                        year: year,
+                        month: month,
+                        date: date,
+                      };
+
                       this.setState({
                         selected: {id: picture.id, image: picture.image},
                       });
                       this.props.navigation.push('DetailImage', {
                         imageId: picture.id,
                         image: picture.image,
-                        // dateTime: this.state.dateTime,
+                        picture: picture,
+                        pictureDate: pictureDate,
                       });
                     }}>
                     <Image
@@ -602,9 +788,6 @@ export default class Record extends Component {
                 // renderHeader={(date) => {/*Return JSX*/}}
                 // Enable the option to swipe between months. Default = false
                 enableSwipeMonths={true}
-                // markedDates={{
-                // '2020-10-05': {marked: true},
-                // }}
                 theme={{
                   todayTextColor: '#FCA652',
                   backgroundColor: '#FFFBE6',
@@ -615,16 +798,19 @@ export default class Record extends Component {
                 this.state.selectedDate.date,
               ) && (
                 <View style={styles.dateBox}>
-                  <Text>{this.state.selectedDate.date}</Text>
+                  <Text style={{textAlign: 'center', fontSize: 25}}>
+                    {this.state.selectedDate.date}
+                  </Text>
                   {Object.entries(this.state.selectedDate)
                     .filter(([key, value]) => key !== 'date')
                     .map(([key, value], i) => {
                       return (
                         <View style={styles.macroBox} key={i}>
-                          <Text>
-                            {key} {value}
+                          <Text style={styles.macroTxt}>{key}</Text>
+                          <Text style={styles.macroTxt}>
+                            {value}
+                            {'   '}kcal
                           </Text>
-                          <Text>kcal</Text>
                         </View>
                       );
                     })}
@@ -632,15 +818,14 @@ export default class Record extends Component {
               )}
             </View>
           )}
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     width: '100%',
     flex: 1,
     backgroundColor: '#FFFBE6',
@@ -709,13 +894,15 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
     width: '90%',
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 5,
+    elevation: 5,
+    backgroundColor: 'white',
   },
   calboxTitle: {
     flexDirection: 'row',
   },
-  calchart: {},
+  // calchart: {},
   caltxt: {
     fontSize: 30,
     fontWeight: 'bold',
@@ -738,6 +925,30 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '50%',
   },
+  arrow: {
+    width: 15,
+    height: 15,
+    position: 'relative',
+    top: 20,
+    left: -8,
+    backgroundColor: '#332c2b',
+    transform: [{rotate: '45deg'}],
+  },
+  arrowbox: {
+    width: 60,
+    height: 40,
+    position: 'relative',
+    top: 25,
+    right: 45,
+    backgroundColor: '#332c2b',
+    borderRadius: 3,
+    justifyContent: 'center',
+  },
+  arrowboxtxt: {
+    color: 'white',
+    fontSize: 20,
+    textAlign: 'center',
+  },
   // btn1
   pictureBox: {
     // width: '100%',
@@ -759,14 +970,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 10,
     borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#000000',
+    backgroundColor: '#fff',
+    elevation: 3,
+    paddingVertical: 10,
   },
   macroBox: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
     borderBottomColor: 'gray',
+    marginHorizontal: 10,
+  },
+  macroTxt: {
+    fontSize: 20,
+    fontFamily: 'BMHANNAAir',
+    color: '#232323',
+    paddingTop: 20,
+    marginHorizontal: 15,
+    marginVertical: 10,
   },
   calendarArea: {
     width: '100%',

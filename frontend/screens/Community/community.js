@@ -210,14 +210,21 @@ export default class Community extends Component {
                             }}
                           />
                         )}
-                        <Text
-                          style={{
-                            marginLeft: 10,
-                            fontSize: 20,
-                            fontWeight: 'bold',
+                        <TouchableHighlight
+                          onPress={() => {
+                            this.props.navigation.push('UserFeed', {
+                              username: article.user.username,
+                            });
                           }}>
-                          {article.user.username}
-                        </Text>
+                          <Text
+                            style={{
+                              marginLeft: 10,
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>
+                            {article.user.username}
+                          </Text>
+                        </TouchableHighlight>
                       </View>
                       {/* <View style={styles.tags}>
                           {article.tags.map((tag) => {
@@ -430,7 +437,9 @@ export default class Community extends Component {
                   </View>
                   <View style={styles.cntBox}>
                     <Text style={styles.cntContent}>게시글</Text>
-                    <Text style={styles.cntContent}>0</Text>
+                    <Text style={styles.cntContent}>
+                      {this.state.myArticles.length}
+                    </Text>
                   </View>
                   <View style={styles.cntBox}>
                     <Text style={styles.cntContent}>팔로워</Text>

@@ -273,6 +273,6 @@ def getBestArticles(request):
     bestarticles = models.Article.objects.order_by('-num_of_like')[:10]
     lst = []
     for article in bestarticles:
-        serializer = serializers.Article(article)
+        serializer = serializers.ArticleSerializer(article)
         lst.append(serializer.data)
     return Response(lst)
