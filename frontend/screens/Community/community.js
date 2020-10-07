@@ -555,6 +555,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     textAlign: 'center',
+    fontFamily: 'BMHANNA',
   },
   tags: {
     marginBottom: 10,
@@ -646,8 +647,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   articleContent: {
+    marginBottom: 30,
     fontSize: 20,
-    fontFamily: 'BMEULJROTTF',
+    fontFamily: 'HANNAAir',
   },
 
   // profileBox

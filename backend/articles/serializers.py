@@ -5,12 +5,16 @@ from accounts.serializers import UserSerializer
 
 class ArticleSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
-    created_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False)
-    updated_at = serializers.DateTimeField(format="%Y-%m-%d %H:%M:%S", required=False)
+    created_at = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S", required=False)
+    updated_at = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S", required=False)
+    user_1 = UserSerializer(required=False)
+    user_2 = UserSerializer(required=False)
 
     class Meta:
         model = models.Article
-        exclude = ['tag']
+        exclude = ['tag', 'like_users']
         # fields = '__all__'
         # fields = ['user', 'tag', 'content', 'recipe']
         # read_only_fields = ('id', 'user', 'created_at', 'updated_at')
@@ -32,6 +36,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Comment
         fields = '__all__'
+
 
 class ReplySerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
