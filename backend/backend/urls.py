@@ -51,6 +51,7 @@ urlpatterns = [
     # 로그인 & 로그아웃
     path('rest-auth/', include('rest_auth.urls')),
     path('gallery/', include('gallery.urls')),
+    path('food/', include('food.urls'))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

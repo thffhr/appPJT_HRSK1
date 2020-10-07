@@ -14,3 +14,10 @@ class Menu(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     count = models.IntegerField(default=1)
     totalCal = models.IntegerField(null=True)
+    
+class Menu2food(models.Model):
+    image = models.ForeignKey(Menu,
+                              on_delete=models.CASCADE)  # Menuid가 들어가는거
+    food = models.ForeignKey(Food,
+                             on_delete=models.CASCADE)  # food id가 들어가는거
+    location = models.TextField(null=False)  # 좌상우하, 좌표값
