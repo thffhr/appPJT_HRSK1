@@ -10,11 +10,10 @@ class Menu(models.Model):
                              on_delete=models.CASCADE)
     image = models.FileField(upload_to="image", null=True)
     mealTime = models.CharField(max_length=2, blank=True)  # 아침/점심/저녁/간식/야식
-    foods = models.ManyToManyField(
-        Food, related_name="foods", blank=True)  # 음식 이름, 칼로리, 영양성분(탄/단/지)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     totalCal = models.IntegerField(null=True)
-    
+
+
 class Menu2food(models.Model):
     image = models.ForeignKey(Menu,
                               on_delete=models.CASCADE)  # Menuid가 들어가는거
