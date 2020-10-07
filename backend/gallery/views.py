@@ -112,6 +112,14 @@ def minusCnt(request):
     print(selectedMenu2.count)
     return Response('줄었다')
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def deleteMenu(request):
+    del_d = request.data['date']
+    del_mt = request.data['mealtime']
+    del_Menu = get_object_or_404(Menu, user=request.user, created_at__contains=del_d, mealTime=del_mt)
+    del_Menu.delete()
+    return Response("식단이 삭제되었습니다.")
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
