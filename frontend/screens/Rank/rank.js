@@ -60,11 +60,13 @@ class Rank extends Component {
       active: 'btn2',
     });
   };
-  getArticles = () => {
+  getArticles = async () => {
+    const token = await AsyncStorage.getItem('auth-token');
     fetch(`${serverUrl}articles/getbest/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
       },
     })
       .then((response) => response.json())
@@ -188,7 +190,8 @@ class Rank extends Component {
                           style={{
                             marginLeft: 10,
                             fontSize: 20,
-                            fontWeight: 'bold',
+                            fontFamily: 'BMHANNA',
+                            marginBottom: 5,
                           }}>
                           {article.user.username}
                         </Text>
@@ -305,7 +308,7 @@ class Rank extends Component {
                             <Icon
                               name="heart"
                               style={{
-                                fontSize: 20,
+                                fontSize: 30,
                                 color: 'red',
                                 marginRight: 5,
                               }}
@@ -314,7 +317,7 @@ class Rank extends Component {
                           {article.num_of_like === 0 && (
                             <Icon
                               name="heart-outline"
-                              style={{fontSize: 20, marginRight: 5}}
+                              style={{fontSize: 30, marginRight: 5}}
                             />
                           )}
                           {article.num_of_like > 2 && (
@@ -578,6 +581,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontSize: 20,
     textAlign: 'center',
+    fontFamily: 'BMHANNA',
   },
   tags: {
     marginBottom: 10,
@@ -589,6 +593,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     marginBottom: 10,
+  },
+  articleContent: {
+    fontSize: 20,
+    fontFamily: 'HANNAAir',
+    marginBottom: 30,
   },
 });
 

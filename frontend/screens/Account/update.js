@@ -128,7 +128,7 @@ class Update extends Component {
     } else if (genderCheck == 'female') {
       gender = '여성';
     } else {
-      gender = '정보 없음';
+      gender = '남성';
     }
     return (
       <View style={styles.container}>

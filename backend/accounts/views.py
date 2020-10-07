@@ -94,6 +94,7 @@ def update_info(request):
     save_data['age'] = int(request.data['age'])
     save_data['weight'] = int(request.data['weight'])
     save_data['height'] = int(request.data['height'])
+    basal_metabolism = 0
     if request.data['sex'] == 'male':
         print(1)
         basal_metabolism = 66.47 + \
@@ -112,7 +113,6 @@ def update_info(request):
         basal_metabolism *= 0.9
 
     request.data['basal_metabolism'] = int(basal_metabolism)
-    print(basal_metabolism)
     serializer = UserSerializer(user, data=save_data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
