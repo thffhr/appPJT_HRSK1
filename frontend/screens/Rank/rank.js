@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
+const serverUrl = 'http://j3a410.p.ssafy.io/api/';
+
 class Rank extends Component {
   constructor(props) {
     super(props);
@@ -79,7 +81,7 @@ class Rank extends Component {
                     fontWeight: 'bold',
                     marginLeft: '5%',
                     marginBottom: 10,
-                    color: 'gray'
+                    color: 'gray',
                   }}>
                   Top 3
                 </Text>
@@ -119,8 +121,7 @@ class Rank extends Component {
                             <View style={styles.tag}>
                               <Text
                                 key={tag}
-                                style={{fontSize: 15, color: 'white'}}
-                                >
+                                style={{fontSize: 15, color: 'white'}}>
                                 #{tag}
                               </Text>
                             </View>
@@ -244,14 +245,14 @@ const styles = StyleSheet.create({
   rankBox: {
     alignSelf: 'center',
     height: 200,
-    width:"90%",
-    backgroundColor:"transparent",
-    borderRadius:10,
+    width: '90%',
+    backgroundColor: 'transparent',
+    borderRadius: 10,
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.5,
-    shadowRadius: 10, 
+    shadowRadius: 10,
   },
   articles: {
     width: '100%',
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     borderColor: '#FFFBE6',
     backgroundColor: '#fca652',
     padding: 7.5,
-    marginRight: 10
+    marginRight: 10,
   },
   articleBtns: {
     width: '100%',
