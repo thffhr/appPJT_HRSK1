@@ -14,7 +14,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('screen');
-const serverUrl = 'http://10.0.2.2:8080/';
+// const serverUrl = 'http://10.0.2.2:8080/';
+const serverUrl = 'http://j3a410.p.ssafy.io/';
 
 export default class MyFeed extends Component {
   constructor(props) {

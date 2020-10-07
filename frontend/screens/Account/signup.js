@@ -11,6 +11,9 @@ import {
 import {AsyncStorage} from 'react-native';
 import {CommonActions} from '@react-navigation/native';
 
+// const serverUrl = 'http://10.0.2.2:8080/';
+const serverUrl = 'http://j3a410.p.ssafy.io/';
+
 const H = Dimensions.get('window').height;
 const W = Dimensions.get('window').width;
 
@@ -28,7 +31,7 @@ class Signup extends Component {
     };
   }
   onSignup = () => {
-    fetch('http://10.0.2.2:8080/rest-auth/signup/', {
+    fetch(`${serverUrl}rest-auth/signup/`, {
       method: 'POST',
       body: JSON.stringify(this.state.signupData),
       headers: {
