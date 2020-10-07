@@ -14,8 +14,8 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width, height} = Dimensions.get('screen');
-// const serverUrl = 'http://10.0.2.2:8080/';
-const serverUrl = 'http://j3a410.p.ssafy.io/api/';
+const serverUrl = 'http://10.0.2.2:8080/';
+// const serverUrl = 'http://j3a410.p.ssafy.io/api/';
 
 export default class MyFeed extends Component {
   constructor(props) {
@@ -82,13 +82,6 @@ export default class MyFeed extends Component {
         </Modal>
 
         <ScrollView>
-          {/* <View style={styles.detailHeader}>
-            <Icon
-              name="arrow-back"
-              onPress={this.onBack}
-              style={styles.backBtn}></Icon>
-          </View> */}
-
           <View style={styles.article}>
             <View style={styles.writer}>
               {this.state.article.user.profileImage && (
@@ -126,144 +119,145 @@ export default class MyFeed extends Component {
                 uri: `${serverUrl}gallery` + this.state.article.image,
               }}
             />
-
-            <View style={styles.articleBtns}>
-              <TouchableOpacity
-                style={{marginRight: 10}}
-                onPress={async () => {
-                  const token = await AsyncStorage.getItem('auth-token');
-                  fetch(`${serverUrl}articles/articleLikeBtn/`, {
-                    method: 'POST',
-                    body: JSON.stringify({articleId: this.state.article.id}),
-                    headers: {
-                      Authorization: `Token ${token}`,
-                      'Content-Type': 'application/json',
-                    },
-                  })
-                    .then((response) => response.json())
-                    .then((response) => {
-                      console.log(response);
-                      const isliked = this.state.article.isliked;
-                      const num_of_like = this.state.article.num_of_like;
-                      if (response === 'like') {
-                        this.setState({
-                          article: {
-                            ...this.state.article,
-                            isliked: !isliked,
-                            num_of_like: num_of_like + 1,
-                          },
-                        });
-                      } else if (response === 'dislike') {
-                        this.setState({
-                          article: {
-                            ...this.state.article,
-                            isliked: !isliked,
-                            num_of_like: num_of_like - 1,
-                          },
-                        });
-                      }
+            <View style={styles.articleBelow}>
+              <View style={styles.articleBtns}>
+                <TouchableOpacity
+                  style={{marginRight: 10}}
+                  onPress={async () => {
+                    const token = await AsyncStorage.getItem('auth-token');
+                    fetch(`${serverUrl}articles/articleLikeBtn/`, {
+                      method: 'POST',
+                      body: JSON.stringify({articleId: this.state.article.id}),
+                      headers: {
+                        Authorization: `Token ${token}`,
+                        'Content-Type': 'application/json',
+                      },
                     })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }}>
-                {this.state.article.isliked && (
-                  <Icon name="heart" style={{fontSize: 40, color: 'red'}} />
+                      .then((response) => response.json())
+                      .then((response) => {
+                        console.log(response);
+                        const isliked = this.state.article.isliked;
+                        const num_of_like = this.state.article.num_of_like;
+                        if (response === 'like') {
+                          this.setState({
+                            article: {
+                              ...this.state.article,
+                              isliked: !isliked,
+                              num_of_like: num_of_like + 1,
+                            },
+                          });
+                        } else if (response === 'dislike') {
+                          this.setState({
+                            article: {
+                              ...this.state.article,
+                              isliked: !isliked,
+                              num_of_like: num_of_like - 1,
+                            },
+                          });
+                        }
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  }}>
+                  {this.state.article.isliked && (
+                    <Icon name="heart" style={{fontSize: 40, color: 'red'}} />
+                  )}
+                  {!this.state.article.isliked && (
+                    <Icon name="heart-outline" style={{fontSize: 40}} />
+                  )}
+                </TouchableOpacity>
+                {this.state.article.canComment && (
+                  <TouchableOpacity
+                    style={{marginRight: 10}}
+                    onPress={() => {
+                      this.props.navigation.push('Comment', {
+                        articleId: this.state.article.id,
+                      });
+                    }}>
+                    <Icon
+                      name="chatbubble-ellipses-outline"
+                      style={{fontSize: 40}}
+                    />
+                  </TouchableOpacity>
                 )}
-                {!this.state.article.isliked && (
-                  <Icon name="heart-outline" style={{fontSize: 40}} />
+                {this.state.article.recipe !== '' && (
+                  <TouchableOpacity
+                    style={{marginRight: 10}}
+                    onPress={() => {
+                      this.setModalVisible(true, this.state.article.recipe);
+                    }}>
+                    <Icon name="list-circle" style={{fontSize: 40}} />
+                  </TouchableOpacity>
                 )}
-              </TouchableOpacity>
-              {this.state.article.canComment && (
-                <TouchableOpacity
-                  style={{marginRight: 10}}
-                  onPress={() => {
-                    this.props.navigation.push('Comment', {
-                      articleId: this.state.article.id,
-                    });
-                  }}>
-                  <Icon
-                    name="chatbubble-ellipses-outline"
-                    style={{fontSize: 40}}
-                  />
-                </TouchableOpacity>
-              )}
-              {this.state.article.recipe !== '' && (
-                <TouchableOpacity
-                  style={{marginRight: 10}}
-                  onPress={() => {
-                    this.setModalVisible(true, this.state.article.recipe);
-                  }}>
-                  <Icon name="list-circle" style={{fontSize: 40}} />
-                </TouchableOpacity>
-              )}
-              {!this.state.article.recipe && (
-                <TouchableOpacity
-                  style={{marginRight: 10}}
-                  onPress={() => {
-                    alert('레시피가 없습니다');
-                  }}>
-                  <Icon name="list-circle-outline" style={{fontSize: 40}} />
-                </TouchableOpacity>
-              )}
-            </View>
+                {!this.state.article.recipe && (
+                  <TouchableOpacity
+                    style={{marginRight: 10}}
+                    onPress={() => {
+                      alert('레시피가 없습니다');
+                    }}>
+                    <Icon name="list-circle-outline" style={{fontSize: 40}} />
+                  </TouchableOpacity>
+                )}
+              </View>
 
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-              {this.state.article.num_of_like > 0 && (
-                <Icon
-                  name="heart"
-                  style={{
-                    fontSize: 20,
-                    color: 'red',
-                    marginRight: 5,
-                  }}
-                />
-              )}
-              {this.state.article.num_of_like === 0 && (
-                <Icon
-                  name="heart-outline"
-                  style={{fontSize: 20, marginRight: 5}}
-                />
-              )}
-              {this.state.article.num_of_like > 2 && (
-                <Text style={styles.likeText}>
-                  {article.user_1.username}외 {article.num_of_like - 1}
-                  명이 좋아합니다.
-                </Text>
-              )}
-              {this.state.article.num_of_like === 2 &&
-                this.state.article.isliked && (
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                {this.state.article.num_of_like > 0 && (
+                  <Icon
+                    name="heart"
+                    style={{
+                      fontSize: 20,
+                      color: 'red',
+                      marginRight: 5,
+                    }}
+                  />
+                )}
+                {this.state.article.num_of_like === 0 && (
+                  <Icon
+                    name="heart-outline"
+                    style={{fontSize: 20, marginRight: 5}}
+                  />
+                )}
+                {this.state.article.num_of_like > 2 && (
                   <Text style={styles.likeText}>
-                    {this.state.article.user_1.username}님과 회원님이
-                    좋아합니다.
+                    {article.user_1.username}외 {article.num_of_like - 1}
+                    명이 좋아합니다.
                   </Text>
                 )}
-              {this.state.article.num_of_like === 2 &&
-                !this.state.article.isliked && (
+                {this.state.article.num_of_like === 2 &&
+                  this.state.article.isliked && (
+                    <Text style={styles.likeText}>
+                      {this.state.article.user_1.username}님과 회원님이
+                      좋아합니다.
+                    </Text>
+                  )}
+                {this.state.article.num_of_like === 2 &&
+                  !this.state.article.isliked && (
+                    <Text style={styles.likeText}>
+                      {this.state.article.user_1.username}님과{' '}
+                      {this.state.article.user_2.username}님이 좋아합니다.
+                    </Text>
+                  )}
+                {this.state.article.num_of_like === 1 &&
+                  this.state.article.isliked && (
+                    <Text style={styles.likeText}>회원님이 좋아합니다.</Text>
+                  )}
+                {this.state.article.num_of_like === 1 &&
+                  !this.state.article.isliked && (
+                    <Text style={styles.likeText}>
+                      {this.state.article.user_1.username}님이 좋아합니다.
+                    </Text>
+                  )}
+                {this.state.article.num_of_like === 0 && (
                   <Text style={styles.likeText}>
-                    {this.state.article.user_1.username}님과{' '}
-                    {this.state.article.user_2.username}님이 좋아합니다.
+                    이 게시물에 첫 좋아요를 눌러주세요!
                   </Text>
                 )}
-              {this.state.article.num_of_like === 1 &&
-                this.state.article.isliked && (
-                  <Text style={styles.likeText}>회원님이 좋아합니다.</Text>
-                )}
-              {this.state.article.num_of_like === 1 &&
-                !this.state.article.isliked && (
-                  <Text style={styles.likeText}>
-                    {this.state.article.user_1.username}님이 좋아합니다.
-                  </Text>
-                )}
-              {this.state.article.num_of_like === 0 && (
-                <Text style={styles.likeText}>
-                  이 게시물에 첫 좋아요를 눌러주세요!
-                </Text>
-              )}
+              </View>
+              <Text style={styles.articleContent}>
+                {this.state.article.content}
+              </Text>
             </View>
-            <Text style={styles.articleContent}>
-              {this.state.article.content}
-            </Text>
           </View>
         </ScrollView>
       </View>
@@ -320,6 +314,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 400,
     marginBottom: 10,
+  },
+  articleBelow: {
+    marginLeft: '5%',
   },
   articleBtns: {
     width: '100%',
