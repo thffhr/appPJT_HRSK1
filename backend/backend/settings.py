@@ -26,7 +26,7 @@ SECRET_KEY = 'sp*v7csxdt$$r!dqs_i_4_nx3k28-6f=05!c(wm^u^)sc@#4mk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'j3a410.p.ssafy.io']
 
 
 # Application definition
@@ -170,3 +170,5 @@ MEDIA_URL = '/media/'  # 항상 / 로 끝나도록 설정
 
 # 업로드된 파일을 저장할 디렉토리 경로
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+Force_SCRIPT_NAME = '/api'
