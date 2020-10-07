@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from .serializers import UserSerializer
 from django.http import HttpResponse
 import json
+import base64
+from django.core.files.base import ContentFile
+import os
 # from rest_framework.serializers import ModelSerializer
 
 # from django.views.decorators.csrf import csrf_exempt
@@ -91,6 +94,7 @@ def update_info(request):
     save_data['age'] = int(request.data['age'])
     save_data['weight'] = int(request.data['weight'])
     save_data['height'] = int(request.data['height'])
+    basal_metabolism = 0
     if request.data['sex'] == 'male':
         print(1)
         basal_metabolism = 66.47 + \
@@ -109,11 +113,43 @@ def update_info(request):
         basal_metabolism *= 0.9
 
     request.data['basal_metabolism'] = int(basal_metabolism)
-    print(basal_metabolism)
     serializer = UserSerializer(user, data=save_data, partial=True)
     if serializer.is_valid(raise_exception=True):
         serializer.save()
         return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_profileImage(request):
+    user = request.user
+    old_img = 'media/' + str(user.profileImage)
+
+    decoded_data = base64.b64decode(request.data['data'])
+    new_profileImg = ContentFile(
+        decoded_data, name=f"image/{request.data['fileName']}")
+    save_data = {}
+    save_data['profileImage'] = new_profileImg
+    user = request.user
+    print('이름:', user.username)
+    serializer = UserSerializer(user, data=save_data, partial=True)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save()
+        if os.path.isfile(old_img):
+            os.remove(old_img)
+        return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def del_profile(request):
+    user = request.user
+    if user.profileImage:
+        old_img = 'media/' + str(user.profileImage)
+        user.profileImage.delete(save=True)
+        if os.path.isfile(old_img):
+            os.remove(old_img)
+        return Response('프로필이미지 삭제')
 
 
 @api_view(['POST'])
@@ -133,15 +169,24 @@ def follow(request, username):
     if user != request.user:
         if user.followers.filter(id=request.user.id).exists():
             user.followers.remove(request.user)
-            request.user.followings.remove(user)
+            user.num_of_followers -= 1
+            user.save()
 
-            result = {"result": "팔로우 실패"}
+            request.user.followings.remove(user)
+            request.user.num_of_followings -= 1
+            request.user.save()
+
+            result = {"result": "팔로우 취소"}
             result = json.dumps(result)
             return HttpResponse(result, content_type=u"application/json; charset=utf-8")
 
         else:
             user.followers.add(request.user)
+            user.num_of_followers += 1
+            user.save()
             request.user.followings.add(user)
+            request.user.num_of_followings += 1
+            request.user.save()
 
             result = {"result": "팔로우 성공"}
             result = json.dumps(result)
@@ -155,8 +200,22 @@ def isfollow(request, username):
     if user.followers.filter(id=request.user.id).exists():
         result = {"follow": "True"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(True)
     else:
         result = {"follow": "False"}
         result = json.dumps(result)
-        return HttpResponse(result, content_type=u"application/json; charset=utf-8")
+        return Response(False)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_basal(request):
+    return Response(int(request.user.basal_metabolism))
+
+@api_view(['POST'])
+def getBestUsers(request):
+    BestUsers = User.objects.order_by('-num_of_followers')[:5]
+    lst = []
+    for BestUser in BestUsers:
+        serializer = UserSerializer(BestUser)
+        lst.append(serializer.data)
+    return Response(lst)

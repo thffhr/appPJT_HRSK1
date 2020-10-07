@@ -24,6 +24,8 @@ from rest_framework import routers, permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
+from django.conf.urls.static import static
+
 # swagger 정보 설정, 관련 엔드포인트 추가
 # swagger 엔드포인트는 DEBUG Mode에서만 노출
 schema_view = get_schema_view(
@@ -48,7 +50,10 @@ urlpatterns = [
     path('rest-auth/signup/', include('rest_auth.registration.urls')),
     # 로그인 & 로그아웃
     path('rest-auth/', include('rest_auth.urls')),
+    path('gallery/', include('gallery.urls')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += [
