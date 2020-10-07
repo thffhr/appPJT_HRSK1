@@ -17,9 +17,6 @@ urlpatterns = [
     path('pimg/update/', views.update_profileImage, name='profileImage'),
     path('pimg/delete/', views.del_profile, name='delProfile'),
     # path('recommend/<str:username>/', views.recommend, name='recommend'),
-<<<<<<< HEAD
     path('getbasal/', views.get_basal, name='getbasal'),
-=======
     path('bestusers/', views.getBestUsers, name='getBestUsers')
->>>>>>> 160af50ef7df819d1550eb85da68e796485636a5
 ]
