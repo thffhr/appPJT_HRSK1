@@ -22,6 +22,7 @@ export default class DetatilImage extends Component {
       image: this.props.route.params.image,
       picture: this.props.route.params.picture,
       dateTime: this.props.route.params.pictureDate,
+      position: [120, 130, 300, 300],
     };
   }
   onBack = () => {
@@ -53,6 +54,16 @@ export default class DetatilImage extends Component {
                 uri: `${serverUrl}gallery` + this.state.image,
               }}
             />
+            <View
+              style={{
+                position: 'absolute',
+                left: this.state.position[0],
+                top: this.state.position[1],
+                width: this.state.position[2] - this.state.position[0],
+                height: this.state.position[3] - this.state.position[1],
+                borderWidth: 2,
+                borderColor: '#2bff32',
+              }}></View>
           </ScrollView>
         </View>
       </View>
@@ -94,6 +105,8 @@ const styles = StyleSheet.create({
   imageBody: {},
   image: {
     height: width,
+    position: 'relative',
+    zIndex: 0,
   },
   // date
   chartDayicon: {

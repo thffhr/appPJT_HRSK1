@@ -12,13 +12,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const serverUrl = 'http://10.0.2.2:8080/';
+// const serverUrl = 'http://10.0.2.2:8080/';
+const serverUrl = 'http://j3a410.p.ssafy.io/api/';
 
 const H = Dimensions.get('window').height;
 const W = Dimensions.get('window').width;
-import {CommonActions} from '@react-navigation/native';
-
-const serverUrl = 'http://j3a410.p.ssafy.io/api/';
 
 class Rank extends Component {
   constructor(props) {
@@ -126,7 +124,6 @@ class Rank extends Component {
           {this.state.active == 'btn1' && (
             <View style={{width: '100%'}}>
               <View style={styles.rankArea}>
-<<<<<<< HEAD
                 <Text style={styles.title}>Top 3</Text>
                 <View style={styles.rankBox}>
                   {this.state.BestArticle.map((article) => {
@@ -165,19 +162,6 @@ class Rank extends Component {
                     );
                   })}
                 </View>
-=======
-                <Text
-                  style={{
-                    fontSize: 25,
-                    fontWeight: 'bold',
-                    marginLeft: '5%',
-                    marginBottom: 10,
-                    color: 'gray',
-                  }}>
-                  Top 3
-                </Text>
-                <View style={styles.rankBox}></View>
->>>>>>> 3cbd834842dc52a930fd1b9cc36cb18254ce5196
               </View>
               <View style={styles.articles}>
                 <Text style={styles.title}>인기식단</Text>
@@ -212,39 +196,12 @@ class Rank extends Component {
                           {article.user.username}
                         </Text>
                       </View>
-<<<<<<< HEAD
                       <Image
                         style={styles.articleImg}
                         source={{
                           uri: `${serverUrl}gallery` + article.image,
                         }}
                       />
-=======
-                      <View style={styles.tags}>
-                        {article.tags.map((tag) => {
-                          return (
-                            <View style={styles.tag}>
-                              <Text
-                                key={tag}
-                                style={{fontSize: 15, color: 'white'}}>
-                                #{tag}
-                              </Text>
-                            </View>
-                          );
-                        })}
-                      </View>
-                      <View
-                        style={{
-                          width: '100%',
-                          height: 400,
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          backgroundColor: 'orange',
-                          marginBottom: 10,
-                        }}>
-                        <Text>이미지자리</Text>
-                      </View>
->>>>>>> 3cbd834842dc52a930fd1b9cc36cb18254ce5196
                       <View style={styles.articleBelow}>
                         <View style={styles.articleBtns}>
                           <TouchableOpacity
@@ -498,7 +455,6 @@ const styles = StyleSheet.create({
   },
   rankBox: {
     alignSelf: 'center',
-<<<<<<< HEAD
     height: W * 0.5,
     width: '90%',
     borderRadius: 10,
@@ -519,17 +475,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: '#696969',
     fontFamily: 'BMDOHYEON',
-=======
-    height: 200,
-    width: '90%',
-    backgroundColor: 'transparent',
-    borderRadius: 10,
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
->>>>>>> 3cbd834842dc52a930fd1b9cc36cb18254ce5196
   },
   articles: {
     width: '100%',
