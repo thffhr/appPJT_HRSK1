@@ -315,6 +315,5 @@ def getBestArticles(request):
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 articles_All.append(serializer.data)
-        
-    return Response(articles_All)
 
+    return Response(articles_All)
