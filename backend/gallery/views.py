@@ -207,13 +207,13 @@ def saveMenu(request):
     for i in range(len(foodlist)):
         idx = foodlist[i].find("[")
         new_food = Menu2food()
-        fname = det_foods[i][0:idx].strip()
+        fname = foodlist[i][0:idx].strip()
         kfoodName = my_dict[fname]
-        input_menu = get_object_or_404(Menu, id=new_menu.id)
+        # input_menu = get_object_or_404(Menu, id=new_menu.id)
         foods = get_object_or_404(Food, DESC_KOR=kfoodName)
         # new_food.food 는 같은 이름 찾아서 넣어야댐
         new_food.location = foodlist[i][idx:]  # 좌표값
-        new_food.save(image=input_menw, food=foods)
+        new_food.save(image=new_food, food=foods)
 
     # predict = predict_img('media/' + str(new_menu.image)) #db 저장 위치
     return Response("파일을 저장했습니다.")
