@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 
+// const serverUrl = 'http://localhost:8080/';
 // const serverUrl = 'http://10.0.2.2:8080/';
 const serverUrl = 'http://j3a410.p.ssafy.io/api/';
 
@@ -70,10 +71,16 @@ class Startsex extends Component {
             다음
           </Text>
         </TouchableOpacity>
-        <Image
-          source={require('../../assets/images/sex.png')}
-          style={styles.image}
-        />
+        <View style={{width: W * 0.4, height: W * 0.4}}>
+          <Image
+            // source={require('../../assets/images/sex.png')}
+            source={{
+              uri:
+                'https://cdn3.iconfinder.com/data/icons/virus-transmision/32/gender_corona_virus_covid19-256.png',
+            }}
+            style={styles.image}
+          />
+        </View>
         <Text
           style={{
             fontSize: W * 0.06,
@@ -131,8 +138,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFBE6',
   },
   image: {
-    width: W * 0.5,
-    height: W * 0.4,
+    // width: W * 0.6,
+    // height: W * 0.6,
+    width: '100%',
+    height: '100%',
   },
   selectboxes: {
     flexDirection: 'row',
