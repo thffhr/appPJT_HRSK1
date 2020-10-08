@@ -52,7 +52,6 @@ export default class DetatilImage extends Component {
                 {this.state.dateTime.date}일
               </Text>
             </View>
-            {/* <View style={styles.btnBox}> */}
             {!this.state.onCaption && (
               <Icon
                 style={styles.onCaption}
@@ -67,7 +66,6 @@ export default class DetatilImage extends Component {
                 name="eye-off"
               />
             )}
-            {/* </View> */}
           </View>
           <ScrollView style={styles.imageBody}>
             <Image
