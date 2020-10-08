@@ -270,9 +270,51 @@ def del_reply(request, reply_id):
 
 @api_view(['POST'])
 def getBestArticles(request):
+    user = request.user
     bestarticles = models.Article.objects.order_by('-num_of_like')[:10]
-    lst = []
+    articles_All = []
     for article in bestarticles:
-        serializer = serializers.Article(article)
-        lst.append(serializer.data)
-    return Response(lst)
+        data = {}
+
+        if article.like_users.filter(id=user.id).exists():
+            data['isliked'] = True
+        else:
+            data['isliked'] = False
+
+        serializer = serializers.ArticleSerializer(
+            article, data=data, partial=True)
+
+        if article.num_of_like > 2:
+            for likeuser in article.like_users.order_by('-pk'):
+                if user.followings.filter(id=likeuser.id).exists():
+                    user_1 = likeuser
+                    break
+            else:
+                user_1 = article.like_users.last()
+
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+
+        elif article.num_of_like == 2:
+            if request.user != article.like_users.last():
+                user_1 = article.like_users.last()
+                user_2 = article.like_users.first()
+            else:
+                user_1 = article.like_users.first()
+                user_2 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1, user_2=user_2)
+                articles_All.append(serializer.data)
+        elif article.num_of_like == 1:
+            user_1 = article.like_users.last()
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user_1=user_1)
+                articles_All.append(serializer.data)
+        else:
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                articles_All.append(serializer.data)
+        
+    return Response(articles_All)
+
