@@ -94,6 +94,7 @@ def update_info(request):
     save_data['age'] = int(request.data['age'])
     save_data['weight'] = int(request.data['weight'])
     save_data['height'] = int(request.data['height'])
+    basal_metabolism = 0
     if request.data['sex'] == 'male':
         print(1)
         basal_metabolism = 66.47 + \

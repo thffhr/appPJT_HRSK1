@@ -12,4 +12,5 @@ urlpatterns = [
     path('getChart/<str:date>/', views.getChart, name='getChart'),
     path('plusCnt/', views.plusCnt, name='plusCnt'),
     path('minusCnt/', views.minusCnt, name='minusCnt'),
+    path('deleteMenu/', views.deleteMenu, name='deleteMenu'),
 ]
