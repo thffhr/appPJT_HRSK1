@@ -6,9 +6,9 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {roundToNearestPixel} from 'react-native/Libraries/Utilities/PixelRatio';
 
 const {width, height} = Dimensions.get('screen');
 // const serverUrl = 'http://10.0.2.2:8080/';
@@ -23,10 +23,16 @@ export default class DetatilImage extends Component {
       picture: this.props.route.params.picture,
       dateTime: this.props.route.params.pictureDate,
       position: [120, 130, 300, 300],
+      onCaption: false,
     };
   }
   onBack = () => {
     this.props.navigation.navigate('Record');
+  };
+  onCaption = () => {
+    this.setState({
+      onCaption: !this.state.onCaption,
+    });
   };
   render() {
     return (
@@ -46,6 +52,22 @@ export default class DetatilImage extends Component {
                 {this.state.dateTime.date}일
               </Text>
             </View>
+            {/* <View style={styles.btnBox}> */}
+            {!this.state.onCaption && (
+              <Icon
+                style={styles.onCaption}
+                onPress={this.onCaption}
+                name="eye"
+              />
+            )}
+            {this.state.onCaption && (
+              <Icon
+                style={styles.onCaption}
+                onPress={this.onCaption}
+                name="eye-off"
+              />
+            )}
+            {/* </View> */}
           </View>
           <ScrollView style={styles.imageBody}>
             <Image
@@ -54,16 +76,19 @@ export default class DetatilImage extends Component {
                 uri: `${serverUrl}gallery` + this.state.image,
               }}
             />
-            <View
-              style={{
-                position: 'absolute',
-                left: this.state.position[0],
-                top: this.state.position[1],
-                width: this.state.position[2] - this.state.position[0],
-                height: this.state.position[3] - this.state.position[1],
-                borderWidth: 2,
-                borderColor: '#2bff32',
-              }}></View>
+
+            {this.state.onCaption && (
+              <View
+                style={{
+                  position: 'absolute',
+                  left: this.state.position[0],
+                  top: this.state.position[1],
+                  width: this.state.position[2] - this.state.position[0],
+                  height: this.state.position[3] - this.state.position[1],
+                  borderWidth: 2,
+                  borderColor: '#2bff32',
+                }}></View>
+            )}
           </ScrollView>
         </View>
       </View>
@@ -95,8 +120,10 @@ const styles = StyleSheet.create({
     margin: 1,
   },
   detailHeader: {
-    // flexDirection: 'row',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginHorizontal: width * 0.05,
     marginVertical: height * 0.015,
   },
   backBtn: {
@@ -106,22 +133,40 @@ const styles = StyleSheet.create({
   image: {
     height: width,
     position: 'relative',
-    zIndex: 0,
   },
   // date
   chartDayicon: {
     fontSize: 50,
   },
+
   chartDaybox: {
     // width: '50%',
-    borderWidth: 1,
-    borderRadius: 100,
+    // borderWidth: 1,
+    // borderRadius: 100,
     // textAlign: 'center',
-    // justifyContent: 'center',
     // alignItems: 'center',
   },
   chartDaytxt: {
     fontSize: 20,
     margin: 10,
   },
+
+  // caption
+  onCaption: {
+    // backgroundColor: '#2bff32',
+    // borderRadius: 10,
+    fontSize: 30,
+  },
+  offCaption: {
+    backgroundColor: 'transparent',
+    borderRadius: 10,
+  },
+  captionTxt: {
+    fontSize: 25,
+    fontFamily: 'BMJUA',
+    textAlign: 'center',
+  },
+  // btnBox: {
+  //   width: 70,
+  // },
 });
