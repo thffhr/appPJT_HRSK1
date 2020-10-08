@@ -7,6 +7,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -22,10 +23,30 @@ export default class DetatilImage extends Component {
       image: this.props.route.params.image,
       picture: this.props.route.params.picture,
       dateTime: this.props.route.params.pictureDate,
-      position: [120, 130, 300, 300],
+      foods: [],
       onCaption: false,
+      info: {
+        menu_id: this.props.route.params.imageId,
+      },
     };
   }
+  componentDidMount() {
+    this.getFood();
+  }
+  getFood = () => {
+    console.log(typeof this.state.imageId);
+    fetch(`${serverUrl}gallery/getFood/${this.state.imageId}/`, {
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          foods: response,
+        });
+      })
+      .catch((err) => console.error(err));
+  };
   onBack = () => {
     this.props.navigation.navigate('Record');
   };
@@ -75,18 +96,69 @@ export default class DetatilImage extends Component {
               }}
             />
 
-            {this.state.onCaption && (
-              <View
-                style={{
-                  position: 'absolute',
-                  left: this.state.position[0],
-                  top: this.state.position[1],
-                  width: this.state.position[2] - this.state.position[0],
-                  height: this.state.position[3] - this.state.position[1],
-                  borderWidth: 2,
-                  borderColor: '#2bff32',
-                }}></View>
+            {/* {this.state.onCaption && (
+              <View>
+                {this.state.foods &&
+                  this.state.foods.map((food, i) => {
+                    return (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          left: food[2][0],
+                          top: food[2][1],
+                          width: food[2][2],
+                          height: food[2][3],
+                          borderWidth: 2,
+                          borderColor: '#2bff32',
+                        }}></View>
+                    );
+                  })}
+              </View>
             )}
+            {this.state.onCaption && (
+              <View>
+                {this.state.foods &&
+                  this.state.foods.map((food, i) => {
+                    return (
+                      <View
+                        style={{
+                          marginTop: 20,
+                          marginHorizontal: 10,
+                          borderRadius: 10,
+                          backgroundColor: '#fff',
+                          elevation: 5,
+                          paddingVertical: 10,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                        key={i}>
+                        <Text
+                          style={{
+                            fontSize: 25,
+                            fontFamily: 'BMHANNAAir',
+                            color: '#232323',
+                            paddingTop: 20,
+                            marginHorizontal: 20,
+                            marginVertical: 10,
+                          }}>
+                          {food[0]['DESC_KOR']}
+                        </Text>
+                        <Text
+                          style={{
+                            fontSize: 25,
+                            fontFamily: 'BMHANNAAir',
+                            color: '#232323',
+                            paddingTop: 20,
+                            marginHorizontal: 20,
+                            marginVertical: 10,
+                          }}>
+                          {food[0]['SERVING_SIZE']}
+                        </Text>
+                      </View>
+                    );
+                  })}
+              </View>
+            )} */}
           </ScrollView>
         </View>
       </View>

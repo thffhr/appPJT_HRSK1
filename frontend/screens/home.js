@@ -39,7 +39,7 @@ class Home extends Component {
   }
 
   getInfo = () => {
-    fetch(`${serverUrl}accounts/profile/${this.state.username}`, {
+    fetch(`${serverUrl}accounts/profile/${this.state.username}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
