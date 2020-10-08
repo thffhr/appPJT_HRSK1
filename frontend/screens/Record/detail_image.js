@@ -137,13 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 50,
   },
 
-  chartDaybox: {
-    // width: '50%',
-    // borderWidth: 1,
-    // borderRadius: 100,
-    // textAlign: 'center',
-    // alignItems: 'center',
-  },
+  chartDaybox: {},
   chartDaytxt: {
     fontSize: 20,
     margin: 10,
@@ -151,8 +145,6 @@ const styles = StyleSheet.create({
 
   // caption
   onCaption: {
-    // backgroundColor: '#2bff32',
-    // borderRadius: 10,
     fontSize: 30,
   },
   offCaption: {
@@ -164,7 +156,4 @@ const styles = StyleSheet.create({
     fontFamily: 'BMJUA',
     textAlign: 'center',
   },
-  // btnBox: {
-  //   width: 70,
-  // },
 });
