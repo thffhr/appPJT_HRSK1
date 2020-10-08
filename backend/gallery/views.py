@@ -57,7 +57,7 @@ def saveMenu(request):
                     center_x = int(detection[0] * width)
                     center_y = int(detection[1] * height)
                     # print(center_x,center_y)
-                    # w = abs(int(detection[2] * width))
+                    w = abs(int(detection[2] * width))
                     h = abs(int(detection[3] * height))
                     # print(w,h)
                     # 객체의 사각형 테두리 중 좌상단 좌표값 찾기
